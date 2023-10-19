@@ -1,0 +1,14 @@
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.AssemblyInfoInputs.cache
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.AssemblyInfo.cs
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.csproj.CoreCompileInputs.cache
+C:\Users\nasingh\source\repos\C#\Extension_Methods\bin\Debug\net6.0\Extension_Methods.exe
+C:\Users\nasingh\source\repos\C#\Extension_Methods\bin\Debug\net6.0\Extension_Methods.deps.json
+C:\Users\nasingh\source\repos\C#\Extension_Methods\bin\Debug\net6.0\Extension_Methods.runtimeconfig.json
+C:\Users\nasingh\source\repos\C#\Extension_Methods\bin\Debug\net6.0\Extension_Methods.dll
+C:\Users\nasingh\source\repos\C#\Extension_Methods\bin\Debug\net6.0\Extension_Methods.pdb
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.dll
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\refint\Extension_Methods.dll
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.pdb
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\Extension_Methods.genruntimeconfig.cache
+C:\Users\nasingh\source\repos\C#\Extension_Methods\obj\Debug\net6.0\ref\Extension_Methods.dll
