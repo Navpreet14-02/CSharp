@@ -1,0 +1,14 @@
+C:\Users\nasingh\source\repos\C#\NullableTypes\bin\Debug\net6.0\NullableTypes.exe
+C:\Users\nasingh\source\repos\C#\NullableTypes\bin\Debug\net6.0\NullableTypes.deps.json
+C:\Users\nasingh\source\repos\C#\NullableTypes\bin\Debug\net6.0\NullableTypes.runtimeconfig.json
+C:\Users\nasingh\source\repos\C#\NullableTypes\bin\Debug\net6.0\NullableTypes.dll
+C:\Users\nasingh\source\repos\C#\NullableTypes\bin\Debug\net6.0\NullableTypes.pdb
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.AssemblyInfoInputs.cache
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.AssemblyInfo.cs
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.csproj.CoreCompileInputs.cache
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.dll
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\refint\NullableTypes.dll
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.pdb
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\NullableTypes.genruntimeconfig.cache
+C:\Users\nasingh\source\repos\C#\NullableTypes\obj\Debug\net6.0\ref\NullableTypes.dll
