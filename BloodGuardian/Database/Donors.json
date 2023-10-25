@@ -1,0 +1,15 @@
+[
+  {
+    "Donorid": 0,
+    "Name": "Navpreet Singh",
+    "Age": 21,
+    "Phone": 1234567890,
+    "Email": "xyz@gmail.com",
+    "State": "Punjab",
+    "Address": "Punjab,Patiala",
+    "City": "Patiala",
+    "Password": "root34",
+    "BloodGrp": "B+",
+    "Role": 1
+  },
+]
