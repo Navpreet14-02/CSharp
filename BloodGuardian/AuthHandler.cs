@@ -32,7 +32,7 @@ namespace BloodGuardian
 
             return newDonor;
 
-        }
+        } 
 
         public static Donor Login()
         {

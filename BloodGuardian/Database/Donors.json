@@ -1,15 +1,28 @@
 [
   {
     "Donorid": 0,
-    "Name": "Navpreet Singh",
-    "Age": 21,
-    "Phone": 1234567890,
-    "Email": "xyz@gmail.com",
+    "Name": "Raja",
+    "Age": 30,
+    "Phone": 1234567894,
+    "Email": "raja12@gmail.com",
     "State": "Punjab",
-    "Address": "Punjab,Patiala",
+    "Address": "Patiala,Punjab",
     "City": "Patiala",
-    "Password": "root34",
+    "Password": "raja34",
     "BloodGrp": "B+",
-    "Role": 1
+    "Role": 2
   },
+  {
+    "Donorid": 1,
+    "Name": "Ram",
+    "Age": 24,
+    "Phone": 1234567892,
+    "Email": "ram@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "ram12",
+    "BloodGrp": "A+",
+    "Role": 2
+  }
 ]

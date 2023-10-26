@@ -1,1 +1,59 @@
-[]
+[
+  {
+    "BankId": 0,
+    "ManagerName": "Raja",
+    "ManagerEmail": "raja12@gmail.com",
+    "Contact": 1234567894,
+    "BankName": "raja-bloodbank",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Blood_WithDrawal_Record": [],
+    "Blood_Deposit_Record": [
+      {
+        "Id": null,
+        "BloodDonorName": "Navi",
+        "BloodReceiverName": null,
+        "BloodGroup": "B+",
+        "CustomerEmail": "navi@gmail.com",
+        "CustomerPhone": 12917334,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 40
+      }
+    ],
+    "BloodUnits": {
+      "A+": 0,
+      "A-": 0,
+      "B+": 140,
+      "B-": 0,
+      "O+": 0,
+      "O-": 0,
+      "AB+": 0,
+      "AB-": 0
+    },
+    "BloodDonationCamps": []
+  },
+  {
+    "BankId": 1,
+    "ManagerName": "Ram",
+    "ManagerEmail": "ram@gmail.com",
+    "Contact": 1234567892,
+    "BankName": "ram-bloodbank",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Blood_WithDrawal_Record": [],
+    "Blood_Deposit_Record": [],
+    "BloodUnits": {
+      "A+": 0,
+      "A-": 0,
+      "B+": 0,
+      "B-": 0,
+      "O+": 0,
+      "O-": 0,
+      "AB+": 0,
+      "AB-": 0
+    },
+    "BloodDonationCamps": []
+  }
+]
