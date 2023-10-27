@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace BloodGuardian.View
 {
-    internal static class App
+    internal class App
     {
 
-        public static void Start()
+
+
+        public static void Start(DBHandler Database)
         {
 
             Console.WriteLine("******************** BloodGuardian ***********************");
@@ -29,45 +31,45 @@ namespace BloodGuardian.View
 
             if (input == "1")
             {
-                Donor d = AuthHandler.Login();
+                Donor d = AuthHandler.Login(Database);
                 if (d.Role == roles.Admin)
                 {
-                    //AdminMenu(d);
+                    AdminUI.AdminMenu(Database,d);
                 }
                 else if (d.Role == roles.BloodBankManager)
                 {
-                    BBManagerMenu(d);
+                    BloodBankManagerMenu(Database,d);
                 }
                 else
                 {
-                    DonorMenu(d);
+                    DonorUI.DonorMenu(Database,d);
                 }
             }
             else if (input == "2")
             {
-                Donor d = AuthHandler.Register();
+                Donor d = AuthHandler.Register(Database);
                 if (d.Role == roles.Admin)
                 {
-                    //AdminMenu(d);
+                    AdminUI.AdminMenu(Database, d);
                 }
                 else if (d.Role == roles.BloodBankManager)
                 {
-                    BBManagerMenu(d);
+                    BloodBankManagerMenu(Database, d);
                 }
                 else
                 {
-                    DonorMenu(d);
+                    DonorUI.DonorMenu(Database, d);
                 }
 
             }
             else if (input == "3")
             {
-                DBHandler.GetRequests();
+                Database.GetRequests();
             }
             else if(input == "4")
             {
                 Request newRequest = Request.createRequest();
-                DBHandler.AddRequest(newRequest);
+                Database.AddRequest(newRequest);
             }
             else if(input == "6")
             {
@@ -76,50 +78,21 @@ namespace BloodGuardian.View
 
         }
 
-        public static void DonorMenu(Donor d)
+
+        public static void BloodBankManagerMenu(DBHandler Database, Donor d)
         {
 
             Donor currDonor = d;
 
-            Console.WriteLine("Enter input as shown below");
-            Console.WriteLine("1:Update Profile");
-            Console.WriteLine("2:Search Blood Banks Near you.");
-            Console.WriteLine("3:Search Blood Donation Camps Near You.");
-
-            Console.Write("Enter your Input:");
-            var input = Convert.ToInt32(Console.ReadLine());
-
-            switch (input)
-            {
-                case 1:
-                    currDonor = Donor.UpdateProfile(currDonor);
-                    break;
-                case 2:
-                    Search.SearchBloodBanks(currDonor);
-                    break;
-                case 3:
-                    
-                    break;
-            }
-            
-
-        }
-
-
-        public static void BBManagerMenu(Donor d)
-        {
-
-            Donor currDonor = d;
-          
+            BloodBank bank = Database.FindBloodBank(currDonor);
 
             Console.WriteLine("Enter input as shown below");
             Console.WriteLine("1:Update Profile.");
-            Console.WriteLine("2:Update Quantity of Blood.");
-            Console.WriteLine("3:Add Blood Deposit Record.");
-            Console.WriteLine("4:Add Blood Withdraw Record.");
-            Console.WriteLine("5:Organize Blood Donation Camps.");
-            Console.WriteLine("6:See Blood Donation Camps.");
-            Console.WriteLine("7:Remove Blood Donation Camps.");
+            Console.WriteLine("2:Add Blood Deposit Record.");
+            Console.WriteLine("3:Add Blood Withdraw Record.");
+            Console.WriteLine("4:Organize Blood Donation Camps.");
+            Console.WriteLine("5:See Blood Donation Camps.");
+            Console.WriteLine("6:Remove Blood Donation Camps.");
 
             Console.Write("Enter your Input:");
             var input = Convert.ToInt32(Console.ReadLine());
@@ -128,18 +101,31 @@ namespace BloodGuardian.View
             {
                 case 1:
                     var oldDonor = d;
-                    currDonor = Donor.UpdateProfile(currDonor);
-                    BloodBank.UpdateBloodBankDetails(oldDonor,currDonor);
+                    currDonor = Donor.UpdateProfile(Database,currDonor);
+                    BloodBank.UpdateBloodBankDetails(Database,oldDonor,currDonor);
                     break;
                 case 2:
-                    BloodBank.UpdateBloodQuantity(currDonor);
+                    BloodBank.UpdateDepositBloodRecord(Database,bank);
                     break;
                 case 3:
-                    BloodBank.UpdateDepositBloodRecord(currDonor);
+                    BloodBank.UpdateWithdrawBloodRecord(Database, bank);
+                    break;
+                case 4:
+                    BloodDonationCamp.OrganizeBloodDonationCamps(Database, bank,currDonor);
+                    break;
+                case 5:
+                    BloodDonationCamp.GetBloodDonationCamps(Database, bank, currDonor);
+                    break;
+                case 6:
+                    BloodDonationCamp.RemoveBloodDonationCamps(Database, bank, currDonor);
                     break;
             }
 
         }
+
+
+        
+
 
     }
 }

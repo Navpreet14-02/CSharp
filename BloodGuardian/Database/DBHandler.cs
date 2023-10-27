@@ -34,7 +34,7 @@ namespace BloodGuardian.Database
 
 
     //}
-    internal static class DBHandler
+    internal class DBHandler
     {
         static private List<Donor> _donors;
         static private string _donorDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Donors.json";
@@ -60,14 +60,19 @@ namespace BloodGuardian.Database
         //-----------------------------------------------------------------------------------------------------
         // Donor Methods
 
-        public static void AddDonor(Donor d) {
+        public void AddDonor(Donor d) {
             d.Donorid = _donors.Count;
             _donors.Add(d);
             UpdateDB();
 
             
         }
-        public static Donor FindDonor(string email,string password)
+
+        public List<Donor> ReadDonors()
+        {
+            return _donors;
+        }
+        public Donor FindDonor(string email,string password)
         {
 
             var d =  _donors.Find((donor)=>donor.Email == email && donor.Password == password);
@@ -75,7 +80,7 @@ namespace BloodGuardian.Database
             return d;
         }
 
-        public static void UpdateDonor(Donor oldDonor,Donor newDonor)
+        public void UpdateDonor(Donor oldDonor,Donor newDonor)
         {
             int donorIndex = oldDonor.Donorid;
 
@@ -83,6 +88,33 @@ namespace BloodGuardian.Database
 
             UpdateDB();
         }
+
+
+        public void DeleteDonor(int donorIndex)
+        {
+
+            // Removing Donor
+
+            var bank = _bloodbanks.Find((bank) => bank.ManagerEmail == _donors[donorIndex].Email);
+
+            _donors.RemoveAt(donorIndex);
+
+            // Updating Donor IDs
+
+            foreach (var (donor, ind) in _donors.Select((val, i) => (val, i)))
+            {
+                donor.Donorid = ind;
+            }
+
+
+            DeleteBloodBank(null,bank.BankId);
+
+            UpdateDB();
+
+        }
+
+
+
 
 
         // -------------------------------------------------------------------------------------------------------------
@@ -95,7 +127,7 @@ namespace BloodGuardian.Database
 
         // Request methods
 
-        public static void GetRequests()
+        public void GetRequests()
         {
             foreach (var request in _bloodRequests)
             {
@@ -109,7 +141,7 @@ namespace BloodGuardian.Database
 
         }
 
-        public static void AddRequest(Request r)
+        public void AddRequest(Request r)
         {
             r.RequestId = _bloodRequests.Count;
             _bloodRequests.Add(r);
@@ -125,9 +157,10 @@ namespace BloodGuardian.Database
         //-------------------------------------------------------------------------------------------------------------
         // Blood Bank Methods
 
-        public static List<BloodBank> SearchBloodBank(string state,string city,string bloodType)
+        public List<BloodBank> SearchBloodBank(string state,string city,string bloodType)
         {
             List<BloodBank> result;
+
 
             if (state == null || city == null) return null;
             else if(bloodType == null)
@@ -144,21 +177,25 @@ namespace BloodGuardian.Database
             return result;
         }
 
-        public static void AddBloodBank(BloodBank bb)
+        public void AddBloodBank(BloodBank bb)
         {
             bb.BankId = _bloodbanks.Count;
             _bloodbanks.Add(bb);
             UpdateDB();
         }
 
+        public List<BloodBank> ReadBloodBanks()
+        {
+            return _bloodbanks;
+        }
 
-        public static BloodBank FindBloodBank(Donor d)
+        public BloodBank FindBloodBank(Donor d)
         {
 
             return _bloodbanks.Find((b) => b.ManagerEmail == d.Email);
         }
 
-        public static void UpdateBloodBank(BloodBank oldBB,BloodBank newBB)
+        public void UpdateBloodBank(BloodBank oldBB,BloodBank newBB)
         {
             int bbIndex = oldBB.BankId;
 
@@ -168,7 +205,32 @@ namespace BloodGuardian.Database
 
         }
 
-        public static void UpdateBloodBank(BloodBank bank,string bloodType,int newquantity,bool deposit)
+        public void DeleteBloodBank(Donor d,int bankIndex)
+        {
+
+            // Removing Blood Bank
+
+            if (d == null)
+            {
+                _bloodbanks.RemoveAt(bankIndex);
+            }
+            else
+            {
+                d.Role = roles.Donor;
+                _bloodbanks.RemoveAt(bankIndex);
+            }
+
+            // Updating BloodBank Ids
+            foreach (var (bank, ind) in _bloodbanks.Select((val, i) => (val, i)))
+            {
+                bank.BankId= ind;
+            }
+
+            UpdateDB();
+
+        }
+
+        public void UpdateBloodTransferRecord(BloodBank bank,string bloodType,int newquantity,bool deposit)
         {
 
             if(deposit)_bloodbanks.Find(b => b.ManagerEmail == bank.ManagerEmail).BloodUnits[bloodType] += newquantity;
@@ -189,7 +251,7 @@ namespace BloodGuardian.Database
 
 
 
-        private static void UpdateDB()
+        private void UpdateDB()
         {
             string donorDataJSON = JsonConvert.SerializeObject(_donors,Formatting.Indented);
             File.WriteAllText(_donorDataPath, donorDataJSON);

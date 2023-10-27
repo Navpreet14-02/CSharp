@@ -24,5 +24,44 @@
     "Password": "ram12",
     "BloodGrp": "A+",
     "Role": 2
+  },
+  {
+    "Donorid": 2,
+    "Name": "Mohan",
+    "Age": 30,
+    "Phone": 1234567892,
+    "Email": "mohan@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "mohan12",
+    "BloodGrp": "AB-",
+    "Role": 1
+  },
+  {
+    "Donorid": 3,
+    "Name": "Roy",
+    "Age": 26,
+    "Phone": 1234567894,
+    "Email": "roy@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "roy24",
+    "BloodGrp": "O+",
+    "Role": 2
+  },
+  {
+    "Donorid": 4,
+    "Name": "Navpreet",
+    "Age": 24,
+    "Phone": 1234567892,
+    "Email": "Navpreet@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Navi14",
+    "BloodGrp": "A+",
+    "Role": 0
   }
 ]

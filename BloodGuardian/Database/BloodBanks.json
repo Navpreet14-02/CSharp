@@ -31,7 +31,17 @@
       "AB+": 0,
       "AB-": 0
     },
-    "BloodDonationCamps": []
+    "BloodDonationCamps": [
+      {
+        "camp_id": 0,
+        "Date": "2023-10-30T00:00:00",
+        "Camp_State": "Uttar Pradesh",
+        "Camp_City": "Noida",
+        "Camp_Address": "Noida,Uttar Pradesh",
+        "Start_Time": "08:00:00",
+        "End_Time": "14:00:00"
+      }
+    ]
   },
   {
     "BankId": 1,
@@ -49,6 +59,39 @@
       "A-": 0,
       "B+": 0,
       "B-": 0,
+      "O+": 0,
+      "O-": 0,
+      "AB+": 0,
+      "AB-": 0
+    },
+    "BloodDonationCamps": [
+      {
+        "camp_id": 0,
+        "Date": "2023-10-29T00:00:00",
+        "Camp_State": "Uttar Pradesh",
+        "Camp_City": "Noida",
+        "Camp_Address": "Noida, Uttar Pradesh",
+        "Start_Time": "09:00:00",
+        "End_Time": "17:00:00"
+      }
+    ]
+  },
+  {
+    "BankId": 2,
+    "ManagerName": "Roy",
+    "ManagerEmail": "roy@gmail.com",
+    "Contact": 1234567894,
+    "BankName": "roy-bloodbank",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Blood_WithDrawal_Record": [],
+    "Blood_Deposit_Record": [],
+    "BloodUnits": {
+      "A+": 0,
+      "A-": 0,
+      "B+": 0,
+      "B-": 50,
       "O+": 0,
       "O-": 0,
       "AB+": 0,

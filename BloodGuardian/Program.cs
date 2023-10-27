@@ -8,9 +8,12 @@ internal class Program
     private static void Main(string[] args)
     {
 
-        App.Start();
+        DBHandler database = new DBHandler();
 
-        //int ans= Console.
-        
+
+        App.Start(database);
+
+
+
     }
 }
