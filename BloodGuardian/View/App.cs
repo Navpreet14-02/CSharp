@@ -11,7 +11,15 @@ namespace BloodGuardian.View
     internal class App
     {
 
-
+        public enum HomePageOptions
+        {
+            Login=1,
+            Register=2,
+            SeeBloodRequests=3,
+            AddBloodRequest=4,
+            SearchBlood=5,
+            Exit=6,
+        }
 
         public static void Start(DBHandler Database)
         {
@@ -27,104 +35,75 @@ namespace BloodGuardian.View
 
 
             Console.Write("Enter your Input:");
-            var input = Console.ReadLine();
+            var input = Enum.Parse<HomePageOptions>(Console.ReadLine());
 
-            if (input == "1")
-            {
-                Donor d = AuthHandler.Login(Database);
-                if (d.Role == roles.Admin)
-                {
-                    AdminUI.AdminMenu(Database,d);
-                }
-                else if (d.Role == roles.BloodBankManager)
-                {
-                    BloodBankManagerMenu(Database,d);
-                }
-                else
-                {
-                    DonorUI.DonorMenu(Database,d);
-                }
-            }
-            else if (input == "2")
-            {
-                Donor d = AuthHandler.Register(Database);
-                if (d.Role == roles.Admin)
-                {
-                    AdminUI.AdminMenu(Database, d);
-                }
-                else if (d.Role == roles.BloodBankManager)
-                {
-                    BloodBankManagerMenu(Database, d);
-                }
-                else
-                {
-                    DonorUI.DonorMenu(Database, d);
-                }
-
-            }
-            else if (input == "3")
-            {
-                Database.GetRequests();
-            }
-            else if(input == "4")
-            {
-                Request newRequest = Request.createRequest();
-                Database.AddRequest(newRequest);
-            }
-            else if(input == "6")
-            {
-                Environment.Exit(0);
-            }
-
-        }
-
-
-        public static void BloodBankManagerMenu(DBHandler Database, Donor d)
-        {
-
-            Donor currDonor = d;
-
-            BloodBank bank = Database.FindBloodBank(currDonor);
-
-            Console.WriteLine("Enter input as shown below");
-            Console.WriteLine("1:Update Profile.");
-            Console.WriteLine("2:Add Blood Deposit Record.");
-            Console.WriteLine("3:Add Blood Withdraw Record.");
-            Console.WriteLine("4:Organize Blood Donation Camps.");
-            Console.WriteLine("5:See Blood Donation Camps.");
-            Console.WriteLine("6:Remove Blood Donation Camps.");
-
-            Console.Write("Enter your Input:");
-            var input = Convert.ToInt32(Console.ReadLine());
+            Donor d;
 
             switch (input)
             {
-                case 1:
-                    var oldDonor = d;
-                    currDonor = Donor.UpdateProfile(Database,currDonor);
-                    BloodBank.UpdateBloodBankDetails(Database,oldDonor,currDonor);
+
+                case HomePageOptions.Login:
+            
+                    d = AuthHandler.Login(Database);
+                    if (d.Role == roles.Admin)
+                    {
+                        AdminUI.AdminMenu(Database,d);
+                    }
+                    else if (d.Role == roles.BloodBankManager)
+                    {
+                        BloodBankManagerUI.BloodBankManagerMenu(Database,d);
+                    }
+                    else
+                    {
+                        DonorUI.DonorMenu(Database,d);
+                    }
                     break;
-                case 2:
-                    BloodBank.UpdateDepositBloodRecord(Database,bank);
+
+                case HomePageOptions.Register:
+            
+                    d = AuthHandler.Register(Database);
+                    if (d.Role == roles.Admin)
+                    {
+                        AdminUI.AdminMenu(Database, d);
+                    }
+                    else if (d.Role == roles.BloodBankManager)
+                    {
+                        BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    }
+                    else
+                    {
+                        DonorUI.DonorMenu(Database, d);
+                    }
                     break;
-                case 3:
-                    BloodBank.UpdateWithdrawBloodRecord(Database, bank);
+
+                case HomePageOptions.SeeBloodRequests:
+                    Request.ViewRequests();
+                    Start(Database);
                     break;
-                case 4:
-                    BloodDonationCamp.OrganizeBloodDonationCamps(Database, bank,currDonor);
+
+                case HomePageOptions.AddBloodRequest:
+                    Request newRequest = Request.createRequest();
+                    Database.AddRequest(newRequest);
+                    Start(Database);
                     break;
-                case 5:
-                    BloodDonationCamp.GetBloodDonationCamps(Database, bank, currDonor);
+
+                case HomePageOptions.SearchBlood:
+                    Search.SearchBlood(Database);
+                    Start(Database);
                     break;
-                case 6:
-                    BloodDonationCamp.RemoveBloodDonationCamps(Database, bank, currDonor);
+
+                case HomePageOptions.Exit:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("Choose Valid Option");
+                    Start(Database);
                     break;
             }
-
         }
 
-
-        
+   
 
 
     }

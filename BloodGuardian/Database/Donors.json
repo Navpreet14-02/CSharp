@@ -10,7 +10,7 @@
     "City": "Patiala",
     "Password": "raja34",
     "BloodGrp": "B+",
-    "Role": 2
+    "Role": 1
   },
   {
     "Donorid": 1,
@@ -49,7 +49,7 @@
     "City": "Patiala",
     "Password": "roy24",
     "BloodGrp": "O+",
-    "Role": 2
+    "Role": 1
   },
   {
     "Donorid": 4,
@@ -63,5 +63,18 @@
     "Password": "Navi14",
     "BloodGrp": "A+",
     "Role": 0
+  },
+  {
+    "Donorid": 5,
+    "Name": "Rahul",
+    "Age": 35,
+    "Phone": 1234567892,
+    "Email": "rahul@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "rahul24",
+    "BloodGrp": "O-",
+    "Role": 2
   }
 ]

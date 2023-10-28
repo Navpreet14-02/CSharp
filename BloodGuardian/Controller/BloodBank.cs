@@ -67,7 +67,7 @@ namespace BloodGuardian.Models
 
         public static void UpdateBloodBankDetails(DBHandler Database,Donor oldDonor,Donor newDonor)
         {
-            var bank = Database.FindBloodBank(oldDonor);
+            var bank = Database.FindBloodBank(oldDonor, -1);
 
 
             Console.WriteLine("Enter name of your bloodbank: ");
@@ -128,7 +128,11 @@ namespace BloodGuardian.Models
             Console.Write("Enter the Id of the Blood Bank you want to remove: ");
             var bankid = Convert.ToInt32(Console.ReadLine());
 
-            db.DeleteBloodBank(d, bankid);
+            var bank = db.FindBloodBank(null, bankid);
+
+            var donor = db.ReadDonors().Find((dn) => dn.Email == bank.ManagerEmail);
+
+            db.DeleteBloodBank(donor, bankid);
 
         }
 

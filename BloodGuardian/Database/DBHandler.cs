@@ -75,7 +75,17 @@ namespace BloodGuardian.Database
         public Donor FindDonor(string email,string password)
         {
 
-            var d =  _donors.Find((donor)=>donor.Email == email && donor.Password == password);
+            Donor d = null;
+            if (password == null)
+            {
+                d = _donors.Find((donor) => donor.Email==email);
+
+            }
+            else
+            {
+                d =  _donors.Find((donor)=>donor.Email == email && donor.Password == password);
+
+            }
 
             return d;
         }
@@ -127,18 +137,10 @@ namespace BloodGuardian.Database
 
         // Request methods
 
-        public void GetRequests()
+        public static List<Request> GetRequests()
         {
-            foreach (var request in _bloodRequests)
-            {
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine(request.RequestId);
-                Console.WriteLine("Requester Name: "+request.RequesterName);
-                Console.WriteLine("Requester Phone No: " + request.RequesterPhone);
-                Console.WriteLine("Requested Blood Type: "+request.BloodRequirementType);
-                Console.WriteLine("Requester Address: "+request.Address);
-            }
 
+            return _bloodRequests;
         }
 
         public void AddRequest(Request r)
@@ -189,10 +191,18 @@ namespace BloodGuardian.Database
             return _bloodbanks;
         }
 
-        public BloodBank FindBloodBank(Donor d)
+        public BloodBank FindBloodBank(Donor d,int bankid)
         {
 
-            return _bloodbanks.Find((b) => b.ManagerEmail == d.Email);
+            if(bankid== -1)
+            {
+                return _bloodbanks.Find((b) => b.ManagerEmail == d.Email);
+
+            }
+            else
+            {
+                return _bloodbanks[bankid];
+            }
         }
 
         public void UpdateBloodBank(BloodBank oldBB,BloodBank newBB)
@@ -216,7 +226,7 @@ namespace BloodGuardian.Database
             }
             else
             {
-                d.Role = roles.Donor;
+                _donors[d.Donorid].Role = roles.Donor;
                 _bloodbanks.RemoveAt(bankIndex);
             }
 
@@ -237,6 +247,31 @@ namespace BloodGuardian.Database
             else _bloodbanks.Find(b => b.ManagerEmail == bank.ManagerEmail).BloodUnits[bloodType] -= newquantity;
 
             UpdateDB();
+
+        }
+
+
+
+
+
+        //-------------------------------------------------------------------------------------------------------------
+
+
+        //-------------------------------------------------------------------------------------------------------------
+
+        // Blood Donation Camp Methods
+        public static List<BloodDonationCamp> NearestBloodDonationCamps(Donor d)
+        {
+
+            var campsLists = _bloodbanks.Select((bank) => bank.BloodDonationCamps).ToList();
+
+            List<BloodDonationCamp> camps=new List<BloodDonationCamp>();
+            campsLists.ForEach((campList) => campList.ForEach((camp) =>
+            {
+                if (camp.Camp_State == d.State && camp.Camp_City == d.City) camps.Add(camp);
+            }));
+
+            return camps;
 
         }
 

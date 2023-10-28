@@ -1,6 +1,7 @@
 ﻿using BloodGuardian.Database;
 using BloodGuardian.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,26 @@ namespace BloodGuardian.View
 {
     internal class BloodBankManagerUI
     {
+
+
+        public enum BloodBankManagerOptions
+        {
+            UpdateProfile=1,
+            AddBloodDepositRecord=2,
+            AddBloodWithdrawRecord=3,
+            OrganizeBloodDonationCamp=4,
+            SeeBloodDonationCamp=5,
+            RemoveBloodDonationCamp=6,
+            SignOut=7,
+        }
+
+
         public static void BloodBankManagerMenu(DBHandler Database, Donor d)
         {
 
             Donor currDonor = d;
 
-            BloodBank bank = Database.FindBloodBank(currDonor);
+            BloodBank bank = Database.FindBloodBank(currDonor,-1);
 
             Console.WriteLine("Enter input as shown below");
             Console.WriteLine("1:Update Profile.");
@@ -24,31 +39,42 @@ namespace BloodGuardian.View
             Console.WriteLine("4:Organize Blood Donation Camps.");
             Console.WriteLine("5:See Blood Donation Camps.");
             Console.WriteLine("6:Remove Blood Donation Camps.");
+            Console.WriteLine("7:SignOut");
 
             Console.Write("Enter your Input:");
-            var input = Convert.ToInt32(Console.ReadLine());
+            var input = Enum.Parse<BloodBankManagerOptions>(Console.ReadLine());
 
             switch (input)
             {
-                case 1:
+                case BloodBankManagerOptions.UpdateProfile:
                     var oldDonor = d;
                     currDonor = Donor.UpdateProfile(Database, currDonor);
                     BloodBank.UpdateBloodBankDetails(Database, oldDonor, currDonor);
                     break;
-                case 2:
+
+                case BloodBankManagerOptions.AddBloodDepositRecord:
                     BloodBank.UpdateDepositBloodRecord(Database, bank);
                     break;
-                case 3:
+
+                case BloodBankManagerOptions.AddBloodWithdrawRecord:
                     BloodBank.UpdateWithdrawBloodRecord(Database, bank);
                     break;
-                case 4:
+                case BloodBankManagerOptions.OrganizeBloodDonationCamp:
                     BloodDonationCamp.OrganizeBloodDonationCamps(Database, bank, currDonor);
                     break;
-                case 5:
+                case BloodBankManagerOptions.SeeBloodDonationCamp:
                     BloodDonationCamp.GetBloodDonationCamps(Database, bank, currDonor);
                     break;
-                case 6:
+                case BloodBankManagerOptions.RemoveBloodDonationCamp:
                     BloodDonationCamp.RemoveBloodDonationCamps(Database, bank, currDonor);
+                    break;
+                case BloodBankManagerOptions.SignOut:
+                    Donor.SignOut();
+                    App.Start(Database);
+                    break;
+                default:
+                    Console.WriteLine("Invalid Choice.");
+                    BloodBankManagerMenu(Database,d);
                     break;
             }
 

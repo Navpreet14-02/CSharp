@@ -47,49 +47,14 @@ namespace BloodGuardian.Models
             Console.WriteLine("City: " + d.City);
             Console.WriteLine("Address: "+d.Address);
             Console.WriteLine("Password: "+d.Password);
-            if(d.Role==roles.BloodBankManager) Console.WriteLine("Blood Bank Name: "+Database.FindBloodBank(d).BankName);
+            if(d.Role==roles.BloodBankManager) Console.WriteLine("Blood Bank Name: "+Database.FindBloodBank(d,-1).BankName);
 
 
             Console.WriteLine("==============================");
             Console.WriteLine("Enter your new Details: ");
 
-            Donor updatedDonor = new Donor();
-            updatedDonor.Donorid = d.Donorid;
+            Donor updatedDonor = DonorUI.UpdatedUserInfo(d);
 
-            Console.Write("Enter your Name: ");
-            var nameInput = Console.ReadLine();
-            updatedDonor.Name = nameInput==String.Empty ? d.Name:nameInput;
-
-            Console.Write("Enter your Age: ");
-            var ageInput = Console.ReadLine();
-            updatedDonor.Age = ageInput=="" ? d.Age:Convert.ToInt32(ageInput);
-
-            Console.Write("Enter your Phone: ");
-            var phoneInput = Console.ReadLine();
-            updatedDonor.Phone = phoneInput == "" ? d.Phone : Convert.ToInt64(phoneInput);
-
-            Console.Write("Enter your Email: ");
-            var emailInput = Console.ReadLine();
-            updatedDonor.Email = emailInput == String.Empty ? d.Email : emailInput;
-
-            Console.Write("Enter your State (In case you are a Blood Bank Manager, Enter its State ): ");
-            var stateInput = Console.ReadLine();
-            updatedDonor.State = stateInput == String.Empty ? d.State : stateInput;
-
-            Console.Write("Enter your City (In case you are a Blood Bank Manager, Enter its City ): ");
-            var cityInput = Console.ReadLine();
-            updatedDonor.City = cityInput == String.Empty ? d.City : cityInput;
-
-            Console.Write("Enter your Address (In case you are a Blood Bank Manager, Enter its Address ): ");
-            var addressInput = Console.ReadLine();
-            updatedDonor.Address = addressInput == String.Empty ? d.Address : addressInput;
-
-            Console.Write("Enter your Password: ");
-            var passInput = Console.ReadLine();
-            updatedDonor.Password = passInput == String.Empty ? d.Password : passInput;
-
-            updatedDonor.Role = d.Role;
-            updatedDonor.BloodGrp = d.BloodGrp;
 
 
             Database.UpdateDonor(d, updatedDonor);
@@ -140,13 +105,31 @@ namespace BloodGuardian.Models
             var donorId = Convert.ToInt32(Console.ReadLine());  
 
 
+
             if(d.Role == roles.BloodBankManager)
             {
-                BloodBank bank = db.FindBloodBank(d);
+                BloodBank bank = db.FindBloodBank(d,-1);
                 db.DeleteBloodBank(null, bank.BankId);
             }
 
 
+        }
+
+        public static void AddAdmin(DBHandler database,Donor d) 
+        {
+
+            Donor newAdmin = AdminUI.InputAdmin(database,d);
+
+            newAdmin.Role = roles.Admin;
+
+            database.AddDonor(newAdmin);
+            
+
+        }
+
+        public static void SignOut()
+        {
+            // Code Here
         }
 
 

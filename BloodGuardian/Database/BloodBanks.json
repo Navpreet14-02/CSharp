@@ -1,50 +1,6 @@
 [
   {
     "BankId": 0,
-    "ManagerName": "Raja",
-    "ManagerEmail": "raja12@gmail.com",
-    "Contact": 1234567894,
-    "BankName": "raja-bloodbank",
-    "State": "Punjab",
-    "Address": "Patiala,Punjab",
-    "City": "Patiala",
-    "Blood_WithDrawal_Record": [],
-    "Blood_Deposit_Record": [
-      {
-        "Id": null,
-        "BloodDonorName": "Navi",
-        "BloodReceiverName": null,
-        "BloodGroup": "B+",
-        "CustomerEmail": "navi@gmail.com",
-        "CustomerPhone": 12917334,
-        "BloodTransferDate": "2023-11-26T00:00:00",
-        "BloodAmount": 40
-      }
-    ],
-    "BloodUnits": {
-      "A+": 0,
-      "A-": 0,
-      "B+": 140,
-      "B-": 0,
-      "O+": 0,
-      "O-": 0,
-      "AB+": 0,
-      "AB-": 0
-    },
-    "BloodDonationCamps": [
-      {
-        "camp_id": 0,
-        "Date": "2023-10-30T00:00:00",
-        "Camp_State": "Uttar Pradesh",
-        "Camp_City": "Noida",
-        "Camp_Address": "Noida,Uttar Pradesh",
-        "Start_Time": "08:00:00",
-        "End_Time": "14:00:00"
-      }
-    ]
-  },
-  {
-    "BankId": 1,
     "ManagerName": "Ram",
     "ManagerEmail": "ram@gmail.com",
     "Contact": 1234567892,
@@ -68,8 +24,8 @@
       {
         "camp_id": 0,
         "Date": "2023-10-29T00:00:00",
-        "Camp_State": "Uttar Pradesh",
-        "Camp_City": "Noida",
+        "Camp_State": "Punjab",
+        "Camp_City": "Patiala",
         "Camp_Address": "Noida, Uttar Pradesh",
         "Start_Time": "09:00:00",
         "End_Time": "17:00:00"
@@ -77,11 +33,11 @@
     ]
   },
   {
-    "BankId": 2,
-    "ManagerName": "Roy",
-    "ManagerEmail": "roy@gmail.com",
-    "Contact": 1234567894,
-    "BankName": "roy-bloodbank",
+    "BankId": 1,
+    "ManagerName": "Rahul",
+    "ManagerEmail": "rahul@gmail.com",
+    "Contact": 1234567892,
+    "BankName": "rahul-BloodBank",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
@@ -90,7 +46,7 @@
     "BloodUnits": {
       "A+": 0,
       "A-": 0,
-      "B+": 0,
+      "B+": 50,
       "B-": 50,
       "O+": 0,
       "O-": 0,

@@ -12,8 +12,6 @@ namespace BloodGuardian.Models
     {
 
 
-
-
         public int camp_id { get; set; }
 
         public DateTime Date {  get; set; }
@@ -44,7 +42,7 @@ namespace BloodGuardian.Models
             bank.BloodDonationCamps.Add(newCamp);
             Database.UpdateBloodBank(bank, bank);
 
-            App.BloodBankManagerMenu(Database, d);
+            BloodBankManagerUI.BloodBankManagerMenu(Database, d);
         }
 
         public static void GetBloodDonationCamps(DBHandler Database, BloodBank bank, Donor d)
@@ -89,7 +87,7 @@ namespace BloodGuardian.Models
 
             Database.UpdateBloodBank(bank, bank);
 
-            App.BloodBankManagerMenu(Database, d);
+            BloodBankManagerUI.BloodBankManagerMenu(Database, d);
 
 
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BloodGuardian.Database;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,6 @@ namespace BloodGuardian.Models
         public long RequesterPhone { get; set; }
         public string BloodRequirementType { get; set; }   
         public string Address { get; set; }
-
-        //public DateTime RequiredBy { get; set; }
 
 
         public static Request createRequest()
@@ -41,6 +40,24 @@ namespace BloodGuardian.Models
             return req;
 
         }
+
+
+        public static void ViewRequests()
+        {
+
+            var requests = DBHandler.GetRequests();
+            foreach (var request in requests)
+            {
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine(request.RequestId);
+                Console.WriteLine("Requester Name: " + request.RequesterName);
+                Console.WriteLine("Requester Phone No: " + request.RequesterPhone);
+                Console.WriteLine("Requested Blood Type: " + request.BloodRequirementType);
+                Console.WriteLine("Requester Address: " + request.Address);
+            }
+
+        }
+
 
     }
 }
