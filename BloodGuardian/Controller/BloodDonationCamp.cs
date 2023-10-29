@@ -52,14 +52,17 @@ namespace BloodGuardian.Models
 
             bank.BloodDonationCamps.ForEach(camp =>
             {
+                Console.WriteLine();
                 Console.WriteLine("-----------------------");
                 Console.WriteLine("Id: " + camp.camp_id);
                 Console.WriteLine("State: " + camp.Camp_State);
                 Console.WriteLine("City: " + camp.Camp_City);
                 Console.WriteLine("Address: " + camp.Camp_Address);
-                Console.WriteLine("Date " + camp.Date.ToString());
+                Console.WriteLine("Date: " + camp.Date.ToString());
                 Console.WriteLine("Start Time: " + camp.Start_Time.ToString());
                 Console.WriteLine("End Time: " + camp.End_Time.ToString());
+                Console.WriteLine("-----------------------");
+
             });
 
             //App.BloodBankManagerMenu(Database, d);
@@ -116,7 +119,7 @@ namespace BloodGuardian.Models
 
             Database.UpdateBloodBank(bank, bank);
 
-            BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+            
 
 
         }
@@ -138,6 +141,8 @@ namespace BloodGuardian.Models
                     Console.WriteLine("Camp Date: "+camp.Date);
                     Console.WriteLine($"Camp Duration:{camp.Start_Time} to {camp.End_Time}");
                     Console.WriteLine("Camp Address: " +camp.Camp_Address);
+                    Console.WriteLine("------------------------------------");
+                    Console.WriteLine();
 
 
                 });

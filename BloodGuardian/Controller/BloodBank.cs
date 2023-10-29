@@ -66,7 +66,7 @@ namespace BloodGuardian.Models
 
             }
 
-            bank.BankName = Console.ReadLine();
+            //bank.BankName = Console.ReadLine();
             bank.ManagerEmail = d.Email;
             bank.ManagerName = d.Name;
             bank.Address = d.Address;
@@ -147,7 +147,10 @@ namespace BloodGuardian.Models
             newBank.State=newDonor.State;
             newBank.City = newDonor.City;
             newBank.Contact=newDonor.Phone;
-
+            newBank.BloodUnits = bank.BloodUnits;
+            newBank.Blood_Deposit_Record = bank.Blood_Deposit_Record;
+            newBank.Blood_WithDrawal_Record = bank.Blood_WithDrawal_Record;
+            newBank.BloodDonationCamps = bank.BloodDonationCamps;
 
 
             Database.UpdateBloodBank(bank, newBank);
@@ -165,6 +168,8 @@ namespace BloodGuardian.Models
                 Console.WriteLine("Manager Email: "+ bank.ManagerEmail);
                 Console.WriteLine("Manager Contact" + bank.Contact);
                 Console.WriteLine("Address: "+bank.Address);
+                Console.WriteLine("------------------------------");
+
             });
 
         }
@@ -218,7 +223,7 @@ namespace BloodGuardian.Models
 
             BloodTransferReceipt blood = BloodBankManagerUI.CreateBloodDepositRecord();
 
-
+            blood.Id = bank.Blood_Deposit_Record.Count;
             bank.Blood_Deposit_Record.Add(blood);
             Database.UpdateBloodBank(bank, bank);
 
@@ -235,7 +240,8 @@ namespace BloodGuardian.Models
 
             BloodTransferReceipt blood = BloodBankManagerUI.CreateBloodWithdrawRecord();
 
-            
+
+            blood.Id = bank.Blood_WithDrawal_Record.Count;
 
             bank.Blood_WithDrawal_Record.Add(blood);
             Database.UpdateBloodBank(bank, bank);

@@ -90,8 +90,10 @@ namespace BloodGuardian.Models
                 Console.WriteLine("Email: "+donor.Email);
                 Console.WriteLine("Address: "+donor.Address);
                 Console.WriteLine("Blood Group: "+donor.BloodGrp);
-                Console.WriteLine("Role"+donor.Role.ToString());
-            } 
+                Console.WriteLine("Role: "+donor.Role.ToString());
+                Console.WriteLine("---------------------------");
+
+            }
             );
 
            
@@ -172,7 +174,7 @@ namespace BloodGuardian.Models
             });
 
 
-
+            var isFound = false;
 
             foreach (KeyValuePair<BloodBank, List<BloodTransferReceipt>> entry in BankdepositLists)
             {
@@ -182,17 +184,27 @@ namespace BloodGuardian.Models
                 {
                     if(receipt.CustomerEmail==d.Email && receipt.CustomerPhone == d.Phone)
                     {
+                        isFound = true;
+
                         Console.WriteLine();
                         Console.WriteLine("---------------------");
                         Console.WriteLine($"Bank Name: {entry.Key.BankName}");
                         Console.WriteLine($"Address: {entry.Key.Address}");
                         Console.WriteLine($"Date: {receipt.BloodTransferDate}");
+                        Console.WriteLine("---------------------");
+
 
                     }
                 });
 
+
                 //Console.WriteLine($"":);
                 
+            }
+
+            if(!isFound)
+            {
+                Console.WriteLine("You have not donated blood anywhere yet.");
             }
 
 

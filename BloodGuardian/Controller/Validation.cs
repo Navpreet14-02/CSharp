@@ -31,8 +31,8 @@ namespace BloodGuardian.Models
 
         public static void ValidatePhone(string phone)
         {
-            int phoneValue;
-            if (!int.TryParse(phone, out phoneValue)) throw new InvalidDataException("Enter valid Phone Number.");
+            long phoneValue;
+            if (!long.TryParse(phone, out phoneValue)) throw new InvalidDataException("Enter valid Phone Number.");
 
             if (phone.Length < 10 || phone.Length>10) throw new InvalidDataException("The length of the phone number should be 10 digits.");
 
@@ -116,9 +116,9 @@ namespace BloodGuardian.Models
             if (String.IsNullOrEmpty(date) || String.IsNullOrWhiteSpace(date)) throw new InvalidDataException("Date can not be empty.");
 
             DateTime transferDate;
-            if (!DateTime.TryParse(Console.ReadLine(), out transferDate))
+            if (!DateTime.TryParse(date, out transferDate))
             {
-                throw new InvalidDataException("Enter Invalid Date.");
+                throw new InvalidDataException("Enter Valid Date.");
 
             }
         

@@ -10,9 +10,8 @@
     "City": "Patiala",
     "Password": "raja34",
     "BloodGrp": "B+",
-    "LoggedIn": "false",
-    "Role": 1
-
+    "Role": 1,
+    "LoggedIn": false
   },
   {
     "Donorid": 1,
@@ -25,25 +24,11 @@
     "City": "Patiala",
     "Password": "ram12",
     "BloodGrp": "A+",
-    "LoggedIn": "false",
-    "Role": 2
+    "Role": 2,
+    "LoggedIn": false
   },
   {
     "Donorid": 2,
-    "Name": "Mohan",
-    "Age": 30,
-    "Phone": 1234567892,
-    "Email": "mohan@gmail.com",
-    "State": "Punjab",
-    "Address": "Patiala,Punjab",
-    "City": "Patiala",
-    "Password": "mohan12",
-    "BloodGrp": "AB-",
-    "LoggedIn": "false",
-    "Role": 1
-  },
-  {
-    "Donorid": 3,
     "Name": "Roy",
     "Age": 26,
     "Phone": 1234567894,
@@ -53,50 +38,91 @@
     "City": "Patiala",
     "Password": "roy24",
     "BloodGrp": "O+",
-    "LoggedIn": "false",
-    "Role": 1
+    "Role": 1,
+    "LoggedIn": false
   },
   {
-    "Donorid": 4,
+    "Donorid": 3,
     "Name": "Navpreet",
-    "Age": 24,
+    "Age": 21,
     "Phone": 1234567892,
-    "Email": "Navpreet@gmail.com",
-    "State": "Punjab",
-    "Address": "Patiala,Punjab",
-    "City": "Patiala",
-    "Password": "Navi14",
-    "BloodGrp": "A+",
-    "LoggedIn": "false",
-    "Role": 0
-
-  },
-  {
-    "Donorid": 5,
-    "Name": "Rahul",
-    "Age": 35,
-    "Phone": 1234567892,
-    "Email": "rahul@gmail.com",
-    "State": "Punjab",
-    "Address": "Patiala,Punjab",
-    "City": "Patiala",
-    "Password": "rahul24",
-    "BloodGrp": "O-",
-    "LoggedIn": "false",
-    "Role": 2
-  },
-  {
-    "Donorid": 6,
-    "Name": "Mohit",
-    "Age": 35,
-    "Phone": 1234567895,
-    "Email": "mohit@gmail.com",
+    "Email": "navpreet@gmail.com",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
     "Password": "Navpreet14",
     "BloodGrp": "A+",
-    "LoggedIn": "false",
-    "Role": 1
+    "Role": 0,
+    "LoggedIn": true
+  },
+  {
+    "Donorid": 4,
+    "Name": "Mohit",
+    "Age": 32,
+    "Phone": 1234567895,
+    "Email": "mohit15@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Navpreet14",
+    "BloodGrp": "A+",
+    "Role": 1,
+    "LoggedIn": false
+  },
+  {
+    "Donorid": 5,
+    "Name": "Leo Das",
+    "Age": 30,
+    "Phone": 1241565464,
+    "Email": "leo14@gmail.com",
+    "State": "Uttar Pradesh",
+    "Address": "Noida, Uttar Pradesh",
+    "City": "Noida",
+    "Password": "Leodas1402",
+    "BloodGrp": "O+",
+    "Role": 1,
+    "LoggedIn": false
+  },
+  {
+    "Donorid": 6,
+    "Name": "Another Admin",
+    "Age": 23,
+    "Phone": 1235216134,
+    "Email": "admin@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Admin@14",
+    "BloodGrp": "AB+",
+    "Role": 0,
+    "LoggedIn": false
+  },
+  {
+    "Donorid": 7,
+    "Name": "Akshay ",
+    "Age": 35,
+    "Phone": 1293857315,
+    "Email": "akshay@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Akshay14",
+    "BloodGrp": "B-",
+    "Role": 2,
+    "LoggedIn": true
+  },
+  {
+    "Donorid": 8,
+    "Name": "Shahrukh",
+    "Age": 34,
+    "Phone": 2135235985,
+    "Email": "shahrukh@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Shahrukh14",
+    "BloodGrp": "AB-",
+    "Role": 2,
+    "LoggedIn": false
   }
 ]

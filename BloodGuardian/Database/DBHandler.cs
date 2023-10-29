@@ -101,8 +101,12 @@ namespace BloodGuardian.Database
                 donor.Donorid = ind;
             }
 
+            if (bank != null)
+            {
+                DeleteBloodBank(null,bank.BankId);
 
-            DeleteBloodBank(null,bank.BankId);
+            }
+
 
             UpdateDB();
 
@@ -191,6 +195,9 @@ namespace BloodGuardian.Database
         public BloodBank FindBloodBank(Donor d,int bankid)
         {
 
+
+            
+
             if(bankid== -1)
             {
                 return _bloodbanks.Find((b) => b.ManagerEmail == d.Email);
@@ -198,6 +205,7 @@ namespace BloodGuardian.Database
             }
             else
             {
+                if (bankid < 0 || bankid > _bloodbanks.Count) return null;
                 return _bloodbanks[bankid];
             }
         }
@@ -205,6 +213,7 @@ namespace BloodGuardian.Database
         public void UpdateBloodBank(BloodBank oldBB,BloodBank newBB)
         {
             int bbIndex = oldBB.BankId;
+            newBB.BankId = oldBB.BankId;
 
             _bloodbanks[bbIndex] = newBB;
 

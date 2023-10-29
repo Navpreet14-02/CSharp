@@ -1,43 +1,83 @@
 [
   {
     "BankId": 0,
-    "ManagerName": "Ram",
-    "ManagerEmail": "ram@gmail.com",
-    "Contact": 1234567892,
-    "BankName": "ram-bloodbank",
+    "ManagerName": "Akshay ",
+    "ManagerEmail": "akshay@gmail.com",
+    "Contact": 1293857315,
+    "BankName": "akshay-bloodbank",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
-    "Blood_WithDrawal_Record": [],
-    "Blood_Deposit_Record": [],
+    "Blood_WithDrawal_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": null,
+        "BloodReceiverName": "Kishan",
+        "BloodGroup": "A+",
+        "CustomerEmail": "kishan@gmail.com",
+        "CustomerPhone": 1231245555,
+        "BloodTransferDate": "2023-08-20T00:00:00",
+        "BloodAmount": 20
+      }
+    ],
+    "Blood_Deposit_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": "Ravi",
+        "BloodReceiverName": null,
+        "BloodGroup": "B+",
+        "CustomerEmail": "ravi@gmail.com",
+        "CustomerPhone": 1234567895,
+        "BloodTransferDate": "2023-09-25T00:00:00",
+        "BloodAmount": 30
+      }
+    ],
     "BloodUnits": {
-      "A+": 0,
-      "A-": 0,
-      "B+": 0,
-      "B-": 0,
-      "O+": 0,
+      "A+": 50,
+      "A-": 70,
+      "B+": 100,
+      "B-": 50,
+      "O+": 50,
       "O-": 0,
       "AB+": 0,
-      "AB-": 0
+      "AB-": 40
     },
     "BloodDonationCamps": [
       {
         "camp_id": 0,
-        "Date": "2023-10-29T00:00:00",
+        "Date": "2023-11-10T00:00:00",
         "Camp_State": "Punjab",
         "Camp_City": "Patiala",
-        "Camp_Address": "Patiala, Punjab",
-        "Start_Time": "09:00:00",
-        "End_Time": "17:00:00"
+        "Camp_Address": "Patiala,Punjab",
+        "Start_Time": "14:00:00",
+        "End_Time": "00:00:00"
+      },
+      {
+        "camp_id": 1,
+        "Date": "2023-11-20T00:00:00",
+        "Camp_State": "Uttar Pradesh",
+        "Camp_City": "Noida",
+        "Camp_Address": "Noida, Uttar Pradesh",
+        "Start_Time": "14:00:00",
+        "End_Time": "00:00:00"
+      },
+      {
+        "camp_id": 2,
+        "Date": "2023-11-24T00:00:00",
+        "Camp_State": "Punjab",
+        "Camp_City": "Patiala",
+        "Camp_Address": "Patiala,Punjab",
+        "Start_Time": "14:00:00",
+        "End_Time": "00:00:00"
       }
     ]
   },
   {
     "BankId": 1,
-    "ManagerName": "Rahul",
-    "ManagerEmail": "rahul@gmail.com",
-    "Contact": 1234567892,
-    "BankName": "rahul-BloodBank",
+    "ManagerName": "Shahrukh",
+    "ManagerEmail": "shahrukh@gmail.com",
+    "Contact": 2135235985,
+    "BankName": "shahrukh-bloodbank",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
@@ -46,11 +86,11 @@
     "BloodUnits": {
       "A+": 0,
       "A-": 0,
-      "B+": 50,
-      "B-": 50,
-      "O+": 0,
-      "O-": 0,
-      "AB+": 0,
+      "B+": 40,
+      "B-": 546,
+      "O+": 65,
+      "O-": 43,
+      "AB+": 34,
       "AB-": 0
     },
     "BloodDonationCamps": []

@@ -24,6 +24,7 @@ namespace BloodGuardian.Models
                 Console.WriteLine("State: " + bank.State);
                 Console.WriteLine("City: " + bank.City);
                 Console.WriteLine("Address: " + bank.Address);
+                Console.WriteLine("------------------------------------");
 
             }
 
@@ -117,6 +118,7 @@ namespace BloodGuardian.Models
                 Console.WriteLine("State: " + bank.State);
                 Console.WriteLine("City: " + bank.City);
                 Console.WriteLine("Address: " + bank.Address);
+                Console.WriteLine("------------------------------------");
 
             }
 
@@ -134,6 +136,8 @@ namespace BloodGuardian.Models
                 Console.WriteLine("Address: "+camp.Camp_Address);
                 Console.WriteLine("Camp Date: "+camp.Date);
                 Console.WriteLine($"Camp Duration: {camp.Start_Time.ToString()} - {camp.End_Time.ToString()}");
+                Console.WriteLine("-------------------------");
+
                 Console.WriteLine();
 
             }

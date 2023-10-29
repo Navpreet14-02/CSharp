@@ -28,12 +28,16 @@ namespace BloodGuardian.View
 
             Donor currDonor = d;
 
+            Console.WriteLine();
+            Console.WriteLine("==================================");
             Console.WriteLine("Enter input as shown below");
             Console.WriteLine("1:Update Profile");
             Console.WriteLine("2:Search Blood Banks Near you.");
             Console.WriteLine("3:Search Blood Donation Camps Near You.");
             Console.WriteLine("4:See Blood Donation History.");
             Console.WriteLine("5:SignOut");
+            Console.WriteLine("==================================");
+            Console.WriteLine();
 
 
             DonorOptions option;

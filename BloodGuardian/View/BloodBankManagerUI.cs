@@ -34,6 +34,9 @@ namespace BloodGuardian.View
 
             BloodBank bank = Database.FindBloodBank(currDonor,-1);
 
+
+            Console.WriteLine();
+            Console.WriteLine("==========================");
             Console.WriteLine("Enter input as shown below");
             Console.WriteLine("1:Update Profile.");
             Console.WriteLine("2:Add Blood Deposit Record.");
@@ -42,6 +45,9 @@ namespace BloodGuardian.View
             Console.WriteLine("5:See Blood Donation Camps.");
             Console.WriteLine("6:Remove Blood Donation Camps.");
             Console.WriteLine("7:SignOut");
+            Console.WriteLine("==========================");
+            Console.WriteLine();
+
 
             BloodBankManagerOptions option;
             while (true)
@@ -69,28 +75,38 @@ namespace BloodGuardian.View
                     var oldDonor = d;
                     currDonor = Donor.UpdateProfile(Database, currDonor);
                     BloodBank.UpdateBloodBankDetails(Database, oldDonor, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodDepositRecord:
                     BloodBank.UpdateDepositBloodRecord(Database, bank);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodWithdrawRecord:
                     BloodBank.UpdateWithdrawBloodRecord(Database, bank);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
                 case BloodBankManagerOptions.OrganizeBloodDonationCamp:
                     BloodDonationCamp.OrganizeBloodDonationCamps(Database, bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
+
                 case BloodBankManagerOptions.SeeBloodDonationCamp:
                     BloodDonationCamp.GetBloodDonationCamps(Database, bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
+
                 case BloodBankManagerOptions.RemoveBloodDonationCamp:
                     BloodDonationCamp.RemoveBloodDonationCamps(Database, bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
                     break;
+
                 case BloodBankManagerOptions.SignOut:
                     Donor.SignOut(d);
                     App.Start(Database);
                     break;
+
                 default:
                     Console.WriteLine("Enter Valid Option.");
                     BloodBankManagerUI.BloodBankManagerMenu(Database, d);
@@ -232,7 +248,7 @@ namespace BloodGuardian.View
 
             while (true)
             {
-                Console.WriteLine("Enter the amount of Blood Donated(in ml)");
+                Console.Write("Enter the amount of Blood Donated(in ml): ");
                 string amnt = Console.ReadLine();
 
                 try
@@ -392,7 +408,7 @@ namespace BloodGuardian.View
 
             while (true)
             {
-                Console.Write("Enter the amount of Blood Withdrawn(in ml)");
+                Console.Write("Enter the amount of Blood Withdrawn(in ml): ");
                 string amnt = Console.ReadLine();
 
                 try
@@ -530,7 +546,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the start time for the camp in 24-hour format:");
+                Console.Write("Enter the start time for the camp(HH:MM) in 24-hour format:");
                 string start_time = Console.ReadLine();
                 
                 try
@@ -569,7 +585,7 @@ namespace BloodGuardian.View
                     continue;
                 }
 
-                camp.Start_Time = TimeOnly.Parse(end_time);
+                camp.End_Time = TimeOnly.Parse(end_time);
                 Console.WriteLine("--------------------------------");
 
                 break;

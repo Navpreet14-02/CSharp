@@ -25,6 +25,8 @@ namespace BloodGuardian.View
         {
 
             //Console.WriteLine("******************** BloodGuardian ***********************");
+            Console.WriteLine();
+            Console.WriteLine("==================================");
             Console.WriteLine("Enter the input as shown below:");
             Console.WriteLine("1:Login");
             Console.WriteLine("2:Register");
@@ -32,6 +34,9 @@ namespace BloodGuardian.View
             Console.WriteLine("4:Add a Blood Request");
             Console.WriteLine("5:Search Blood");
             Console.WriteLine("6:Exit");
+            Console.WriteLine("==================================");
+            Console.WriteLine();
+
 
 
             HomePageOptions option;

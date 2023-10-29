@@ -31,7 +31,8 @@ namespace BloodGuardian.View
         {
 
 
-
+            Console.WriteLine();
+            Console.WriteLine("============================="); 
             Console.WriteLine("Enter input as shown below");
             Console.WriteLine("1:Update Profile.");
             Console.WriteLine("2:Add New Admin");
@@ -43,6 +44,9 @@ namespace BloodGuardian.View
             Console.WriteLine("8:Remove a Blood Donation Camp.");
             Console.WriteLine("9:Remove a Request.");
             Console.WriteLine("10:SignOut.");
+            Console.WriteLine("=============================");
+            Console.WriteLine();
+
 
 
             AdminOptions option;
@@ -70,11 +74,12 @@ namespace BloodGuardian.View
             {
                 case AdminOptions.UpdateProfile:
                     Donor.UpdateProfile(database, d);
-                    AdminMenu(database, d) ;
+                    AdminMenu(database, d);
                     break;
 
                 case AdminOptions.AddNewAdmin:
                     Donor.AddAdmin(database, d);
+                    AdminMenu(database, d);
                     break;
 
                 case AdminOptions.SeeAllDonors:
