@@ -32,6 +32,8 @@ namespace BloodGuardian.Models
         public string BloodGrp{ get; set; }
         public roles Role { get; set; }
 
+        public bool LoggedIn { get; set; } 
+
 
 
 
@@ -78,7 +80,7 @@ namespace BloodGuardian.Models
 
         public static void ViewDonors(DBHandler db,Donor d)
         {
-            db.ReadDonors().ForEach(donor => {
+            DBHandler.ReadDonors().ForEach(donor => {
 
                 Console.WriteLine("---------------------------");
                 Console.WriteLine("id: "+donor.Donorid);
@@ -95,21 +97,102 @@ namespace BloodGuardian.Models
            
         }
 
+        public static Donor FindDonor(string email, string password)
+        {
+
+            var donorList = DBHandler.ReadDonors();
+            Donor d = null;
+            if (password == null)
+            {
+                d = donorList.Find((donor) => donor.Email == email);
+
+            }
+            else
+            {
+                d = donorList.Find((donor) => donor.Email == email && donor.Password == password);
+
+            }
+
+            return d;
+        }
+
         public static void RemoveDonor(DBHandler db, Donor d)
         {
 
             ViewDonors(db,d);
 
             Console.WriteLine();
-            Console.WriteLine("Enter the Id of the Donor you want to remove: ");
-            var donorId = Convert.ToInt32(Console.ReadLine());  
 
-
-
-            if(d.Role == roles.BloodBankManager)
+            int donorId;
+            while (true)
             {
-                BloodBank bank = db.FindBloodBank(d,-1);
-                db.DeleteBloodBank(null, bank.BankId);
+                Console.Write("Enter the Id of the Donor you want to remove: ");
+                string input = Console.ReadLine();
+
+                int res;
+                if (input == String.Empty || !int.TryParse(input, out res))
+                {
+                    Console.WriteLine("Enter Valid Input.");
+                    continue;
+                }
+
+                donorId = Convert.ToInt32(input);
+                Console.WriteLine("-----------------------------");
+                break;
+
+            }
+
+            var donor=DBHandler.ReadDonors().ElementAtOrDefault(donorId);
+
+            if(donor== null)
+            {
+                Console.WriteLine("The donor with this id does not exist.");
+            }
+            else
+            {
+
+                db.DeleteDonor(donorId);
+                if (d.Role == roles.BloodBankManager)
+                {
+                    BloodBank bank = db.FindBloodBank(d,-1);
+                    db.DeleteBloodBank(null, bank.BankId);
+                }
+            }
+
+
+
+        }
+
+        public static void ViewBloodDonationHistory(DBHandler database,Donor d)
+        {
+            var BankdepositLists= new Dictionary<BloodBank, List<BloodTransferReceipt>>();
+            database.ReadBloodBanks().ForEach(bank =>
+            {
+                BankdepositLists.Add(bank, bank.Blood_Deposit_Record);
+            });
+
+
+
+
+            foreach (KeyValuePair<BloodBank, List<BloodTransferReceipt>> entry in BankdepositLists)
+            {
+                // do something with entry.Value or entry.Key
+
+                entry.Value.ForEach((receipt) =>
+                {
+                    if(receipt.CustomerEmail==d.Email && receipt.CustomerPhone == d.Phone)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("---------------------");
+                        Console.WriteLine($"Bank Name: {entry.Key.BankName}");
+                        Console.WriteLine($"Address: {entry.Key.Address}");
+                        Console.WriteLine($"Date: {receipt.BloodTransferDate}");
+
+                    }
+                });
+
+                //Console.WriteLine($"":);
+                
             }
 
 
@@ -127,9 +210,9 @@ namespace BloodGuardian.Models
 
         }
 
-        public static void SignOut()
+        public static void SignOut(Donor d)
         {
-            // Code Here
+            d.LoggedIn = false;
         }
 
 

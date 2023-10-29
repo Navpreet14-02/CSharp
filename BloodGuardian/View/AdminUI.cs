@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static BloodGuardian.View.App;
 
 namespace BloodGuardian.View
 {
@@ -22,7 +23,8 @@ namespace BloodGuardian.View
             RemoveBloodBank=6,
             SeeBloodDonationCamps=7,
             RemoveBloodDonationCamps=8,
-            SignOut=9,
+            RemoveRequest=9,
+            SignOut=10,
         }
 
         public static void AdminMenu(DBHandler database, Donor d)
@@ -39,13 +41,32 @@ namespace BloodGuardian.View
             Console.WriteLine("6:Remove a Blood Bank.");
             Console.WriteLine("7:See all Blood Donation Camps.");
             Console.WriteLine("8:Remove a Blood Donation Camp.");
-            Console.WriteLine("9:SignOut.");
+            Console.WriteLine("9:Remove a Request.");
+            Console.WriteLine("10:SignOut.");
 
-            Console.WriteLine("*********************");
-            Console.WriteLine("Enter your input: ");
-            var input = Enum.Parse<AdminOptions>(Console.ReadLine());
 
-            switch (input)
+            AdminOptions option;
+            while (true)
+            {
+                Console.WriteLine("----------------------");
+                Console.Write("Enter your Input:");
+                string input = Console.ReadLine();
+
+                AdminOptions result;
+                if (input == string.Empty || !Enum.TryParse<AdminOptions>(input,out  result))
+                {
+
+                    Console.WriteLine("Enter Valid Option.");
+                    continue;
+                }
+
+                option = Enum.Parse<AdminOptions>(input);
+                //Console.WriteLine("*********************"); 
+                break;
+
+            }
+
+            switch (option)
             {
                 case AdminOptions.UpdateProfile:
                     Donor.UpdateProfile(database, d);
@@ -82,12 +103,18 @@ namespace BloodGuardian.View
                     break;
 
                 case AdminOptions.RemoveBloodDonationCamps:
-                    BloodDonationCamp.RemoveBloodDonationCamp(database, d);
+                    BloodDonationCamp.RemoveBloodDonationCampAdmin(database, d);
                     AdminMenu(database, d);
                     break;
 
+                case AdminOptions.RemoveRequest:
+                    Request.RemoveRequest(database, d);
+                    AdminMenu(database, d);
+
+                    break;
+
                 case AdminOptions.SignOut:
-                    Donor.SignOut();
+                    Donor.SignOut(d);
                     App.Start(database);
                     break;
                 default:
@@ -107,32 +134,214 @@ namespace BloodGuardian.View
 
             Donor newAdmin = new Donor();
 
-            Console.Write("Enter Admin Name: ");
-            newAdmin.Name = Console.ReadLine();
+            while (true)
+            {
 
-            Console.Write("Enter Admin Age: ");
-            newAdmin.Age = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter Admin Name: ");
+                string name = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateName(name);
 
-            Console.Write("Enter Admin Phone: ");
-            newAdmin.Phone = Convert.ToInt64(Console.ReadLine());
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
 
-            Console.Write("Enter Admin Email: ");
-            newAdmin.Email = Console.ReadLine();
+                newAdmin.Name = name;
+                Console.WriteLine("--------------------------------");
+                break;
 
-            Console.Write("Enter Admin State: ");
-            newAdmin.State = Console.ReadLine();
+            }
 
-            Console.Write("Enter Admin City: ");
-            newAdmin.City = Console.ReadLine();
 
-            Console.Write("Enter Admin Address: ");
-            newAdmin.Address = Console.ReadLine();
+            while (true)
+            {
 
-            Console.Write("Enter Admin Password: ");
-            newAdmin.Password = Console.ReadLine();
+                Console.Write("Enter Admin Age: ");
+                string age = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateAge(age);
 
-            Console.Write("Enter Admin Blood Group - A+,A-,B+,B-,O+,O-,AB+,AB-: ");
-            newAdmin.BloodGrp = Console.ReadLine();
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+                newAdmin.Age = Convert.ToInt32(age);
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
+
+            while (true)
+            {
+                Console.Write("Enter Admin Phone: ");
+                string phone = Console.ReadLine();
+                try
+                {
+                    Validation.ValidatePhone(phone);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+
+                newAdmin.Phone = Convert.ToInt64(phone);
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+            while (true)
+            {
+                Console.Write("Enter Admin Email: ");
+
+                string email = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateEmail(email);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+
+                newAdmin.Email = email;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+            while (true)
+            {
+
+                Console.Write("Enter Admin State: ");
+                string state = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateState(state);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                newAdmin.State = state;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
+            while (true)
+            {
+
+
+                Console.Write("Enter Admin City: ");
+                string city = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateCity(city);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                newAdmin.City = city;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+            while (true)
+            {
+
+                Console.Write("Enter Admin Address: ");
+
+                string address = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateAddress(address);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                newAdmin.Address = address;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
+
+            while (true)
+            {
+
+                Console.Write("Enter Admin Password: ");
+                string password = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidatePassword(password);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                newAdmin.Password = password;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+            while (true)
+            {
+
+                Console.Write("Enter your Blood Group - A+,A-,B+,B-,O+,O-,AB+,AB-: ");
+                string bloodgrp = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateBloodGroup(bloodgrp);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                newAdmin.BloodGrp = bloodgrp;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
 
             return newAdmin;
 

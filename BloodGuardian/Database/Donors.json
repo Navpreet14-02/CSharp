@@ -10,7 +10,9 @@
     "City": "Patiala",
     "Password": "raja34",
     "BloodGrp": "B+",
+    "LoggedIn": "false",
     "Role": 1
+
   },
   {
     "Donorid": 1,
@@ -23,6 +25,7 @@
     "City": "Patiala",
     "Password": "ram12",
     "BloodGrp": "A+",
+    "LoggedIn": "false",
     "Role": 2
   },
   {
@@ -36,6 +39,7 @@
     "City": "Patiala",
     "Password": "mohan12",
     "BloodGrp": "AB-",
+    "LoggedIn": "false",
     "Role": 1
   },
   {
@@ -49,6 +53,7 @@
     "City": "Patiala",
     "Password": "roy24",
     "BloodGrp": "O+",
+    "LoggedIn": "false",
     "Role": 1
   },
   {
@@ -62,7 +67,9 @@
     "City": "Patiala",
     "Password": "Navi14",
     "BloodGrp": "A+",
+    "LoggedIn": "false",
     "Role": 0
+
   },
   {
     "Donorid": 5,
@@ -75,6 +82,21 @@
     "City": "Patiala",
     "Password": "rahul24",
     "BloodGrp": "O-",
+    "LoggedIn": "false",
     "Role": 2
+  },
+  {
+    "Donorid": 6,
+    "Name": "Mohit",
+    "Age": 35,
+    "Phone": 1234567895,
+    "Email": "mohit@gmail.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Navpreet14",
+    "BloodGrp": "A+",
+    "LoggedIn": "false",
+    "Role": 1
   }
 ]

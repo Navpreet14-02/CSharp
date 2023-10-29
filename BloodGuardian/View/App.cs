@@ -24,7 +24,7 @@ namespace BloodGuardian.View
         public static void Start(DBHandler Database)
         {
 
-            Console.WriteLine("******************** BloodGuardian ***********************");
+            //Console.WriteLine("******************** BloodGuardian ***********************");
             Console.WriteLine("Enter the input as shown below:");
             Console.WriteLine("1:Login");
             Console.WriteLine("2:Register");
@@ -34,46 +34,38 @@ namespace BloodGuardian.View
             Console.WriteLine("6:Exit");
 
 
-            Console.Write("Enter your Input:");
-            var input = Enum.Parse<HomePageOptions>(Console.ReadLine());
+            HomePageOptions option;
+
+            while (true)
+            {
+                Console.WriteLine("----------------------");
+                Console.Write("Enter your Input:");
+                string input = Console.ReadLine();
+
+                HomePageOptions result;
+                if (input == string.Empty || !Enum.TryParse<HomePageOptions>(input, out result)){
+                    Console.WriteLine("Enter Valid Option.");
+                    continue;
+                }
+
+                option = Enum.Parse<HomePageOptions>(input);
+                break;
+
+            }
+
 
             Donor d;
 
-            switch (input)
+            switch (option)
             {
 
                 case HomePageOptions.Login:
             
-                    d = AuthHandler.Login(Database);
-                    if (d.Role == roles.Admin)
-                    {
-                        AdminUI.AdminMenu(Database,d);
-                    }
-                    else if (d.Role == roles.BloodBankManager)
-                    {
-                        BloodBankManagerUI.BloodBankManagerMenu(Database,d);
-                    }
-                    else
-                    {
-                        DonorUI.DonorMenu(Database,d);
-                    }
+                    AuthHandler.Login(Database);
                     break;
 
                 case HomePageOptions.Register:
-            
-                    d = AuthHandler.Register(Database);
-                    if (d.Role == roles.Admin)
-                    {
-                        AdminUI.AdminMenu(Database, d);
-                    }
-                    else if (d.Role == roles.BloodBankManager)
-                    {
-                        BloodBankManagerUI.BloodBankManagerMenu(Database, d);
-                    }
-                    else
-                    {
-                        DonorUI.DonorMenu(Database, d);
-                    }
+                    AuthHandler.Register(Database);
                     break;
 
                 case HomePageOptions.SeeBloodRequests:
@@ -97,8 +89,8 @@ namespace BloodGuardian.View
                     break;
 
                 default:
-                    Console.WriteLine("Choose Valid Option");
-                    Start(Database);
+                    Console.WriteLine("Enter Valid Option.");
+                    App.Start(Database);
                     break;
             }
         }

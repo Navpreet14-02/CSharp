@@ -88,7 +88,9 @@ namespace BloodGuardian.Models
             if (String.IsNullOrEmpty(email) || String.IsNullOrWhiteSpace(email)) throw new InvalidDataException("Email can not be empty.");
 
 
-            var emailRegex = new Regex(@"^([a - zA - Z0 - 9_\-\.] +)@([a - zA - Z0 - 9_\-\.] +)\.([a - zA - Z]{ 2,5})$");
+            //var emailRegex = new Regex(@"^([a - zA - Z0 - 9_\-\.] +)@([a - zA - Z0 - 9_\-\.] +)\.([a - zA - Z]{ 2,5})$");
+
+            var emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
 
             if (!emailRegex.IsMatch(email)) throw new InvalidDataException("Enter Valid Email.");
@@ -105,6 +107,47 @@ namespace BloodGuardian.Models
 
             if (!BloodGroups.Contains(bloodgrp)) throw new InvalidDataException("Enter Valid Blood Group.");
 
+
+        }
+
+
+        public static void ValidateDate(string date)
+        {
+            if (String.IsNullOrEmpty(date) || String.IsNullOrWhiteSpace(date)) throw new InvalidDataException("Date can not be empty.");
+
+            DateTime transferDate;
+            if (!DateTime.TryParse(Console.ReadLine(), out transferDate))
+            {
+                throw new InvalidDataException("Enter Invalid Date.");
+
+            }
+        
+
+        }
+
+        public static void ValidateTime(string time)
+        {
+            if (String.IsNullOrEmpty(time) || String.IsNullOrWhiteSpace(time)) throw new InvalidDataException("Time can not be empty.");
+
+            TimeOnly timeInput;
+            if (!TimeOnly.TryParse(time, out timeInput))
+            {
+                throw new InvalidDataException("Enter Invalid Time.");
+
+            }
+
+
+        }
+
+
+        public static void ValidateBloodAmount(string amount)
+        {
+
+            if (String.IsNullOrEmpty(amount) || String.IsNullOrWhiteSpace(amount)) throw new InvalidDataException("Amount can not be empty.");
+
+
+            int amnt;
+            if (!int.TryParse(amount, out amnt)) throw new InvalidDataException("Enter valid input.");
 
         }
 

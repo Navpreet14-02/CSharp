@@ -8,10 +8,21 @@ internal class Program
     private static void Main(string[] args)
     {
 
+
+
         DBHandler database = new DBHandler();
-
-
-        App.Start(database);
+        try
+        {
+            Console.WriteLine("******************** BLOODGUARDIAN ***********************");
+            Console.WriteLine();
+            App.Start(database);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("App Restarting...");
+            App.Start(database);
+        }
 
 
 

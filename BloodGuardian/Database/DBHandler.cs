@@ -62,33 +62,18 @@ namespace BloodGuardian.Database
 
         public void AddDonor(Donor d) {
             d.Donorid = _donors.Count;
+            d.LoggedIn = false;
             _donors.Add(d);
             UpdateDB();
 
             
         }
 
-        public List<Donor> ReadDonors()
+        public static List<Donor> ReadDonors()
         {
             return _donors;
         }
-        public Donor FindDonor(string email,string password)
-        {
 
-            Donor d = null;
-            if (password == null)
-            {
-                d = _donors.Find((donor) => donor.Email==email);
-
-            }
-            else
-            {
-                d =  _donors.Find((donor)=>donor.Email == email && donor.Password == password);
-
-            }
-
-            return d;
-        }
 
         public void UpdateDonor(Donor oldDonor,Donor newDonor)
         {
@@ -149,6 +134,18 @@ namespace BloodGuardian.Database
             _bloodRequests.Add(r);
 
             UpdateDB();
+        }
+
+        public void DeleteRequest(Request r)
+        {
+            _bloodRequests.Remove(r);
+            foreach (var (request, ind) in _bloodRequests.Select((val, i) => (val, i)))
+            {
+                request.RequestId = ind;
+            }
+
+            UpdateDB();
+
         }
 
 
@@ -260,7 +257,7 @@ namespace BloodGuardian.Database
         //-------------------------------------------------------------------------------------------------------------
 
         // Blood Donation Camp Methods
-        public static List<BloodDonationCamp> NearestBloodDonationCamps(Donor d)
+        public List<BloodDonationCamp> NearestBloodDonationCamps(Donor d)
         {
 
             var campsLists = _bloodbanks.Select((bank) => bank.BloodDonationCamps).ToList();

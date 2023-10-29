@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static BloodGuardian.View.BloodBankManagerUI;
 
 namespace BloodGuardian.View
 {
@@ -18,7 +19,8 @@ namespace BloodGuardian.View
             UpdateProfile=1,
             SearchBloodBanks=2,
             SearchBloodDonationCamps=3,
-            SignOut=4,
+            SeeBloodDonationHistory=4,
+            SignOut=5,
         }
 
         public static void DonorMenu(DBHandler Database, Donor d)
@@ -30,12 +32,31 @@ namespace BloodGuardian.View
             Console.WriteLine("1:Update Profile");
             Console.WriteLine("2:Search Blood Banks Near you.");
             Console.WriteLine("3:Search Blood Donation Camps Near You.");
-            Console.WriteLine("4:SignOut");
+            Console.WriteLine("4:See Blood Donation History.");
+            Console.WriteLine("5:SignOut");
 
-            Console.Write("Enter your Input:");
-            var input = Enum.Parse<DonorOptions>(Console.ReadLine());
 
-            switch (input)
+            DonorOptions option;
+            while (true)
+            {
+                Console.WriteLine("----------------------");
+                Console.Write("Enter your Input:");
+                string input = Console.ReadLine();
+
+                DonorOptions result;
+                if (input == string.Empty || !Enum.TryParse<DonorOptions>(input, out result))
+                {
+                    Console.WriteLine("Enter Valid Option.");
+                    continue;
+                }
+
+                option = Enum.Parse<DonorOptions>(input);
+                //Console.WriteLine("*********************");
+                break;
+
+            }
+
+            switch (option)
             {
                 case DonorOptions.UpdateProfile:
                     currDonor = Donor.UpdateProfile(Database, currDonor);
@@ -49,13 +70,17 @@ namespace BloodGuardian.View
                     Search.SearchBloodDonationCamp(Database,d);
                     DonorMenu(Database, currDonor);
                     break;
+                case DonorOptions.SeeBloodDonationHistory:
+                    Donor.ViewBloodDonationHistory(Database, d);
+                    DonorMenu(Database, currDonor);
+                    break;
                 case DonorOptions.SignOut:
-                    Donor.SignOut();
+                    Donor.SignOut(d);
                     App.Start(Database);
                     break;
                 default:
-                    Console.WriteLine("Invalid Choice");
-                    DonorMenu(Database, currDonor);
+                    Console.WriteLine("Enter Valid Option");
+                    DonorUI.DonorMenu(Database, d);
                     break;
             }
 
@@ -85,6 +110,7 @@ namespace BloodGuardian.View
                 }
 
                 newDonor.Name = name;
+                Console.WriteLine("--------------------------------");
                 break;
 
             }
@@ -106,6 +132,8 @@ namespace BloodGuardian.View
                 }
 
                 newDonor.Age = Convert.ToInt32(age);
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -128,6 +156,8 @@ namespace BloodGuardian.View
 
 
                 newDonor.Phone = Convert.ToInt64(phone);
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -149,8 +179,16 @@ namespace BloodGuardian.View
                     continue;
                 }
 
+                if (Donor.FindDonor(email, null)!=null)
+                {
+                    Console.WriteLine("This email already exists.");
+                    continue;
+                }
+
 
                 newDonor.Email = email;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -174,6 +212,8 @@ namespace BloodGuardian.View
                 }
 
                 newDonor.Role = Enum.Parse<roles>(role);
+                Console.WriteLine("--------------------------------");
+
                 break;
             }
 
@@ -195,6 +235,8 @@ namespace BloodGuardian.View
                     continue;
                 }
                 newDonor.State = state;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -217,6 +259,8 @@ namespace BloodGuardian.View
                     continue;
                 }
                 newDonor.City = city;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -241,6 +285,8 @@ namespace BloodGuardian.View
                     continue;
                 }
                 newDonor.Address = address;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -254,7 +300,7 @@ namespace BloodGuardian.View
 
                 try
                 {
-                    Validation.ValidateAddress(password);
+                    Validation.ValidatePassword(password);
 
                 }
                 catch (InvalidDataException e)
@@ -263,6 +309,8 @@ namespace BloodGuardian.View
                     continue;
                 }
                 newDonor.Password = password;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -273,8 +321,6 @@ namespace BloodGuardian.View
 
                 Console.Write("Enter your Blood Group - A+,A-,B+,B-,O+,O-,AB+,AB-: ");
                 string bloodgrp = Console.ReadLine();
-
-                string address = Console.ReadLine();
 
                 try
                 {
@@ -287,6 +333,8 @@ namespace BloodGuardian.View
                     continue;
                 }
                 newDonor.BloodGrp = bloodgrp;
+                Console.WriteLine("--------------------------------");
+
                 break;
 
             }
@@ -304,37 +352,224 @@ namespace BloodGuardian.View
 
             Donor updatedDonor = new Donor();
 
-            Console.Write("Enter your Name: ");
-            var nameInput = Console.ReadLine();
-            updatedDonor.Name = nameInput == String.Empty ? oldDonor.Name : nameInput;
 
-            Console.Write("Enter your Age: ");
-            var ageInput = Console.ReadLine();
-            updatedDonor.Age = ageInput == "" ? oldDonor.Age : Convert.ToInt32(ageInput);
+            while (true)
+            {
 
-            Console.Write("Enter your Phone: ");
-            var phoneInput = Console.ReadLine();
-            updatedDonor.Phone = phoneInput == "" ? oldDonor.Phone : Convert.ToInt64(phoneInput);
+                Console.Write("Enter your Name: ");
+                string name = Console.ReadLine();
+                if (name != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateName(name);
 
-            Console.Write("Enter your Email: ");
-            var emailInput = Console.ReadLine();
-            updatedDonor.Email = emailInput == String.Empty ? oldDonor.Email : emailInput;
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
 
-            Console.Write("Enter your State (In case you are a Blood Bank Manager, Enter its State ): ");
-            var stateInput = Console.ReadLine();
-            updatedDonor.State = stateInput == String.Empty ? oldDonor.State : stateInput;
+                updatedDonor.Name = name==String.Empty?oldDonor.Name:name;
+                Console.WriteLine("--------------------------------");
+                break;
 
-            Console.Write("Enter your City (In case you are a Blood Bank Manager, Enter its City ): ");
-            var cityInput = Console.ReadLine();
-            updatedDonor.City = cityInput == String.Empty ? oldDonor.City : cityInput;
+            }
 
-            Console.Write("Enter your Address (In case you are a Blood Bank Manager, Enter its Address ): ");
-            var addressInput = Console.ReadLine();
-            updatedDonor.Address = addressInput == String.Empty ? oldDonor.Address : addressInput;
 
-            Console.Write("Enter your Password: ");
-            var passInput = Console.ReadLine();
-            updatedDonor.Password = passInput == String.Empty ? oldDonor.Password : passInput;
+
+            while (true)
+            {
+
+                Console.Write("Enter your Age: ");
+                string age = Console.ReadLine();
+                if (age != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateAge(age);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+
+                updatedDonor.Age = age==String.Empty?oldDonor.Age: Convert.ToInt32(age);
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+                Console.Write("Enter your Phone: ");
+                string phone = Console.ReadLine();
+                if (phone != String.Empty)
+                {
+
+                    try
+                    {
+                        Validation.ValidatePhone(phone);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+
+
+                updatedDonor.Phone = phone==String.Empty?oldDonor.Phone:Convert.ToInt64(phone);
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+                Console.Write("Enter your Email: ");
+
+                string email = Console.ReadLine();
+                if (email != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateEmail(email);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+
+
+                updatedDonor.Email = email==String.Empty?oldDonor.Email:email;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+
+                Console.Write("Enter your State (In case you are a Blood Bank Manager, Enter its State ): ");
+                string state = Console.ReadLine();
+
+                if (state != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateState(state);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+                updatedDonor.State = state==String.Empty?oldDonor.State:state;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+
+
+                Console.Write("Enter your City (In case you are a Blood Bank Manager, Enter its City ): ");
+                string city = Console.ReadLine();
+                if (city != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateCity(city);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+                updatedDonor.City = city==String.Empty?oldDonor.City:city;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+
+                Console.Write("Enter your Address (In case you are a Blood Bank Manager, Enter its Address ): ");
+
+                string address = Console.ReadLine();
+
+                if (address != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateAddress(address);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+                updatedDonor.Address = address==String.Empty?oldDonor.Address:address;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
+
+
+            while (true)
+            {
+
+                Console.Write("Enter your Password: ");
+                string password = Console.ReadLine();
+
+                if (password != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidatePassword(password);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+                updatedDonor.Password = password==String.Empty?oldDonor.Password:password;
+                Console.WriteLine("--------------------------------");
+
+                break;
+
+            }
 
             updatedDonor.Donorid = oldDonor.Donorid;
 

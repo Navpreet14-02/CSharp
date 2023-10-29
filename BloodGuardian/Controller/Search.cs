@@ -33,13 +33,74 @@ namespace BloodGuardian.Models
         public static void SearchBlood(DBHandler database)
         {
 
+            string state;
+            while (true)
+            {
 
-            Console.WriteLine("Enter your state:");
-            string state = Console.ReadLine();
-            Console.WriteLine("Enter your city");
-            string city = Console.ReadLine();
-            Console.WriteLine("Enter your blood group: ");
-            string bloodType = Console.ReadLine();
+                Console.Write("Enter your State: ");
+                string input = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateState(input);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                state = input;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
+            string city;
+            while (true)
+            {
+
+
+                Console.Write("Enter your City: ");
+                string input = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateCity(input);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                city = input;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
+            string bloodType;
+            while (true)
+            {
+
+                Console.Write("Enter your Blood Group - A+,A-,B+,B-,O+,O-,AB+,AB-: ");
+                string bloodgrp = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateBloodGroup(bloodgrp);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                bloodType = bloodgrp;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
 
             Console.WriteLine();
 
@@ -64,7 +125,7 @@ namespace BloodGuardian.Models
 
         public static void SearchBloodDonationCamp(DBHandler database,Donor d)
         {
-            var camps = DBHandler.NearestBloodDonationCamps(d);
+            var camps = database.NearestBloodDonationCamps(d);
 
             foreach(var camp in camps)
             {

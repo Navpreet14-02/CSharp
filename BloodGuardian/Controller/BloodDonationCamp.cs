@@ -72,17 +72,46 @@ namespace BloodGuardian.Models
             GetBloodDonationCamps(Database, bank, d);
 
             Console.WriteLine();
-            Console.Write("Enter the id of camp you want to remove: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+
+
+            int campid;
+            while (true)
+            {
+                Console.Write("Enter the id of camp you want to remove: ");
+                string input = Console.ReadLine();
+
+                int res;
+                if (input == String.Empty || !int.TryParse(input, out res))
+                {
+                    Console.WriteLine("Enter Valid Input.");
+                    continue;
+                }
+
+                campid = Convert.ToInt32(input);
+                Console.WriteLine("-----------------------------");
+                break;
+
+            }
 
 
             // Removing Camp
-            bank.BloodDonationCamps.RemoveAt(id);
 
-            // Updating Camp Ids
-            foreach (var (camp, ind) in bank.BloodDonationCamps.Select((val, i) => (val, i)))
+            var choosenCamp = bank.BloodDonationCamps.ElementAtOrDefault(campid);
+
+            if (choosenCamp == null)
             {
-                camp.camp_id = ind;
+                Console.WriteLine("The camp with this id does not exist.");
+            }
+            else
+            {
+
+                bank.BloodDonationCamps.RemoveAt(campid);
+
+                // Updating Camp Ids
+                foreach (var (camp, ind) in bank.BloodDonationCamps.Select((val, i) => (val, i)))
+                {
+                    camp.camp_id = ind;
+                }
             }
 
             Database.UpdateBloodBank(bank, bank);
@@ -116,7 +145,7 @@ namespace BloodGuardian.Models
         }
 
 
-        public static void RemoveBloodDonationCamp(DBHandler db, Donor d)
+        public static void RemoveBloodDonationCampAdmin(DBHandler db, Donor d)
         {
 
             ViewBloodDonationCamps(db,d);
@@ -129,12 +158,36 @@ namespace BloodGuardian.Models
             Console.WriteLine("=========================================");
 
 
-            Console.Write("Enter the bank id: ");
-            var bankid = Convert.ToInt32(Console.ReadLine());
 
-            var bank = db.ReadBloodBanks().ElementAt(bankid);
+            int bankid;
+            while (true)
+            {
+                Console.Write("Enter the bank id: ");
+                string input = Console.ReadLine();
 
-            RemoveBloodDonationCamps(db, bank, d);
+                int res;
+                if (input == String.Empty || !int.TryParse(input, out res))
+                {
+                    Console.WriteLine("Enter Valid Input.");
+                    continue;
+                }
+
+                bankid = Convert.ToInt32(input);
+                Console.WriteLine("-----------------------------");
+                break;
+
+            }
+
+            var bank = db.ReadBloodBanks().ElementAtOrDefault(bankid);
+
+            if (bank == null)
+            {
+                Console.WriteLine("The bank with this id does not exist.");
+            }
+            else
+            {
+                RemoveBloodDonationCamps(db, bank, d);
+            }
 
 
         }

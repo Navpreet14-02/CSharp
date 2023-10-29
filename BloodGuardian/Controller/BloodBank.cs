@@ -41,7 +41,31 @@ namespace BloodGuardian.Models
         {
 
             BloodBank bank = new BloodBank();
-            Console.WriteLine("Enter the Name of your BloodBank: ");
+
+
+
+            while (true)
+            {
+
+                Console.Write("Enter your Name of your BloodBank: ");
+                string name = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateName(name);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+                bank.BankName = name;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
             bank.BankName = Console.ReadLine();
             bank.ManagerEmail = d.Email;
             bank.ManagerName = d.Name;
@@ -54,9 +78,31 @@ namespace BloodGuardian.Models
 
             foreach(var grp in Donor.BloodGroups)
             {
-                Console.Write(grp+": ");
-                var input=Console.ReadLine();
-                bank.BloodUnits[grp] = input==""?0:Convert.ToInt32(input);
+
+
+                while (true)
+                {
+                    Console.Write(grp+": ");    
+                    string amnt = Console.ReadLine();
+
+                    if (amnt != String.Empty)
+                    { 
+
+                        try
+                        {
+                            Validation.ValidateBloodAmount(amnt);
+                        }
+                        catch (InvalidDataException e)
+                        {
+                            Console.WriteLine(e.Message);
+                            continue;
+                        }
+                    }
+
+                    bank.BloodUnits[grp] = amnt == "" ? 0 : Convert.ToInt32(amnt);
+                    break;
+
+                }
 
             }
 
@@ -69,12 +115,32 @@ namespace BloodGuardian.Models
         {
             var bank = Database.FindBloodBank(oldDonor, -1);
 
-
-            Console.WriteLine("Enter name of your bloodbank: ");
-            var name = Console.ReadLine();
-
             var newBank = new BloodBank();
-            newBank.BankName = name==String.Empty?bank.BankName:name;
+            while (true)
+            {
+
+                Console.Write("Enter your Name of your BloodBank: ");
+                string name = Console.ReadLine();
+                if (name != String.Empty)
+                {
+                    try
+                    {
+                        Validation.ValidateName(name);
+
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        continue;
+                    }
+                }
+
+                newBank.BankName = name==String.Empty?bank.BankName:name;
+                Console.WriteLine("--------------------------------");
+                break;
+
+            }
+
             newBank.ManagerEmail = newDonor.Email;
             newBank.ManagerName= newDonor.Name;
             newBank.Address = newDonor.Address;
@@ -87,22 +153,6 @@ namespace BloodGuardian.Models
             Database.UpdateBloodBank(bank, newBank);
             
         }
-
-        //public static void UpdateBloodQuantity(DBHandler Database, BloodBank bank)
-        //{ 
-
-        //    Console.WriteLine("---------------------------------------");
-        //    Console.Write("Enter the blood group you want to update the quantity of - A+,A-,B+,B-,O+,O-,AB+,AB- : ");
-        //    var input = Console.ReadLine();
-        //    Console.Write("Enter the new quantity of the blood: ");
-        //    var quantity = Convert.ToInt32(Console.ReadLine());
-
-        //    //DBHandler.UpdateBloodBank(bank, input, quantity);
-
-
-            
-
-        //}
 
         public static void ViewBloodBanks(DBHandler db,Donor d)
         {
@@ -125,14 +175,41 @@ namespace BloodGuardian.Models
             ViewBloodBanks(db, d);
 
             Console.WriteLine("==================================");
-            Console.Write("Enter the Id of the Blood Bank you want to remove: ");
-            var bankid = Convert.ToInt32(Console.ReadLine());
+
+            int bankid;
+            while (true)
+            {
+                Console.Write("Enter the Id of the Blood Bank you want to remove: ");
+                string input = Console.ReadLine();
+
+                int res;
+                if(input == String.Empty ||!int.TryParse(input, out res)) 
+                {
+                    Console.WriteLine("Enter Valid Input.");
+                    continue;
+                }
+
+                bankid = Convert.ToInt32(input);
+                Console.WriteLine("-----------------------------");
+                break;
+
+            }
+
+
 
             var bank = db.FindBloodBank(null, bankid);
 
-            var donor = db.ReadDonors().Find((dn) => dn.Email == bank.ManagerEmail);
+            if (bank == null)
+            {
+                Console.WriteLine("The bank with this id does not exist");
+            }
+            else
+            {
 
-            db.DeleteBloodBank(donor, bankid);
+                var donor = DBHandler.ReadDonors().Find((dn) => dn.Email == bank.ManagerEmail);
+                db.DeleteBloodBank(donor, bankid);
+            }
+
 
         }
 
