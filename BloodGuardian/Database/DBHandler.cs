@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using BloodGuardian.Common;
 using BloodGuardian.Models;
 using Newtonsoft.Json;
 
@@ -34,27 +29,49 @@ namespace BloodGuardian.Database
 
 
     //}
-    internal class DBHandler
+    public sealed class DBHandler
     {
+
+        private static DBHandler _handler = null;
+
         static private List<Donor> _donors;
-        static private string _donorDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Donors.json";
+        
 
         static private List<BloodBank> _bloodbanks;
-        static private string _bankDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\BloodBanks.json";
+        
 
         static private List<Request> _bloodRequests;
         static private string _requestDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\BloodRequests.json";
 
-        static DBHandler()
+        static private List<Exception> _exceptions;
+        
+
+
+        private DBHandler()
         {
 
-            _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(_donorDataPath));
+            _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(Message._donorDataPath));
 
-            _bloodbanks = JsonConvert.DeserializeObject<List<BloodBank>>(File.ReadAllText(_bankDataPath));
+            _bloodbanks = JsonConvert.DeserializeObject<List<BloodBank>>(File.ReadAllText(Message._bankDataPath));
 
-            _bloodRequests = JsonConvert.DeserializeObject<List<Request>>(File.ReadAllText(_requestDataPath));
+            _bloodRequests = JsonConvert.DeserializeObject<List<Request>>(File.ReadAllText(Message._requestDataPath));
+
+            _exceptions = JsonConvert.DeserializeObject<List<Exception>>(File.ReadAllText(Message._exceptionsDataPath));
+
         }
 
+
+        public static DBHandler Instance
+        {
+            get
+            {
+                if (_handler== null)
+                {
+                    _handler = new DBHandler();
+                }
+                return _handler;
+            }
+        }
 
 
         //-----------------------------------------------------------------------------------------------------
@@ -69,7 +86,7 @@ namespace BloodGuardian.Database
             
         }
 
-        public static List<Donor> ReadDonors()
+        public List<Donor> ReadDonors()
         {
             return _donors;
         }
@@ -90,7 +107,7 @@ namespace BloodGuardian.Database
 
             // Removing Donor
 
-            var bank = _bloodbanks.Find((bank) => bank.ManagerEmail == _donors[donorIndex].Email);
+            var bank = _bloodbanks.Find((bank) => bank.ManagerUserName == _donors[donorIndex].UserName);
 
             _donors.RemoveAt(donorIndex);
 
@@ -126,7 +143,7 @@ namespace BloodGuardian.Database
 
         // Request methods
 
-        public static List<Request> GetRequests()
+        public List<Request> GetRequests()
         {
 
             return _bloodRequests;
@@ -200,7 +217,7 @@ namespace BloodGuardian.Database
 
             if(bankid== -1)
             {
-                return _bloodbanks.Find((b) => b.ManagerEmail == d.Email);
+                return _bloodbanks.Find((b) => b.ManagerUserName == d.UserName);
 
             }
             else
@@ -232,7 +249,7 @@ namespace BloodGuardian.Database
             }
             else
             {
-                _donors[d.Donorid].Role = roles.Donor;
+                DeleteDonor(d.Donorid);
                 _bloodbanks.RemoveAt(bankIndex);
             }
 
@@ -249,8 +266,8 @@ namespace BloodGuardian.Database
         public void UpdateBloodTransferRecord(BloodBank bank,string bloodType,int newquantity,bool deposit)
         {
 
-            if(deposit)_bloodbanks.Find(b => b.ManagerEmail == bank.ManagerEmail).BloodUnits[bloodType] += newquantity;
-            else _bloodbanks.Find(b => b.ManagerEmail == bank.ManagerEmail).BloodUnits[bloodType] -= newquantity;
+            if(deposit)_bloodbanks.Find(b => b.ManagerUserName == bank.ManagerUserName).BloodUnits[bloodType] += newquantity;
+            else _bloodbanks.Find(b => b.ManagerUserName == bank.ManagerUserName).BloodUnits[bloodType] -= newquantity;
 
             UpdateDB();
 
@@ -287,21 +304,31 @@ namespace BloodGuardian.Database
 
 
 
+
         //-------------------------------------------------------------------------------------------------------------
         // Database Methods
 
+
+        public void LogException(Exception ex)
+        {
+            _exceptions.Add(ex);
+            UpdateDB();
+        }
 
 
         private void UpdateDB()
         {
             string donorDataJSON = JsonConvert.SerializeObject(_donors,Formatting.Indented);
-            File.WriteAllText(_donorDataPath, donorDataJSON);
+            File.WriteAllText(Message._donorDataPath, donorDataJSON);
 
             string bankDataJSON = JsonConvert.SerializeObject(_bloodbanks, Formatting.Indented);
-            File.WriteAllText(_bankDataPath, bankDataJSON);
+            File.WriteAllText(Message._bankDataPath, bankDataJSON);
 
             string requestDataJSON = JsonConvert.SerializeObject(_bloodRequests, Formatting.Indented);
-            File.WriteAllText(_requestDataPath, requestDataJSON);
+            File.WriteAllText(Message._requestDataPath, requestDataJSON);
+
+            string exceptionsDataJSON = JsonConvert.SerializeObject(_exceptions, Formatting.Indented);
+            File.WriteAllText(Message._exceptionsDataPath, exceptionsDataJSON);
         }
 
     }

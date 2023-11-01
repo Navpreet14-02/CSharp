@@ -2,6 +2,8 @@
 using BloodGuardian.View;
 using BloodGuardian.Database;
 using BloodGuardian.Models;
+using BloodGuardian.Common;
+
 
 internal class Program
 {
@@ -10,18 +12,20 @@ internal class Program
 
 
 
-        DBHandler database = new DBHandler();
         try
         {
-            Console.WriteLine("******************** BLOODGUARDIAN ***********************");
+            Console.WriteLine(Message.AppLogo);
             Console.WriteLine();
-            App.Start(database);
+            App.Start();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            Console.WriteLine("App Restarting...");
-            App.Start(database);
+            DBHandler.Instance.LogException(ex);
+
+            Console.WriteLine(ex.StackTrace);
+            Console.WriteLine(Message.UnexpectedError);
+            Console.WriteLine(Message.RestartingApp);
+            App.Start();
         }
 
 

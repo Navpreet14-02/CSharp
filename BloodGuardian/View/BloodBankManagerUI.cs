@@ -1,4 +1,5 @@
-﻿using BloodGuardian.Database;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Database;
 using BloodGuardian.Models;
 using System;
 using System.Collections.Concurrent;
@@ -8,63 +9,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static BloodGuardian.View.AdminUI;
+using BloodGuardian.Controller;
 
 namespace BloodGuardian.View
 {
-    internal class BloodBankManagerUI
+    public class BloodBankManagerUI
     {
 
 
-        public enum BloodBankManagerOptions
+        public static void BloodBankManagerMenu(Donor d)
         {
-            UpdateProfile=1,
-            AddBloodDepositRecord=2,
-            AddBloodWithdrawRecord=3,
-            OrganizeBloodDonationCamp=4,
-            SeeBloodDonationCamp=5,
-            RemoveBloodDonationCamp=6,
-            SignOut=7,
-        }
 
+            BloodBankController bankController = new BloodBankController();
+            AuthHandler authHandler = new AuthHandler();
+            BloodDonationCampController campController = new BloodDonationCampController();
+            DonorController donorController = new DonorController();
 
-        public static void BloodBankManagerMenu(DBHandler Database, Donor d)
-        {
 
             Donor currDonor = d;
 
-            BloodBank bank = Database.FindBloodBank(currDonor,-1);
+            BloodBank bank = DBHandler.Instance.FindBloodBank(currDonor,-1);
 
 
             Console.WriteLine();
-            Console.WriteLine("==========================");
-            Console.WriteLine("Enter input as shown below");
-            Console.WriteLine("1:Update Profile.");
-            Console.WriteLine("2:Add Blood Deposit Record.");
-            Console.WriteLine("3:Add Blood Withdraw Record.");
-            Console.WriteLine("4:Organize Blood Donation Camps.");
-            Console.WriteLine("5:See Blood Donation Camps.");
-            Console.WriteLine("6:Remove Blood Donation Camps.");
-            Console.WriteLine("7:SignOut");
-            Console.WriteLine("==========================");
+            Console.WriteLine(Message.DoubleDashDesign);
+            Console.WriteLine(Message.PrintBloodBankManagerOptions);
+            Console.WriteLine(Message.DoubleDashDesign);
             Console.WriteLine();
 
 
             BloodBankManagerOptions option;
             while (true)
             {
-                Console.WriteLine("----------------------");
-                Console.Write("Enter your Input:");
+                Console.WriteLine(Message.SingleDashDesign);
+                Console.Write(Message.EnterInput);
                 string input = Console.ReadLine();
 
                 BloodBankManagerOptions result;
                 if (input == string.Empty || !Enum.TryParse<BloodBankManagerOptions>(input, out result))
                 {
-                    Console.WriteLine("Enter Valid Option.");
+                    Console.WriteLine(Message.EnterValidOption);
                     continue;
                 }
 
                 option = Enum.Parse<BloodBankManagerOptions>(input);
-                //Console.WriteLine("*********************");
                 break;
 
             }
@@ -73,43 +61,43 @@ namespace BloodGuardian.View
             {
                 case BloodBankManagerOptions.UpdateProfile:
                     var oldDonor = d;
-                    currDonor = Donor.UpdateProfile(Database, currDonor);
-                    BloodBank.UpdateBloodBankDetails(Database, oldDonor, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    currDonor = donorController.UpdateProfile(currDonor);
+                    bankController.UpdateBloodBankDetails(oldDonor, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodDepositRecord:
-                    BloodBank.UpdateDepositBloodRecord(Database, bank);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    bankController.UpdateDepositBloodRecord(bank);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodWithdrawRecord:
-                    BloodBank.UpdateWithdrawBloodRecord(Database, bank);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    bankController.UpdateWithdrawBloodRecord(bank);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
                 case BloodBankManagerOptions.OrganizeBloodDonationCamp:
-                    BloodDonationCamp.OrganizeBloodDonationCamps(Database, bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    campController.OrganizeBloodDonationCamps(bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.SeeBloodDonationCamp:
-                    BloodDonationCamp.GetBloodDonationCamps(Database, bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    campController.GetBloodDonationCamps(bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.RemoveBloodDonationCamp:
-                    BloodDonationCamp.RemoveBloodDonationCamps(Database, bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    campController.RemoveBloodDonationCamps(bank, currDonor);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.SignOut:
-                    Donor.SignOut(d);
-                    App.Start(Database);
+                    authHandler.SignOut(d);
+                    App.Start();
                     break;
 
                 default:
-                    Console.WriteLine("Enter Valid Option.");
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, d);
+                    Console.WriteLine(Message.EnterValidOption);
+                    BloodBankManagerUI.BloodBankManagerMenu(d);
                     break;
             }
 
@@ -121,151 +109,30 @@ namespace BloodGuardian.View
 
             BloodTransferReceipt blood = new BloodTransferReceipt();
 
-            Console.WriteLine("=====================================");
-            Console.WriteLine("Enter following details: ");
+            Console.WriteLine(Message.DoubleDashDesign);
+            Console.WriteLine(Message.EnterDetails);
 
-            while (true)
-            {
-                Console.Write("Enter the Name of the Donor: ");
-
-                string name = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateName(name);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                
+            Console.WriteLine(Message.EnterDonorName);
+            blood.BloodDonorName= InputHandler.InputName(false);
 
 
-                blood.BloodDonorName= name;
-                Console.WriteLine("--------------------------------");
+            Console.WriteLine(Message.BloodDonatedType);
+            blood.BloodGroup = InputHandler.InputBloodGroup(false);
 
-                break;
+            Console.WriteLine(Message.EnterDonorEmail);
+            blood.CustomerEmail = InputHandler.InputEmail(false);
 
-            }
+            Console.WriteLine(Message.EnterDonorPhone);
+            blood.CustomerPhone = InputHandler.InputPhone(false);
 
 
-            while (true)
-            {
-                Console.Write("Enter the Type of Blood Donated: ");
-
-                string bloodgrp = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateBloodGroup(bloodgrp);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                blood.BloodGroup = bloodgrp;
-                Console.WriteLine("--------------------------------");
-                break;
-
-            }
-
-            while (true)
-            {
-                Console.Write("Enter the Email of the Donor: ");
-
-                string email = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateEmail(email);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
+            Console.WriteLine(Message.EnterTransferDate);
+            blood.BloodTransferDate = InputHandler.InputDate(false);
 
 
 
-                blood.CustomerEmail = email;
-                Console.WriteLine("--------------------------------");
-
-                break;
-
-            }
-
-            while (true)
-            {
-                
-                Console.Write("Enter the phone no. of the Donor: ");
-                string phoneno = Console.ReadLine();
-                try
-                {
-                    Validation.ValidatePhone(phoneno);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                blood.CustomerPhone = Convert.ToInt64(phoneno);
-
-                Console.WriteLine("--------------------------------");
-
-                break;
-
-            }
-
-
-            while (true)
-            {
-
-
-                Console.Write("Enter the Date for the Blood Transfer - MM/DD/YYYY: ");
-                string transferDate = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateDate(transferDate);
-                }
-                catch(InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                blood.BloodTransferDate = DateTime.Parse(transferDate);
-                break;
-
-           
-            }
-
-            while (true)
-            {
-                Console.Write("Enter the amount of Blood Donated(in ml): ");
-                string amnt = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateBloodAmount(amnt);
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                blood.BloodAmount = Convert.ToInt32(amnt);
-                break;
-
-            }
+            Console.WriteLine(Message.EnterBloodDonatedAmount);
+            blood.BloodAmount = InputHandler.InputBloodAmount(false);
 
             return blood;
 
@@ -278,12 +145,12 @@ namespace BloodGuardian.View
             BloodTransferReceipt blood = new BloodTransferReceipt();
 
 
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine("Enter following details: ");
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.WriteLine(Message.EnterDetails);
 
             while (true)
             {
-                Console.Write("Enter the Name of the Patient: ");
+                Console.Write(Message.EnterPatientName);
 
                 string name = Console.ReadLine();
                 try
@@ -300,7 +167,7 @@ namespace BloodGuardian.View
 
 
                 blood.BloodReceiverName = name;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -309,7 +176,7 @@ namespace BloodGuardian.View
 
             while (true)
             {
-                Console.Write("Enter the Type of Blood Donated: ");
+                Console.Write(Message.BloodWithdrawnType);
 
                 string bloodgrp = Console.ReadLine();
                 try
@@ -324,7 +191,7 @@ namespace BloodGuardian.View
                 }
 
                 blood.BloodGroup = bloodgrp;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
                 break;
 
             }
@@ -332,7 +199,7 @@ namespace BloodGuardian.View
 
             while (true)
             {
-                Console.Write("Enter the Email of the Patient: ");
+                Console.Write(Message.EnterPatientEmail);
 
                 string email = Console.ReadLine();
                 try
@@ -349,7 +216,7 @@ namespace BloodGuardian.View
 
 
                 blood.CustomerEmail = email;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -359,7 +226,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the phone no. of the Patient: ");
+                Console.Write(Message.EnterPatientPhone);
                 string phoneno = Console.ReadLine();
                 try
                 {
@@ -375,7 +242,7 @@ namespace BloodGuardian.View
 
                 blood.CustomerPhone = Convert.ToInt64(phoneno);
 
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -386,7 +253,7 @@ namespace BloodGuardian.View
             {
 
 
-                Console.Write("Enter the Date for the Blood Transfer - MM/DD/YYYY: ");
+                Console.Write(Message.EnterTransferDate);
                 string transferDate = Console.ReadLine();
 
                 try
@@ -408,7 +275,7 @@ namespace BloodGuardian.View
 
             while (true)
             {
-                Console.Write("Enter the amount of Blood Withdrawn(in ml): ");
+                Console.Write(Message.EnterBloodWithdrawnAmount);
                 string amnt = Console.ReadLine();
 
                 try
@@ -435,13 +302,13 @@ namespace BloodGuardian.View
         {
             var camp = new BloodDonationCamp();
 
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("Enter following details for the Blood Donation Camp:");
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.WriteLine(Message.EnterDonationCampDetails);
 
 
             while (true)
             {
-                Console.Write("Enter the Date for the Camp(DD/MM/YYYY): ");
+                Console.Write(Message.EnterCampDate);
                 string campDate = Console.ReadLine();
 
                 try
@@ -455,7 +322,7 @@ namespace BloodGuardian.View
                 }
 
                 camp.Date = DateTime.Parse(campDate);
-                Console.WriteLine("---------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
                 break;
 
 
@@ -465,7 +332,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the state in which the camp will be organized: ");
+                Console.Write(Message.EnterCampState);
                 string state = Console.ReadLine();
 
                 if (state != String.Empty)
@@ -482,7 +349,7 @@ namespace BloodGuardian.View
                     }
                 }
                 camp.Camp_State=state;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -492,7 +359,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the city in which the camp will be organized: ");
+                Console.Write(Message.EnterCampCity);
                 string city = Console.ReadLine();
 
                 if (city != String.Empty)
@@ -509,7 +376,7 @@ namespace BloodGuardian.View
                     }
                 }
                 camp.Camp_City = city;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -519,7 +386,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the complete address for the camp: ");
+                Console.Write(Message.EnterCampAddress);
                 string address = Console.ReadLine();
 
                 if (address != String.Empty)
@@ -536,7 +403,7 @@ namespace BloodGuardian.View
                     }
                 }
                 camp.Camp_Address = address;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -546,7 +413,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the start time for the camp(HH:MM) in 24-hour format:");
+                Console.Write(Message.EnterCampStartTime);
                 string start_time = Console.ReadLine();
                 
                 try
@@ -561,7 +428,7 @@ namespace BloodGuardian.View
                 }
                 
                 camp.Start_Time = TimeOnly.Parse(start_time);
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 
@@ -571,7 +438,7 @@ namespace BloodGuardian.View
             while (true)
             {
 
-                Console.Write("Enter the end time for the camp(HH:MM) in 24-hour format: ");
+                Console.Write(Message.EnterCampEndTime);
                 string end_time = Console.ReadLine();
 
                 try
@@ -586,7 +453,7 @@ namespace BloodGuardian.View
                 }
 
                 camp.End_Time = TimeOnly.Parse(end_time);
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
 
                 break;
 

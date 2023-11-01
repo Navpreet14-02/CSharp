@@ -1,4 +1,6 @@
-﻿using BloodGuardian.Database;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Database;
+using BloodGuardian.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,39 +8,47 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace BloodGuardian.Models
+namespace BloodGuardian.Controller
 {
-    internal class Search
+    public class Search
     {
 
-        public static void SearchBloodBanks(DBHandler database,Donor d)
+        public static void SearchBloodBanks(Donor d)
         {
-            List<BloodBank> banks = database.SearchBloodBank(d.State,d.City,null);
+            List<BloodBank> banks = DBHandler.Instance.SearchBloodBank(d.State, d.City, null);
 
-            foreach (BloodBank bank in banks)
+            if (banks.Count == 0)
             {
-                Console.WriteLine("------------------------------------");
-                Console.WriteLine("Bank Id: " + bank.BankId);
-                Console.WriteLine("Bank Name: " + bank.BankName);
-                Console.WriteLine("Contact No: " + bank.Contact);
-                Console.WriteLine("State: " + bank.State);
-                Console.WriteLine("City: " + bank.City);
-                Console.WriteLine("Address: " + bank.Address);
-                Console.WriteLine("------------------------------------");
+                Console.WriteLine(Message.NoBloodBankFound);
+            }
+            else
+            {
 
+                foreach (BloodBank bank in banks)
+                {
+                    Console.WriteLine(Message.SingleDashDesign);
+                    Console.WriteLine("Bank Id: " + bank.BankId);
+                    Console.WriteLine("Bank Name: " + bank.BankName);
+                    Console.WriteLine("Contact No: " + bank.Contact);
+                    Console.WriteLine("State: " + bank.State);
+                    Console.WriteLine("City: " + bank.City);
+                    Console.WriteLine("Address: " + bank.Address);
+                    Console.WriteLine(Message.SingleDashDesign);
+
+                }
             }
 
 
         }
 
-        public static void SearchBlood(DBHandler database)
+        public static void SearchBlood()
         {
 
             string state;
             while (true)
             {
 
-                Console.Write("Enter your State: ");
+                Console.Write(Message.EnterState);
                 string input = Console.ReadLine();
 
                 try
@@ -52,7 +62,7 @@ namespace BloodGuardian.Models
                     continue;
                 }
                 state = input;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
                 break;
 
             }
@@ -62,7 +72,7 @@ namespace BloodGuardian.Models
             {
 
 
-                Console.Write("Enter your City: ");
+                Console.Write(Message.EnterCity);
                 string input = Console.ReadLine();
                 try
                 {
@@ -75,7 +85,7 @@ namespace BloodGuardian.Models
                     continue;
                 }
                 city = input;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
                 break;
 
             }
@@ -84,7 +94,7 @@ namespace BloodGuardian.Models
             while (true)
             {
 
-                Console.Write("Enter your Blood Group - A+,A-,B+,B-,O+,O-,AB+,AB-: ");
+                Console.Write(Message.EnterBloodGroup);
                 string bloodgrp = Console.ReadLine();
 
                 try
@@ -98,7 +108,7 @@ namespace BloodGuardian.Models
                     continue;
                 }
                 bloodType = bloodgrp;
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(Message.SingleDashDesign);
                 break;
 
             }
@@ -106,40 +116,55 @@ namespace BloodGuardian.Models
             Console.WriteLine();
 
 
-            List<BloodBank> banks = database.SearchBloodBank(state, city, bloodType);
+            List<BloodBank> banks = DBHandler.Instance.SearchBloodBank(state, city, bloodType);
 
 
-            foreach (BloodBank bank in banks)
+            if (banks.Count == 0)
             {
-                Console.WriteLine("------------------------------------");
-                Console.WriteLine("Bank Id: " + bank.BankId);
-                Console.WriteLine("Bank Name: " + bank.BankName);
-                Console.WriteLine("Contact No: " + bank.Contact);
-                Console.WriteLine("State: " + bank.State);
-                Console.WriteLine("City: " + bank.City);
-                Console.WriteLine("Address: " + bank.Address);
-                Console.WriteLine("------------------------------------");
-
+                Console.WriteLine(Message.NoNearbyBloodBankFound);
             }
+            else
+            {
 
+                foreach (BloodBank bank in banks)
+                {
+                    Console.WriteLine(Message.SingleDashDesign);
+                    Console.WriteLine("Bank Id: " + bank.BankId);
+                    Console.WriteLine("Bank Name: " + bank.BankName);
+                    Console.WriteLine("Contact No: " + bank.Contact);
+                    Console.WriteLine("State: " + bank.State);
+                    Console.WriteLine("City: " + bank.City);
+                    Console.WriteLine("Address: " + bank.Address);
+                    Console.WriteLine(Message.SingleDashDesign);
+
+                }
+            }
 
         }
 
-        public static void SearchBloodDonationCamp(DBHandler database,Donor d)
+        public static void SearchBloodDonationCamp(Donor d)
         {
-            var camps = database.NearestBloodDonationCamps(d);
+            var camps = DBHandler.Instance.NearestBloodDonationCamps(d);
 
-            foreach(var camp in camps)
+
+            if (camps.Count == 0)
             {
-                Console.WriteLine();
-                Console.WriteLine("-------------------------");
-                Console.WriteLine("Address: "+camp.Camp_Address);
-                Console.WriteLine("Camp Date: "+camp.Date);
-                Console.WriteLine($"Camp Duration: {camp.Start_Time.ToString()} - {camp.End_Time.ToString()}");
-                Console.WriteLine("-------------------------");
+                Console.WriteLine(Message.NoDonationCampFound);
+            }
+            else
+            {
+                foreach (var camp in camps)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(Message.SingleDashDesign);
+                    Console.WriteLine("Address: " + camp.Camp_Address);
+                    Console.WriteLine("Camp Date: " + camp.Date);
+                    Console.WriteLine($"Camp Duration: {camp.Start_Time.ToString()} - {camp.End_Time.ToString()}");
+                    Console.WriteLine(Message.SingleDashDesign);
 
-                Console.WriteLine();
+                    Console.WriteLine();
 
+                }
             }
         }
     }

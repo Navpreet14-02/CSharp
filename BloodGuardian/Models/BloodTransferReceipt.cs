@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BloodGuardian.Models
 {
-    internal class BloodTransferReceipt
+    public class BloodTransferReceipt
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
+
         public string BloodDonorName { get; set; }
 
         public string BloodReceiverName { get; set; }

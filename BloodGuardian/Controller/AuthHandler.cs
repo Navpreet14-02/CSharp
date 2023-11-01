@@ -1,121 +1,80 @@
 ﻿using BloodGuardian.Database;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BloodGuardian.Common;
 
-namespace BloodGuardian
+
+namespace BloodGuardian.Controller
+
 {
-    internal class AuthHandler
+    public class AuthHandler
     {
 
+        BloodBankController bankController=new BloodBankController();
+        DonorController donorController = new DonorController();
 
-        public static void Register(DBHandler Database)
+
+        public void Register()
         {
             Donor newDonor = DonorUI.CreateUser();
 
-            Database.AddDonor(newDonor);
+            DBHandler.Instance.AddDonor(newDonor);
 
 
-            if(newDonor.Role == roles.BloodBankManager)
+            if (newDonor.Role == roles.BloodBankManager)
             {
-                BloodBank bank = BloodBank.createBloodBank(newDonor);
+                BloodBank bank = bankController.createBloodBank(newDonor);
                 Console.WriteLine();
 
-                Database.AddBloodBank(bank);
+                DBHandler.Instance.AddBloodBank(bank);
             }
 
 
-            Console.WriteLine("You are Registered. ");
+            Console.WriteLine(Message.UserRegistered);
             Console.WriteLine();
-            App.Start(Database);
+            App.Start();
 
 
             //return newDonor;
 
-        } 
+        }
 
-        public static void Login(DBHandler Database)
+        public void Login()
         {
 
-            string email;
 
-            while (true)
+
+            Console.WriteLine(Message.EnterUserName);
+            string username = InputHandler.InputUserName(false);
+
+            Console.WriteLine(Message.EnterPassword);
+            string password = InputHandler.InputPassword(false);
+
+
+
+            var donor = donorController.FindDonor(username, password);
+            if (donor != null)
             {
-                Console.Write("Enter your Email: ");
-
-                string emailInput = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateEmail(emailInput);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                email = emailInput;
-                Console.WriteLine("--------------------------------");
-
-                break;
-
-            }
-
-            string password;
-
-            while (true)
-            {
-
-                Console.Write("Enter your Password: ");
-                string passwordInput = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidatePassword(passwordInput);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                password = passwordInput;
-                Console.WriteLine("--------------------------------");
-
-                break;
-
-            }
-
-
-            var donor = Donor.FindDonor(email,password);
-            if (donor!=null)
-            {
-                Console.WriteLine("You are logged in.");
+                Console.WriteLine(Message.UserLoggedIn);
                 Console.WriteLine();
                 donor.LoggedIn = true;
                 if (donor.Role == roles.Admin)
                 {
-                    AdminUI.AdminMenu(Database, donor);
+                    AdminUI.AdminMenu(donor);
                 }
                 else if (donor.Role == roles.BloodBankManager)
                 {
-                    BloodBankManagerUI.BloodBankManagerMenu(Database, donor);
+                    BloodBankManagerUI.BloodBankManagerMenu(donor);
                 }
                 else
                 {
-                    DonorUI.DonorMenu(Database, donor);
+                    DonorUI.DonorMenu(donor);
                 }
             }
             else
             {
-                Console.WriteLine("Enter valid details. If you are a new user, then register first.");
-                App.Start(Database);
+                Console.WriteLine(Message.WrongLoginDetailsMessage);
+                App.Start();
             }
 
 
@@ -123,6 +82,11 @@ namespace BloodGuardian
 
             //return donor;
 
+        }
+
+        public void SignOut(Donor d)
+        {
+            d.LoggedIn = false;
         }
     }
 }
