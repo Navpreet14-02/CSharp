@@ -1,14 +1,5 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BloodGuardian.View.AdminUI;
 using BloodGuardian.Controller;
 
 namespace BloodGuardian.View
@@ -17,18 +8,18 @@ namespace BloodGuardian.View
     {
 
 
+
         public static void BloodBankManagerMenu(Donor d)
         {
 
+
             BloodBankController bankController = new BloodBankController();
-            AuthHandler authHandler = new AuthHandler();
             BloodDonationCampController campController = new BloodDonationCampController();
             DonorController donorController = new DonorController();
 
-
             Donor currDonor = d;
 
-            BloodBank bank = DBHandler.Instance.FindBloodBank(currDonor,-1);
+            BloodBank bank = bankController.FindBloodBankbyDonor(currDonor);
 
 
             Console.WriteLine();
@@ -63,48 +54,48 @@ namespace BloodGuardian.View
                     var oldDonor = d;
                     currDonor = donorController.UpdateProfile(currDonor);
                     bankController.UpdateBloodBankDetails(oldDonor, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodDepositRecord:
                     bankController.UpdateDepositBloodRecord(bank);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.AddBloodWithdrawRecord:
                     bankController.UpdateWithdrawBloodRecord(bank);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
                 case BloodBankManagerOptions.OrganizeBloodDonationCamp:
                     campController.OrganizeBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.SeeBloodDonationCamp:
                     campController.GetBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.RemoveBloodDonationCamp:
                     campController.RemoveBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
 
                 case BloodBankManagerOptions.SignOut:
-                    authHandler.SignOut(d);
+                    Console.WriteLine("Signing Out...");
                     App.Start();
                     break;
 
                 default:
                     Console.WriteLine(Message.EnterValidOption);
-                    BloodBankManagerUI.BloodBankManagerMenu(d);
+                    BloodBankManagerMenu(d);
                     break;
             }
 
         }
 
 
-        public static BloodTransferReceipt CreateBloodDepositRecord() 
+        public BloodTransferReceipt CreateBloodDepositRecord() 
         {
 
             BloodTransferReceipt blood = new BloodTransferReceipt();
@@ -139,7 +130,87 @@ namespace BloodGuardian.View
 
         }
 
-        public static BloodTransferReceipt CreateBloodWithdrawRecord()
+        public BloodBank createBloodBank(Donor d)
+        {
+
+            //if (d.Role != roles.BloodBankManager)
+            //{
+            //    Console.WriteLine(Message.NotAuthorized);
+            //    return null;
+            //}
+
+            BloodBank bank = new BloodBank();
+
+
+
+            while (true)
+            {
+
+                Console.Write(Message.EnterBloodBankName);
+                string name = Console.ReadLine();
+                try
+                {
+                    Validation.ValidateName(name);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+                Console.WriteLine(Message.SingleDashDesign);
+                bank.BankName = name;
+                break;
+
+            }
+
+            bank.ManagerEmail = d.Email;
+            bank.ManagerName = d.Name;
+            bank.Address = d.Address;
+            bank.State = d.State;
+            bank.City = d.City;
+            bank.Contact = d.Phone;
+            bank.ManagerUserName = d.UserName;
+
+            Console.WriteLine(Message.BloodAvailabilityAmount);
+
+            foreach (var grp in Validation.BloodGroups)
+            {
+
+
+                while (true)
+                {
+                    Console.Write(grp + ": ");
+                    string amnt = Console.ReadLine();
+
+                    if (amnt != String.Empty)
+                    {
+
+                        try
+                        {
+                            Validation.ValidateBloodAmount(amnt);
+                        }
+                        catch (InvalidDataException e)
+                        {
+                            Console.WriteLine(e.Message);
+                            continue;
+                        }
+                    }
+
+                    bank.BloodUnits[grp] = amnt == "" ? 0 : Convert.ToInt32(amnt);
+                    break;
+
+                }
+
+            }
+
+
+            return bank;
+
+        }
+
+        public BloodTransferReceipt CreateBloodWithdrawRecord()
         {
 
             BloodTransferReceipt blood = new BloodTransferReceipt();
@@ -298,7 +369,7 @@ namespace BloodGuardian.View
         }
 
 
-        public static BloodDonationCamp InputBloodDonationCamp()
+        public BloodDonationCamp InputBloodDonationCamp()
         {
             var camp = new BloodDonationCamp();
 

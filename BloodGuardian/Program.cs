@@ -1,7 +1,5 @@
-﻿using BloodGuardian;
-using BloodGuardian.View;
+﻿using BloodGuardian.View;
 using BloodGuardian.Database;
-using BloodGuardian.Models;
 using BloodGuardian.Common;
 
 
@@ -20,9 +18,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            DBHandler.Instance.LogException(ex);
-
-            Console.WriteLine(ex.StackTrace);
+            ExceptionsDBHandler.Instance.LogException(ex);
             Console.WriteLine(Message.UnexpectedError);
             Console.WriteLine(Message.RestartingApp);
             App.Start();

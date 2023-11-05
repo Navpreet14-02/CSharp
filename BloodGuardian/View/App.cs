@@ -1,12 +1,6 @@
 ﻿using BloodGuardian.Common;
 using BloodGuardian.Controller;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloodGuardian.View
 {
@@ -18,6 +12,7 @@ namespace BloodGuardian.View
 
             RequestController requestController = new RequestController();
             AuthHandler authHandler = new AuthHandler();
+            Search search = new Search();
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
@@ -29,22 +24,18 @@ namespace BloodGuardian.View
 
             HomePageOptions option;
 
-            while (true)
-            {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.Write(Message.EnterInput);
-                string input = Console.ReadLine();
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
 
-                HomePageOptions result;
-                if (input == string.Empty || !Enum.TryParse<HomePageOptions>(input, out result)){
-                    Console.WriteLine(Message.EnterValidOption);
-                    continue;
-                }
-
-                option = Enum.Parse<HomePageOptions>(input);
-                break;
-
+            HomePageOptions result;
+            if (input == string.Empty || !Enum.TryParse<HomePageOptions>(input, out result)){
+                Console.WriteLine(Message.EnterValidOption);
+                Start();
             }
+
+            option = Enum.Parse<HomePageOptions>(input);
+            
 
 
             Donor d;
@@ -71,7 +62,7 @@ namespace BloodGuardian.View
                     break;
 
                 case HomePageOptions.SearchBlood:
-                    Search.SearchBlood();
+                    search.SearchBlood();
                     Start();
                     break;
 
@@ -81,7 +72,7 @@ namespace BloodGuardian.View
 
                 default:
                     Console.WriteLine(Message.EnterValidOption);
-                    App.Start();
+                    Start();
                     break;
             }
         }

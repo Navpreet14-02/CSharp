@@ -7,109 +7,52 @@ namespace BloodGuardian.Controller
 {
     internal class BloodBankController
     {
-        public BloodBank createBloodBank(Donor d)
+
+        private BloodBankManagerUI _bloodbankManagerUI;
+
+        public BloodBankController()
+        {
+            _bloodbankManagerUI = new BloodBankManagerUI();
+        }
+
+        public void AddBloodBank(Donor d)
         {
 
-            BloodBank bank = new BloodBank();
+            BloodBank bank = _bloodbankManagerUI.createBloodBank(d);
+            BloodBankDBHandler.Instance.Add(bank);
 
+        }
 
+        public List<BloodBank> GetBloodBanks()
+        {
+            return BloodBankDBHandler.Instance.Read();
+        }
 
-            while (true)
-            {
+        public BloodBank FindBloodBankbyId(int bankid)
+        {
+            var banks = BloodBankDBHandler.Instance.Read();
+            if (bankid < 0 || bankid > banks.Count) return null;
+            return banks[bankid];
 
-                Console.Write(Message.EnterBloodBankName);
-                string name = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateName(name);
+        }
 
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                bank.BankName = name;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            bank.ManagerEmail = d.Email;
-            bank.ManagerName = d.Name;
-            bank.Address = d.Address;
-            bank.State = d.State;
-            bank.City = d.City;
-            bank.Contact = d.Phone;
-            bank.ManagerUserName = d.UserName;
-
-            Console.WriteLine(Message.BloodAvailabilityAmount);
-
-            foreach (var grp in Donor.BloodGroups)
-            {
-
-
-                while (true)
-                {
-                    Console.Write(grp + ": ");
-                    string amnt = Console.ReadLine();
-
-                    if (amnt != String.Empty)
-                    {
-
-                        try
-                        {
-                            Validation.ValidateBloodAmount(amnt);
-                        }
-                        catch (InvalidDataException e)
-                        {
-                            Console.WriteLine(e.Message);
-                            continue;
-                        }
-                    }
-
-                    bank.BloodUnits[grp] = amnt == "" ? 0 : Convert.ToInt32(amnt);
-                    break;
-
-                }
-
-            }
-
-
-            return bank;
-
+        public BloodBank FindBloodBankbyDonor(Donor d)
+        {
+            var banks = BloodBankDBHandler.Instance.Read();
+            return banks.Find((b) => b.ManagerUserName == d.UserName);
         }
 
         public void UpdateBloodBankDetails(Donor oldDonor, Donor newDonor)
         {
-            var bank = DBHandler.Instance.FindBloodBank(oldDonor, -1);
+            var bank = FindBloodBankbyDonor(oldDonor);
 
             var newBank = new BloodBank();
-            while (true)
-            {
+                
+            Console.WriteLine(Message.EnterBloodBankName);
+            var newBankName = InputHandler.InputName(true); 
 
-                Console.Write(Message.EnterBloodBankName);
-                string name = Console.ReadLine();
-                if (name != String.Empty)
-                {
-                    try
-                    {
-                        Validation.ValidateName(name);
 
-                    }
-                    catch (InvalidDataException e)
-                    {
-                        Console.WriteLine(e.Message);
-                        continue;
-                    }
-                }
-
-                newBank.BankName = name == String.Empty ? bank.BankName : name;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
+            newBank.BankName = newBankName == String.Empty ? bank.BankName : newBankName;
 
             newBank.ManagerEmail = newDonor.Email;
             newBank.ManagerName = newDonor.Name;
@@ -125,13 +68,13 @@ namespace BloodGuardian.Controller
 
 
 
-            DBHandler.Instance.UpdateBloodBank(bank, newBank);
+            BloodBankDBHandler.Instance.UpdateBloodBank(bank, newBank);
 
         }
 
-        public void ViewBloodBanks(Donor d)
+        public void AdminViewBloodBanks(Donor d)
         {
-            DBHandler.Instance.ReadBloodBanks().ForEach(bank =>
+            BloodBankDBHandler.Instance.Read().ForEach(bank =>
             {
                 Console.WriteLine(Message.SingleDashDesign);
                 Console.WriteLine("Id: " + bank.BankId);
@@ -148,34 +91,17 @@ namespace BloodGuardian.Controller
         }
 
 
-        public void RemoveBloodBank(Donor d)
+        public void AdminRemoveBloodBank(Donor d)
         {
-            ViewBloodBanks(d);
+            AdminViewBloodBanks(d);
 
             Console.WriteLine(Message.DoubleDashDesign);
-
-            int bankid;
-            while (true)
-            {
-                Console.Write(Message.EnterBloodBankId);
-                string input = Console.ReadLine();
-
-                int res;
-                if (input == String.Empty || !int.TryParse(input, out res))
-                {
-                    Console.WriteLine(Message.EnterValidInput);
-                    continue;
-                }
-
-                bankid = Convert.ToInt32(input);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
+            Console.WriteLine(Message.EnterBloodBankId);
 
 
+            int bankid = InputHandler.InputId();
 
-            var bank = DBHandler.Instance.FindBloodBank(null, bankid);
+            var bank = FindBloodBankbyId(bankid);
 
             if (bank == null)
             {
@@ -183,24 +109,31 @@ namespace BloodGuardian.Controller
             }
             else
             {
-
-                var donor = DBHandler.Instance.ReadDonors().Find((dn) => dn.UserName == bank.ManagerUserName);
-                DBHandler.Instance.DeleteBloodBank(donor, bankid);
+                DonorController donorController = new DonorController();
+                var donor = donorController.FindDonorByBank(bank);
+                donorController.RemoveDonor(donor);
+                RemoveBloodBank(bank);
             }
 
 
         }
 
+        public void RemoveBloodBank(BloodBank bank)
+        {
+            BloodBankDBHandler.Instance.Delete(bank);
+        }
+
+
         public void UpdateDepositBloodRecord(BloodBank bank)
         {
 
-            BloodTransferReceipt blood = BloodBankManagerUI.CreateBloodDepositRecord();
+            BloodTransferReceipt blood = _bloodbankManagerUI.CreateBloodDepositRecord();
 
             blood.Id = bank.Blood_Deposit_Record.Count;
             bank.Blood_Deposit_Record.Add(blood);
-            DBHandler.Instance.UpdateBloodBank(bank, bank);
+            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
-            DBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, true);
+            BloodBankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, true);
 
 
 
@@ -211,15 +144,15 @@ namespace BloodGuardian.Controller
         {
 
 
-            BloodTransferReceipt blood = BloodBankManagerUI.CreateBloodWithdrawRecord();
+            BloodTransferReceipt blood = _bloodbankManagerUI.CreateBloodWithdrawRecord();
 
 
             blood.Id = bank.Blood_WithDrawal_Record.Count;
 
             bank.Blood_WithDrawal_Record.Add(blood);
-            DBHandler.Instance.UpdateBloodBank(bank, bank);
+            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
-            DBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, false);
+            BloodBankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, false);
 
 
 

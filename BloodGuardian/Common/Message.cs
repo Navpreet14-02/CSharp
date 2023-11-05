@@ -1,12 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BloodGuardian.Common
+﻿namespace BloodGuardian.Common
 {
     internal class Message
     {
@@ -101,7 +93,8 @@ namespace BloodGuardian.Common
         public static string ChooseValidRole = "Please choose a valid role.";
         public static string NoEmptyPassword = "Password can not be empty.";
         public static string EnterStrongPassword = "Enter strong password with minimum length of 8 with numbers, Lower and Uppercase Characters.";
-        public static string NoEmptyEmail = "Enter Valid Email.";
+        public static string NoEmptyEmail = "Enter can not be Email.";
+        public static string EnterValidEmail = "Enter Valid Email.";
         public static string NoEmptyBloodGroup = "Blood Group can not be empty.";
         public static string EnterValidBloodGroup = "Enter Valid Blood Group.";
         public static string NoEmptyDate = "Date can not be empty.";
@@ -116,5 +109,9 @@ namespace BloodGuardian.Common
         public static string _exceptionsDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Exceptions.json";
         public static string UnexpectedError = "Unexpected Error Occurred.";
         public static string RestartingApp = "App Restarting...";
+        public static string NotAuthorized = "You are not authorized.";
+        public static string NoDonationCamps = "There are no Blood Donation Camps organized by your Bank.";
+        public static string NoDonationCampOrganized = "There are no Organized Blood Donation Camps.";
+        public static string NoDonationCampsBank = "There are no Blood Donation Camps organized by this Bank.";
     }
 }

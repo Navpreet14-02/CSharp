@@ -2,25 +2,67 @@
   {
     "BankId": 0,
     "ManagerName": "Akshay",
-    "ManagerUserName": null,
-    "ManagerEmail": "akshay14@gmail.com",
-    "Contact": 2462462376,
+    "ManagerUserName": "Akshay",
+    "ManagerEmail": "akshay16@gmail.com",
+    "Contact": 2346234636,
     "BankName": "akshay-bloodbank",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
-    "Blood_WithDrawal_Record": [],
-    "Blood_Deposit_Record": [],
+    "Blood_WithDrawal_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": null,
+        "BloodReceiverName": "Raja",
+        "BloodGroup": "O+",
+        "CustomerEmail": "raja@gmail.com",
+        "CustomerPhone": 5423634645,
+        "BloodTransferDate": "2023-11-05T00:00:00",
+        "BloodAmount": 40
+      }
+    ],
+    "Blood_Deposit_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": "Kishan",
+        "BloodReceiverName": null,
+        "BloodGroup": "AB-",
+        "CustomerEmail": "kishan@gmail.com",
+        "CustomerPhone": 4363262465,
+        "BloodTransferDate": "2023-09-25T00:00:00",
+        "BloodAmount": 100
+      },
+      {
+        "Id": 1,
+        "BloodDonorName": "Rabi",
+        "BloodReceiverName": null,
+        "BloodGroup": "A+",
+        "CustomerEmail": "rabi@gmail.com",
+        "CustomerPhone": 3245234635,
+        "BloodTransferDate": "2023-09-30T00:00:00",
+        "BloodAmount": 200
+      }
+    ],
     "BloodUnits": {
-      "A+": 0,
+      "A+": 200,
       "A-": 0,
-      "B+": 0,
-      "B-": 50,
-      "O+": 50,
-      "O-": 60,
-      "AB+": 40,
-      "AB-": 30
+      "B+": 60,
+      "B-": 70,
+      "O+": 46,
+      "O-": 45,
+      "AB+": 50,
+      "AB-": 100
     },
-    "BloodDonationCamps": []
+    "BloodDonationCamps": [
+      {
+        "camp_id": 0,
+        "Date": "2023-11-10T00:00:00",
+        "Camp_State": "Punjab",
+        "Camp_City": "Patiala",
+        "Camp_Address": "Patiala,Punjab",
+        "Start_Time": "08:00:00",
+        "End_Time": "15:00:00"
+      }
+    ]
   }
 ]

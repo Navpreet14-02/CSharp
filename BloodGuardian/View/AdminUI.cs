@@ -1,12 +1,4 @@
-﻿using BloodGuardian.Database;
-using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static BloodGuardian.View.App;
+﻿using BloodGuardian.Models;
 using BloodGuardian.Common;
 using BloodGuardian.Controller;
 
@@ -20,11 +12,11 @@ namespace BloodGuardian.View
         {
 
 
-            AuthHandler authHandler = new AuthHandler();
-            BloodDonationCampController campController = new BloodDonationCampController();
+            BloodDonationCampController donationCampController = new BloodDonationCampController();
             BloodBankController bankController = new BloodBankController();
             DonorController donorController = new DonorController();
             RequestController requestController = new RequestController();
+
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
@@ -67,43 +59,43 @@ namespace BloodGuardian.View
                     break;
 
                 case AdminOptions.SeeAllDonors:
-                    donorController.ViewDonors(d);
+                    donorController.AdminViewDonors(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.RemoveDonor:
-                    donorController.RemoveDonor(d);
+                    donorController.AdminRemoveDonor(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.SeeAllBloodBanks:
-                    bankController.ViewBloodBanks(d);
+                    bankController.AdminViewBloodBanks(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.RemoveBloodBank:
-                    bankController.RemoveBloodBank(d);
+                    bankController.AdminRemoveBloodBank(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.SeeBloodDonationCamps:
-                    campController.ViewBloodDonationCamps(d);
+                    donationCampController.AdminViewBloodDonationCamps(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.RemoveBloodDonationCamps:
-                    campController.RemoveBloodDonationCampAdmin(d);
+                    donationCampController.AdminRemoveBloodDonationCamp(d);
                     AdminMenu(d);
                     break;
 
                 case AdminOptions.RemoveRequest:
-                    requestController.RemoveRequest(d);
+                    requestController.AdminRemoveRequest(d);
                     AdminMenu(d);
 
                     break;
 
                 case AdminOptions.SignOut:
-                    authHandler.SignOut(d);
+                    Console.WriteLine("Signing Out...");
                     App.Start();
                     break;
                 default:
@@ -118,7 +110,7 @@ namespace BloodGuardian.View
 
         }
 
-        public static Donor InputAdmin(Donor d)
+        public Donor InputAdmin(Donor d)
         {
 
             Donor newAdmin = new Donor();

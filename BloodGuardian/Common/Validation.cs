@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using BloodGuardian.Models;
+﻿using System.Text.RegularExpressions;
 
 namespace BloodGuardian.Common
 {
@@ -16,6 +8,8 @@ namespace BloodGuardian.Common
         private static Regex emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
         private static Regex hasOnlyAlphaNumeric = new Regex(@"^[A-z][A-z0-9]{2,28}$");
+
+        public static List<string> BloodGroups = new List<string> { "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-" };
 
         public static void ValidateName(string name)
         {
@@ -58,21 +52,35 @@ namespace BloodGuardian.Common
 
         }
 
+        public static void ValidateId(string id)
+        {
+
+            int temp;
+            if (id == String.Empty || !int.TryParse(id, out temp)) throw new InvalidDataException(Message.EnterValidInput);
+            //{
+            //    Console.WriteLine(Message.EnterValidInput);
+            //    continue;
+            //}
+        }
+
         public static void ValidateState(string state)
         {
-            if (string.IsNullOrEmpty(state) || string.IsNullOrWhiteSpace(state)) throw new InvalidDataException(Message.NoEmptyState);
+            int temp;
+            if (string.IsNullOrEmpty(state) || string.IsNullOrWhiteSpace(state) || int.TryParse(state,out temp)) throw new InvalidDataException(Message.NoEmptyState);
         }
 
 
         public static void ValidateCity(string city)
         {
-            if (string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(city)) throw new InvalidDataException(Message.NoEmptyCity);
+            int temp;
+            if (string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(city) || int.TryParse(city, out temp)) throw new InvalidDataException(Message.NoEmptyCity);
         }
 
 
         public static void ValidateAddress(string address)
         {
-            if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address)) throw new InvalidDataException(Message.NoEmptyAddress);
+            int temp;
+            if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address) || int.TryParse(address, out temp)) throw new InvalidDataException(Message.NoEmptyAddress);
         }
 
         public static void ValidateRole(string role)
@@ -123,7 +131,7 @@ namespace BloodGuardian.Common
             if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email)) throw new InvalidDataException(Message.NoEmptyEmail);
 
 
-            if (!emailRegex.IsMatch(email)) throw new InvalidDataException(Message.NoEmptyEmail);
+            if (!emailRegex.IsMatch(email)) throw new InvalidDataException(Message.EnterValidEmail);
 
 
         }
@@ -133,7 +141,7 @@ namespace BloodGuardian.Common
 
             if (string.IsNullOrEmpty(bloodgrp) || string.IsNullOrWhiteSpace(bloodgrp)) throw new InvalidDataException(Message.NoEmptyBloodGroup);
 
-            List<string> BloodGroups = new List<string> { "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+            
 
             if (!BloodGroups.Contains(bloodgrp)) throw new InvalidDataException(Message.EnterValidBloodGroup);
 

@@ -1,14 +1,5 @@
-﻿using BloodGuardian.Database;
-using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static BloodGuardian.View.BloodBankManagerUI;
+﻿using BloodGuardian.Models;
 using BloodGuardian.Common;
-using System.Data;
 using BloodGuardian.Controller;
 
 namespace BloodGuardian.View
@@ -16,14 +7,15 @@ namespace BloodGuardian.View
     public class DonorUI
     {
 
-
-
+        
 
         public static void DonorMenu(Donor d)
         {
 
-            DonorController donorController = new DonorController();
-            AuthHandler authHandler = new AuthHandler();
+
+            DonorController _donorController = new DonorController();
+            Search _search = new Search();
+
 
             Donor currDonor = d;
 
@@ -56,28 +48,28 @@ namespace BloodGuardian.View
             switch (option)
             {
                 case DonorOptions.UpdateProfile:
-                    currDonor = donorController.UpdateProfile(currDonor);
+                    currDonor = _donorController.UpdateProfile(currDonor);
                     DonorMenu(currDonor);
                     break;
                 case DonorOptions.SearchBloodBanks:
-                    Search.SearchBloodBanks(currDonor);
+                    _search.SearchBloodBanks(currDonor);
                     DonorMenu(currDonor);
                     break;
                 case DonorOptions.SearchBloodDonationCamps:
-                    Search.SearchBloodDonationCamp(d);
+                    _search.SearchBloodDonationCamp(d);
                     DonorMenu(currDonor);
                     break;
                 case DonorOptions.SeeBloodDonationHistory:
-                    donorController.ViewBloodDonationHistory(d);
+                    _donorController.ViewBloodDonationHistory(d);
                     DonorMenu(currDonor);
                     break;
                 case DonorOptions.SignOut:
-                    authHandler.SignOut(d);
+                    Console.WriteLine("Signing Out...");
                     App.Start();
                     break;
                 default:
                     Console.WriteLine(Message.EnterValidOption);
-                    DonorUI.DonorMenu(d);
+                    DonorMenu(d);
                     break;
             }
 
@@ -85,11 +77,12 @@ namespace BloodGuardian.View
 
         }
 
-        public static Donor CreateUser()
+        public Donor CreateUser()
         {
 
-            DonorController donorController = new DonorController();
-            AuthHandler authHandler = new AuthHandler();
+
+            DonorController _donorController = new DonorController();
+
 
             Donor newDonor = new Donor();
 
@@ -102,7 +95,7 @@ namespace BloodGuardian.View
             while(true)
             {
                 uname = InputHandler.InputUserName(false);
-                if (donorController.FindDonor(uname, null) != null)
+                if (_donorController.FindDonor(uname, null) != null)
                 {
                     Console.WriteLine(Message.EnterDifferentUserName);
                     continue;
@@ -154,7 +147,7 @@ namespace BloodGuardian.View
         }
 
 
-        public static Donor UpdatedUserInfo(Donor oldDonor)
+        public Donor UpdatedUserInfo(Donor oldDonor)
         {
 
 

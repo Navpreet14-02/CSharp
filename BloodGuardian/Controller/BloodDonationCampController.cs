@@ -7,47 +7,61 @@ namespace BloodGuardian.Controller
 {
     internal class BloodDonationCampController
     {
-        public BloodDonationCamp CreateBloodDonationCamp()
-        {
+        //public BloodDonationCamp CreateBloodDonationCamp()
+        //{
 
-            var camp = BloodBankManagerUI.InputBloodDonationCamp();
+        //    var camp = BloodBankManagerUI.InputBloodDonationCamp();
 
 
-            return camp;
+        //    return camp;
 
-        }
+        //}
 
         public void OrganizeBloodDonationCamps(BloodBank bank, Donor d)
         {
-            var newCamp = CreateBloodDonationCamp();
+
+            BloodBankManagerUI bbManagerUI = new BloodBankManagerUI();
+            var newCamp = bbManagerUI.InputBloodDonationCamp();
+
+            //var newCamp = CreateBloodDonationCamp();
             newCamp.camp_id = bank.BloodDonationCamps.Count;
 
             bank.BloodDonationCamps.Add(newCamp);
-            DBHandler.Instance.UpdateBloodBank(bank, bank);
+            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
-            BloodBankManagerUI.BloodBankManagerMenu(d);
         }
 
         public void GetBloodDonationCamps(BloodBank bank, Donor d)
         {
 
-            Console.WriteLine(Message.OrganizedCamps);
 
-            bank.BloodDonationCamps.ForEach(camp =>
+            var camps = bank.BloodDonationCamps;
+
+            if (camps.Count() == 0)
             {
-                Console.WriteLine();
-                Console.WriteLine("-----------------------");
-                Console.WriteLine("Id: " + camp.camp_id);
-                Console.WriteLine("State: " + camp.Camp_State);
-                Console.WriteLine("City: " + camp.Camp_City);
-                Console.WriteLine("Address: " + camp.Camp_Address);
-                Console.WriteLine("Date: " + camp.Date.ToString());
-                Console.WriteLine("Start Time: " + camp.Start_Time.ToString());
-                Console.WriteLine("End Time: " + camp.End_Time.ToString());
-                Console.WriteLine("-----------------------");
+                Console.WriteLine(Message.NoDonationCamps);
+            }
+            else
+            {
 
-            });
+                Console.WriteLine(Message.OrganizedCamps);
 
+                camps.ForEach(camp =>
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("-----------------------");
+                    Console.WriteLine("Id: " + camp.camp_id);
+                    Console.WriteLine("State: " + camp.Camp_State);
+                    Console.WriteLine("City: " + camp.Camp_City);
+                    Console.WriteLine("Address: " + camp.Camp_Address);
+                    Console.WriteLine("Date: " + camp.Date.ToString());
+                    Console.WriteLine("Start Time: " + camp.Start_Time.ToString());
+                    Console.WriteLine("End Time: " + camp.End_Time.ToString());
+                    Console.WriteLine("-----------------------");
+
+                });
+
+            }
             //App.BloodBankManagerMenu(Database, d);
 
 
@@ -60,25 +74,8 @@ namespace BloodGuardian.Controller
             Console.WriteLine();
 
 
-            int campid;
-            while (true)
-            {
-                Console.Write(Message.EnterCampId);
-                string input = Console.ReadLine();
-
-                int res;
-                if (input == String.Empty || !int.TryParse(input, out res))
-                {
-                    Console.WriteLine(Message.EnterValidInput);
-                    continue;
-                }
-
-                campid = Convert.ToInt32(input);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
+            Console.Write(Message.EnterCampId);
+            int campid = InputHandler.InputId();
 
             // Removing Camp
 
@@ -100,24 +97,38 @@ namespace BloodGuardian.Controller
                 }
             }
 
-            DBHandler.Instance.UpdateBloodBank(bank, bank);
+            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
 
 
-
+            
         }
 
 
-        public void ViewBloodDonationCamps(Donor d)
+        public void AdminViewBloodDonationCamps(Donor d)
         {
 
 
+            var banks = BloodBankDBHandler.Instance.Read();
 
-            DBHandler.Instance.ReadBloodBanks().ForEach((bank) =>
+            if(banks.Count == 0)
+            {
+                Console.WriteLine(Message.NoDonationCampOrganized);
+                return;
+            }
+
+            BloodBankDBHandler.Instance.Read().ForEach((bank) =>
             {
                 Console.WriteLine(Message.DoubleDashDesign);
+                var camps = bank.BloodDonationCamps;
+
                 Console.WriteLine($"Camps organized by {bank.BankName}, ID - {bank.BankId}:");
-                bank.BloodDonationCamps.ForEach((camp) =>
+
+                if(camps.Count == 0)
+                {
+                    Console.WriteLine(Message.NoDonationCampsBank);
+                }
+                camps.ForEach((camp) =>
                 {
                     Console.WriteLine(Message.SingleDashDesign);
                     Console.WriteLine("Camp ID: " + camp.camp_id);
@@ -133,10 +144,10 @@ namespace BloodGuardian.Controller
         }
 
 
-        public void RemoveBloodDonationCampAdmin(Donor d)
+        public void AdminRemoveBloodDonationCamp(Donor d)
         {
 
-            ViewBloodDonationCamps(d);
+            AdminViewBloodDonationCamps(d);
 
 
             Console.WriteLine(Message.DoubleDashDesign);
@@ -145,26 +156,10 @@ namespace BloodGuardian.Controller
 
 
 
-            int bankid;
-            while (true)
-            {
-                Console.Write(Message.EnterBankId);
-                string input = Console.ReadLine();
+            Console.Write(Message.EnterBankId);
+            int bankid=InputHandler.InputId();
 
-                int res;
-                if (input == String.Empty || !int.TryParse(input, out res))
-                {
-                    Console.WriteLine(Message.EnterValidInput);
-                    continue;
-                }
-
-                bankid = Convert.ToInt32(input);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            var bank = DBHandler.Instance.ReadBloodBanks().ElementAtOrDefault(bankid);
+            var bank = BloodBankDBHandler.Instance.Read().ElementAtOrDefault(bankid);
 
             if (bank == null)
             {

@@ -1,5 +1,4 @@
-﻿using BloodGuardian.Database;
-using BloodGuardian.Models;
+﻿using BloodGuardian.Models;
 using BloodGuardian.View;
 using BloodGuardian.Common;
 
@@ -10,23 +9,24 @@ namespace BloodGuardian.Controller
     public class AuthHandler
     {
 
-        BloodBankController bankController=new BloodBankController();
-        DonorController donorController = new DonorController();
+        private BloodBankController _bankController;
+        private DonorController _donorController;
+
+        public AuthHandler()
+        {
+            _bankController = new BloodBankController();
+            _donorController = new DonorController();
+        }
 
 
         public void Register()
         {
-            Donor newDonor = DonorUI.CreateUser();
-
-            DBHandler.Instance.AddDonor(newDonor);
+            Donor newDonor = _donorController.AddDonor();
 
 
             if (newDonor.Role == roles.BloodBankManager)
             {
-                BloodBank bank = bankController.createBloodBank(newDonor);
-                Console.WriteLine();
-
-                DBHandler.Instance.AddBloodBank(bank);
+                _bankController.AddBloodBank(newDonor);
             }
 
 
@@ -52,7 +52,8 @@ namespace BloodGuardian.Controller
 
 
 
-            var donor = donorController.FindDonor(username, password);
+            var donor = _donorController.FindDonor(username, password);
+
             if (donor != null)
             {
                 Console.WriteLine(Message.UserLoggedIn);
@@ -79,14 +80,6 @@ namespace BloodGuardian.Controller
 
 
 
-
-            //return donor;
-
-        }
-
-        public void SignOut(Donor d)
-        {
-            d.LoggedIn = false;
         }
     }
 }

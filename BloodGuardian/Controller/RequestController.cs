@@ -10,14 +10,14 @@ namespace BloodGuardian.Controller
         public void AddRequest()
         {
             var newRequest = App.createRequest();
-            DBHandler.Instance.AddRequest(newRequest);
+            RequestDBHandler.Instance.Add(newRequest);
         }
 
 
         public void ViewRequests()
         {
 
-            var requests = DBHandler.Instance.GetRequests();
+            var requests = RequestDBHandler.Instance.Read();
             foreach (var request in requests)
             {
                 Console.WriteLine(Message.SingleDashDesign);
@@ -32,31 +32,14 @@ namespace BloodGuardian.Controller
 
         }
 
-        public void RemoveRequest(Donor d)
+        public void AdminRemoveRequest(Donor d)
         {
             ViewRequests();
 
-            int requestId;
-            while (true)
-            {
-                Console.Write(Message.EnterRequestId);
-                string input = Console.ReadLine();
+            Console.Write(Message.EnterRequestId);
+            int requestId=InputHandler.InputId();
 
-                int res;
-                if (input == String.Empty || !int.TryParse(input, out res))
-                {
-                    Console.WriteLine(Message.EnterValidInput);
-                    continue;
-                }
-
-                requestId = Convert.ToInt32(input);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-
-            }
-
-            var request = DBHandler.Instance.GetRequests().ElementAtOrDefault(requestId);
+            var request = RequestDBHandler.Instance.Read().ElementAtOrDefault(requestId);
 
             if (request == null)
             {
@@ -64,7 +47,7 @@ namespace BloodGuardian.Controller
             }
             else
             {
-                DBHandler.Instance.DeleteRequest(request);
+                RequestDBHandler.Instance.Delete(request);
             }
         }
     }

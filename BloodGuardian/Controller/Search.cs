@@ -1,21 +1,21 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace BloodGuardian.Controller
 {
     public class Search
     {
+        private BloodBankController _bankController;
 
-        public static void SearchBloodBanks(Donor d)
+        public Search()
         {
-            List<BloodBank> banks = DBHandler.Instance.SearchBloodBank(d.State, d.City, null);
+            _bankController = new BloodBankController();
+        }
+
+        public void SearchBloodBanks(Donor d)
+        {
+
+            List<BloodBank> banks = _bankController.GetBloodBanks().FindAll((bloodbank) => bloodbank.State == d.State&& bloodbank.City == d.City);
 
             if (banks.Count == 0)
             {
@@ -41,82 +41,26 @@ namespace BloodGuardian.Controller
 
         }
 
-        public static void SearchBlood()
+        public void SearchBlood()
         {
 
-            string state;
-            while (true)
-            {
+            Console.WriteLine(Message.EnterState);
+            string state = InputHandler.InputState(false);
 
-                Console.Write(Message.EnterState);
-                string input = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateState(input);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                state = input;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            string city;
-            while (true)
-            {
+            Console.WriteLine(Message.EnterCity);
+            string city=InputHandler.InputCity(false);
 
 
-                Console.Write(Message.EnterCity);
-                string input = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateCity(input);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                city = input;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            string bloodType;
-            while (true)
-            {
-
-                Console.Write(Message.EnterBloodGroup);
-                string bloodgrp = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateBloodGroup(bloodgrp);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                bloodType = bloodgrp;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
+            Console.WriteLine(Message.EnterBloodGroup);
+            string bloodType=InputHandler.InputBloodGroup(false);
 
             Console.WriteLine();
 
 
-            List<BloodBank> banks = DBHandler.Instance.SearchBloodBank(state, city, bloodType);
+            List<BloodBank> banks =
+                _bankController.GetBloodBanks()
+                .FindAll((bloodbank) => bloodbank.State == state && bloodbank.City == city && bloodbank.BloodUnits[bloodType] > 0);
+
 
 
             if (banks.Count == 0)
@@ -142,9 +86,23 @@ namespace BloodGuardian.Controller
 
         }
 
-        public static void SearchBloodDonationCamp(Donor d)
+        public void SearchBloodDonationCamp(Donor d)
         {
-            var camps = DBHandler.Instance.NearestBloodDonationCamps(d);
+            if(d.Role != roles.Donor)
+            {
+                Console.WriteLine(Message.NotAuthorized);
+            }
+            var banksList = _bankController.GetBloodBanks();
+
+            var campsLists = banksList.Select((bank) => bank.BloodDonationCamps).ToList();
+
+            var camps=new List<BloodDonationCamp>();
+            campsLists.ForEach((campList) => campList.ForEach((camp) =>
+            {
+                if (camp.Camp_State == d.State && camp.Camp_City == d.City) camps.Add(camp);
+            }));
+
+
 
 
             if (camps.Count == 0)

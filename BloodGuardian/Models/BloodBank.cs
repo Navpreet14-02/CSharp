@@ -1,12 +1,4 @@
-﻿using BloodGuardian.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BloodGuardian.View;
-using BloodGuardian.Common;
-
+﻿
 namespace BloodGuardian.Models
 {
     public class BloodBank
