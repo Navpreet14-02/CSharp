@@ -1,32 +1,58 @@
 [
   {
     "Donorid": 0,
-    "UserName": "Tarun16",
+    "UserName": "Tarun14",
     "Name": "Tarun",
-    "Age": 26,
+    "Age": 25,
     "Phone": 1293412395,
-    "Email": "tarun@gmail.com",
+    "Email": "tarun14@gmail.com",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
     "Password": "Tarun1402",
     "BloodGrp": "B+",
-    "Role": 1,
-    "LoggedIn": false
+    "Role": 1
   },
   {
     "Donorid": 1,
-    "UserName": "Akshay14",
-    "Name": "Akshay",
-    "Age": 31,
-    "Phone": 2346234636,
-    "Email": "akshay16@gmail.com",
+    "UserName": "Navpreet14",
+    "Name": "Navpreet Singh",
+    "Age": 22,
+    "Phone": 4534645758,
+    "Email": "navpreet14@gmail.com",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
-    "Password": "Akshay14",
+    "Password": "Navpreet1402",
+    "BloodGrp": "B+",
+    "Role": 0
+  },
+  {
+    "Donorid": 2,
+    "UserName": "Param14",
+    "Name": "Param",
+    "Age": 22,
+    "Phone": 4569496580,
+    "Email": "param@gmail.com",
+    "State": "Punjab",
+    "Address": "Mohali, Punjab",
+    "City": "Mohali",
+    "Password": "Param1402",
     "BloodGrp": "O+",
-    "Role": 2,
-    "LoggedIn": false
+    "Role": 0
+  },
+  {
+    "Donorid": 3,
+    "UserName": "Shahrukh14",
+    "Name": "Shahrukh",
+    "Age": 35,
+    "Phone": 3953598345,
+    "Email": "shah@wg.com",
+    "State": "Punjab",
+    "Address": "Patiala,Punjab",
+    "City": "Patiala",
+    "Password": "Sharhrukh14",
+    "BloodGrp": "O+",
+    "Role": 2
   }
 ]

@@ -1,6 +1,7 @@
 ﻿using BloodGuardian.Common;
 using BloodGuardian.Models;
 using BloodGuardian.Controller;
+using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.View
 {
@@ -13,9 +14,9 @@ namespace BloodGuardian.View
         {
 
 
-            BloodBankController bankController = new BloodBankController();
-            BloodDonationCampController campController = new BloodDonationCampController();
-            DonorController donorController = new DonorController();
+            IBloodBank bankController = new BloodBankController();
+            IBloodDonationCamp campController = new BloodDonationCampController();
+            IDonor donorController = new DonorController();
 
             Donor currDonor = d;
 
@@ -29,24 +30,21 @@ namespace BloodGuardian.View
             Console.WriteLine();
 
 
+
             BloodBankManagerOptions option;
-            while (true)
+
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
+
+            BloodBankManagerOptions result;
+            if (input == string.Empty || !Enum.TryParse<BloodBankManagerOptions>(input, out result))
             {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.Write(Message.EnterInput);
-                string input = Console.ReadLine();
-
-                BloodBankManagerOptions result;
-                if (input == string.Empty || !Enum.TryParse<BloodBankManagerOptions>(input, out result))
-                {
-                    Console.WriteLine(Message.EnterValidOption);
-                    continue;
-                }
-
-                option = Enum.Parse<BloodBankManagerOptions>(input);
-                break;
-
+                Console.WriteLine(Message.EnterValidOption);
+                BloodBankManagerMenu(d);
             }
+
+            option = Enum.Parse<BloodBankManagerOptions>(input);
 
             switch (option)
             {
@@ -82,7 +80,7 @@ namespace BloodGuardian.View
                     break;
 
                 case BloodBankManagerOptions.SignOut:
-                    Console.WriteLine("Signing Out...");
+                    Console.WriteLine(Message.SigningOut);
                     App.Start();
                     break;
 
@@ -133,37 +131,12 @@ namespace BloodGuardian.View
         public BloodBank createBloodBank(Donor d)
         {
 
-            //if (d.Role != roles.BloodBankManager)
-            //{
-            //    Console.WriteLine(Message.NotAuthorized);
-            //    return null;
-            //}
-
             BloodBank bank = new BloodBank();
 
 
 
-            while (true)
-            {
-
-                Console.Write(Message.EnterBloodBankName);
-                string name = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateName(name);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                Console.WriteLine(Message.SingleDashDesign);
-                bank.BankName = name;
-                break;
-
-            }
+            Console.Write(Message.EnterBloodBankName);
+            bank.BankName = InputHandler.InputName(false);
 
             bank.ManagerEmail = d.Email;
             bank.ManagerName = d.Name;
@@ -219,151 +192,28 @@ namespace BloodGuardian.View
             Console.WriteLine(Message.SingleDashDesign);
             Console.WriteLine(Message.EnterDetails);
 
-            while (true)
-            {
-                Console.Write(Message.EnterPatientName);
+            Console.Write(Message.EnterPatientName);
+            blood.BloodReceiverName = InputHandler.InputName(false);
 
-                string name = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateName(name);
+            Console.Write(Message.BloodWithdrawnType);
+            blood.BloodGroup = InputHandler.InputBloodGroup(false);
 
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
+
+            Console.Write(Message.EnterPatientEmail);
+            blood.CustomerEmail = InputHandler.InputEmail(false);
 
 
 
-                blood.BloodReceiverName = name;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
-
-
-            while (true)
-            {
-                Console.Write(Message.BloodWithdrawnType);
-
-                string bloodgrp = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateBloodGroup(bloodgrp);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                blood.BloodGroup = bloodgrp;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-
-            while (true)
-            {
-                Console.Write(Message.EnterPatientEmail);
-
-                string email = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateEmail(email);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-
-                blood.CustomerEmail = email;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
-
-
-            while (true)
-            {
-
-                Console.Write(Message.EnterPatientPhone);
-                string phoneno = Console.ReadLine();
-                try
-                {
-                    Validation.ValidatePhone(phoneno);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                blood.CustomerPhone = Convert.ToInt64(phoneno);
-
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
+            Console.Write(Message.EnterPatientPhone);
+            blood.CustomerPhone = InputHandler.InputPhone(false);
 
     
-            while (true)
-            {
+            Console.Write(Message.EnterTransferDate);
+            blood.BloodTransferDate = InputHandler.InputDate(false);
 
 
-                Console.Write(Message.EnterTransferDate);
-                string transferDate = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateDate(transferDate);
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                blood.BloodTransferDate = DateTime.Parse(transferDate);
-                break;
-
-
-            }
-
-
-            while (true)
-            {
-                Console.Write(Message.EnterBloodWithdrawnAmount);
-                string amnt = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateBloodAmount(amnt);
-                }
-                catch(InvalidDataException e) 
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                blood.BloodAmount = Convert.ToInt32(amnt);
-                break;
-
-            }
+            Console.Write(Message.EnterBloodWithdrawnAmount);
+            blood.BloodAmount = InputHandler.InputBloodAmount(false);
 
             return blood;
         }
@@ -377,158 +227,29 @@ namespace BloodGuardian.View
             Console.WriteLine(Message.EnterDonationCampDetails);
 
 
-            while (true)
-            {
-                Console.Write(Message.EnterCampDate);
-                string campDate = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateDate(campDate);
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                camp.Date = DateTime.Parse(campDate);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
+            Console.WriteLine(Message.EnterCampDate);
+            camp.Date = InputHandler.InputDate(false);
 
 
-            }
+            Console.WriteLine(Message.EnterCampState);
+            camp.Camp_State=InputHandler.InputState(false);
 
 
-            while (true)
-            {
+            Console.WriteLine(Message.EnterCampCity);
+            camp.Camp_City = InputHandler.InputCity(false);
+            
 
-                Console.Write(Message.EnterCampState);
-                string state = Console.ReadLine();
-
-                if (state != String.Empty)
-                {
-                    try
-                    {
-                        Validation.ValidateState(state);
-
-                    }
-                    catch (InvalidDataException e)
-                    {
-                        Console.WriteLine(e.Message);
-                        continue;
-                    }
-                }
-                camp.Camp_State=state;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
+            Console.WriteLine(Message.EnterCampAddress);
+            camp.Camp_Address = InputHandler.InputAddress(false);
 
 
-            while (true)
-            {
 
-                Console.Write(Message.EnterCampCity);
-                string city = Console.ReadLine();
-
-                if (city != String.Empty)
-                {
-                    try
-                    {
-                        Validation.ValidateCity(city);
-
-                    }
-                    catch (InvalidDataException e)
-                    {
-                        Console.WriteLine(e.Message);
-                        continue;
-                    }
-                }
-                camp.Camp_City = city;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
+            Console.WriteLine(Message.EnterCampStartTime);
+            camp.Start_Time = InputHandler.InputTime(false);
 
 
-            while (true)
-            {
-
-                Console.Write(Message.EnterCampAddress);
-                string address = Console.ReadLine();
-
-                if (address != String.Empty)
-                {
-                    try
-                    {
-                        Validation.ValidateCity(address);
-
-                    }
-                    catch (InvalidDataException e)
-                    {
-                        Console.WriteLine(e.Message);
-                        continue;
-                    }
-                }
-                camp.Camp_Address = address;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
-
-
-            while (true)
-            {
-
-                Console.Write(Message.EnterCampStartTime);
-                string start_time = Console.ReadLine();
-                
-                try
-                {
-                    Validation.ValidateTime(start_time);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                
-                camp.Start_Time = TimeOnly.Parse(start_time);
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
-
-
-            while (true)
-            {
-
-                Console.Write(Message.EnterCampEndTime);
-                string end_time = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateTime(end_time);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-                camp.End_Time = TimeOnly.Parse(end_time);
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
+            Console.WriteLine(Message.EnterCampEndTime);
+            camp.End_Time = InputHandler.InputTime(false);
 
             return camp;
         }

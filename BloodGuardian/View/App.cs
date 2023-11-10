@@ -1,6 +1,8 @@
 ﻿using BloodGuardian.Common;
 using BloodGuardian.Controller;
 using BloodGuardian.Models;
+using BloodGuardian.Controller.Interfaces;
+
 
 namespace BloodGuardian.View
 {
@@ -10,9 +12,11 @@ namespace BloodGuardian.View
         public static void Start()
         {
 
-            RequestController requestController = new RequestController();
-            AuthHandler authHandler = new AuthHandler();
-            Search search = new Search();
+            IRequest requestController = new RequestController();
+            IAuth authHandler = new AuthHandler();
+            ISearch search = new Search();
+
+
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
@@ -81,95 +85,18 @@ namespace BloodGuardian.View
         {
             Request req = new Request();
 
-            while (true)
-            {
+            Console.WriteLine(Message.EnterName);
+            req.RequesterName = InputHandler.InputName(false);
 
-                Console.Write(Message.EnterName);
-                string name = Console.ReadLine();
-                try
-                {
-                    Validation.ValidateName(name);
+            Console.WriteLine(Message.EnterPhone);
+            req.RequesterPhone = InputHandler.InputPhone(false);
 
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
+            Console.WriteLine(Message.EnterRequiredBloodType);
+            req.BloodRequirementType = InputHandler.InputBloodGroup(false);
+            
 
-                req.RequesterName = name;
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            while (true)
-            {
-                Console.Write(Message.EnterPhone);
-                string phone = Console.ReadLine();
-                try
-                {
-                    Validation.ValidatePhone(phone);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-
-
-                req.RequesterPhone = Convert.ToInt64(phone);
-                Console.WriteLine(Message.SingleDashDesign);
-                break;
-
-            }
-
-            while (true)
-            {
-
-                Console.Write(Message.EnterRequiredBloodType);
-                string bloodgrp = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateBloodGroup(bloodgrp);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                req.BloodRequirementType = bloodgrp;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-
-            }
-
-            while (true)
-            {
-
-                Console.Write(Message.EnterAddress);
-
-                string address = Console.ReadLine();
-
-                try
-                {
-                    Validation.ValidateAddress(address);
-
-                }
-                catch (InvalidDataException e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-                req.Address = address;
-                Console.WriteLine(Message.SingleDashDesign);
-
-                break;
-            }
+            Console.WriteLine(Message.EnterAddress);
+            req.Address = InputHandler.InputAddress(false);
 
             return req;
 

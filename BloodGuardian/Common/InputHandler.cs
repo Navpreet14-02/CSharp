@@ -475,5 +475,34 @@ namespace BloodGuardian.Common
 
             return res;
         }
+
+        public static TimeOnly InputTime(bool isUpdate)
+        {
+            TimeOnly time;
+            while (true)
+            {
+
+                string start_time = Console.ReadLine();
+
+                try
+                {
+                    Validation.ValidateTime(start_time);
+
+                }
+                catch (InvalidDataException e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+
+                time = TimeOnly.Parse(start_time);
+                Console.WriteLine(Message.SingleDashDesign);
+
+                break;
+
+            }
+
+            return time;
+        }
     }
 }

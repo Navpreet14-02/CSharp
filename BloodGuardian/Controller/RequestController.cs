@@ -2,10 +2,13 @@
 using BloodGuardian.Models;
 using BloodGuardian.View;
 using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
+
 
 namespace BloodGuardian.Controller
 {
-    internal class RequestController
+
+    internal class RequestController : IRequest, IRemoveRequest
     {
         public void AddRequest()
         {

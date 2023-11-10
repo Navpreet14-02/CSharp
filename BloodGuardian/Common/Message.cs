@@ -101,6 +101,10 @@
         public static string EnterValidDate = "Enter Valid Date.";
         public static string NoEmptyTime = "Time can not be empty.";
         public static string EnterValidTime = "Enter Valid Time.";
+        public static string EnterValidState = "Enter Valid State.";
+        public static string EnterValidName = "Enter Valid Name.";
+        public static string EnterValidCity = "Enter Valid City.";
+        public static string EnterValidAddress = "Enter Valid Address.";
         public static string NoEmptyAmount = "Amount can not be empty.";
         public static string BloodAmountRange = "Please enter a value less than or equal to 500.";
         public static string _donorDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Donors.json";
@@ -113,5 +117,9 @@
         public static string NoDonationCamps = "There are no Blood Donation Camps organized by your Bank.";
         public static string NoDonationCampOrganized = "There are no Organized Blood Donation Camps.";
         public static string NoDonationCampsBank = "There are no Blood Donation Camps organized by this Bank.";
+        public static string NoRegisteredBloodBanks = "There are no registered blood banks.";
+        public static string NoRegisteredDonors = "There are no registered Donors.";
+        public static string SigningOut = "Signing Out...";
+
     }
 }

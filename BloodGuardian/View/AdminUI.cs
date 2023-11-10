@@ -1,6 +1,7 @@
 ﻿using BloodGuardian.Models;
 using BloodGuardian.Common;
 using BloodGuardian.Controller;
+using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.View
 {
@@ -12,10 +13,10 @@ namespace BloodGuardian.View
         {
 
 
-            BloodDonationCampController donationCampController = new BloodDonationCampController();
-            BloodBankController bankController = new BloodBankController();
-            DonorController donorController = new DonorController();
-            RequestController requestController = new RequestController();
+            IAdminBloodDonationCamp donationCampController = new BloodDonationCampController();
+            IAdminBloodBank bankController = new BloodBankController();
+            IAdmin donorController = new DonorController();
+            IRemoveRequest requestController = new RequestController();
 
 
             Console.WriteLine();
@@ -25,26 +26,21 @@ namespace BloodGuardian.View
             Console.WriteLine();
 
 
-
             AdminOptions option;
-            while (true)
+
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
+
+            AdminOptions result;
+            if (input == string.Empty || !Enum.TryParse<AdminOptions>(input, out result))
             {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.Write(Message.EnterInput);
-                string input = Console.ReadLine();
-
-                AdminOptions result;
-                if (input == string.Empty || !Enum.TryParse<AdminOptions>(input,out  result))
-                {
-
-                    Console.WriteLine(Message.EnterValidOption);
-                    continue;
-                }
-
-                option = Enum.Parse<AdminOptions>(input);
-                break;
-
+                Console.WriteLine(Message.EnterValidOption);
+                AdminMenu(d);
             }
+
+            option = Enum.Parse<AdminOptions>(input);
+
 
             switch (option)
             {
@@ -95,7 +91,7 @@ namespace BloodGuardian.View
                     break;
 
                 case AdminOptions.SignOut:
-                    Console.WriteLine("Signing Out...");
+                    Console.WriteLine(Message.SigningOut);
                     App.Start();
                     break;
                 default:

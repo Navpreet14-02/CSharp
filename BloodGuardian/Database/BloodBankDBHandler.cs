@@ -8,7 +8,7 @@ namespace BloodGuardian.Database
     {
 
 
-        private static BloodBankDBHandler _handler = null;
+        private static BloodBankDBHandler _handler;
 
         static private List<BloodBank> _bloodbanks;
          

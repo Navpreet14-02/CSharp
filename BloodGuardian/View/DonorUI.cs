@@ -1,6 +1,7 @@
 ﻿using BloodGuardian.Models;
 using BloodGuardian.Common;
 using BloodGuardian.Controller;
+using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.View
 {
@@ -13,8 +14,8 @@ namespace BloodGuardian.View
         {
 
 
-            DonorController _donorController = new DonorController();
-            Search _search = new Search();
+            IDonor _donorController = new DonorController();
+            ISearch _search = new Search();
 
 
             Donor currDonor = d;
@@ -27,23 +28,20 @@ namespace BloodGuardian.View
 
 
             DonorOptions option;
-            while (true)
+
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
+
+            DonorOptions result;
+            if (input == string.Empty || !Enum.TryParse<DonorOptions>(input, out result))
             {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.Write(Message.EnterInput);
-                string input = Console.ReadLine();
-
-                DonorOptions result;
-                if (input == string.Empty || !Enum.TryParse<DonorOptions>(input, out result))
-                {
-                    Console.WriteLine(Message.EnterValidOption);
-                    continue;
-                }
-
-                option = Enum.Parse<DonorOptions>(input);
-                break;
-
+                Console.WriteLine(Message.EnterValidOption);
+                DonorMenu(d);
             }
+
+            option = Enum.Parse<DonorOptions>(input);
+
 
             switch (option)
             {
@@ -64,7 +62,7 @@ namespace BloodGuardian.View
                     DonorMenu(currDonor);
                     break;
                 case DonorOptions.SignOut:
-                    Console.WriteLine("Signing Out...");
+                    Console.WriteLine(Message.SigningOut);
                     App.Start();
                     break;
                 default:

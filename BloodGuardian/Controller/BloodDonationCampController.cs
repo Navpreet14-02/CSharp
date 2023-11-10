@@ -2,20 +2,16 @@
 using BloodGuardian.Models;
 using BloodGuardian.View;
 using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
+
 
 namespace BloodGuardian.Controller
 {
-    internal class BloodDonationCampController
+
+
+    internal class BloodDonationCampController : IAdminBloodDonationCamp, IBloodDonationCamp
     {
-        //public BloodDonationCamp CreateBloodDonationCamp()
-        //{
 
-        //    var camp = BloodBankManagerUI.InputBloodDonationCamp();
-
-
-        //    return camp;
-
-        //}
 
         public void OrganizeBloodDonationCamps(BloodBank bank, Donor d)
         {
@@ -23,7 +19,6 @@ namespace BloodGuardian.Controller
             BloodBankManagerUI bbManagerUI = new BloodBankManagerUI();
             var newCamp = bbManagerUI.InputBloodDonationCamp();
 
-            //var newCamp = CreateBloodDonationCamp();
             newCamp.camp_id = bank.BloodDonationCamps.Count;
 
             bank.BloodDonationCamps.Add(newCamp);
@@ -35,15 +30,16 @@ namespace BloodGuardian.Controller
         {
 
 
-            var camps = bank.BloodDonationCamps;
 
-            if (camps.Count() == 0)
+
+            if (bank==null || bank.BloodDonationCamps.Count() == 0)
             {
                 Console.WriteLine(Message.NoDonationCamps);
             }
             else
             {
 
+                var camps = bank.BloodDonationCamps;
                 Console.WriteLine(Message.OrganizedCamps);
 
                 camps.ForEach(camp =>
@@ -62,7 +58,6 @@ namespace BloodGuardian.Controller
                 });
 
             }
-            //App.BloodBankManagerMenu(Database, d);
 
 
         }
@@ -90,7 +85,7 @@ namespace BloodGuardian.Controller
 
                 bank.BloodDonationCamps.RemoveAt(campid);
 
-                // Updating Camp Ids
+
                 foreach (var (camp, ind) in bank.BloodDonationCamps.Select((val, i) => (val, i)))
                 {
                     camp.camp_id = ind;
@@ -111,13 +106,13 @@ namespace BloodGuardian.Controller
 
             var banks = BloodBankDBHandler.Instance.Read();
 
-            if(banks.Count == 0)
+            if(banks == null || banks.Count == 0)
             {
                 Console.WriteLine(Message.NoDonationCampOrganized);
                 return;
             }
 
-            BloodBankDBHandler.Instance.Read().ForEach((bank) =>
+            banks.ForEach((bank) =>
             {
                 Console.WriteLine(Message.DoubleDashDesign);
                 var camps = bank.BloodDonationCamps;

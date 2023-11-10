@@ -2,11 +2,16 @@
 using BloodGuardian.Database;
 using BloodGuardian.Models;
 using BloodGuardian.View;
+using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.Controller
+
 {
-    internal class BloodBankController
+
+
+    internal class BloodBankController : IAdminBloodBank, IBloodBank
     {
+
 
         private BloodBankManagerUI _bloodbankManagerUI;
 
@@ -64,7 +69,7 @@ namespace BloodGuardian.Controller
             newBank.Blood_Deposit_Record = bank.Blood_Deposit_Record;
             newBank.Blood_WithDrawal_Record = bank.Blood_WithDrawal_Record;
             newBank.BloodDonationCamps = bank.BloodDonationCamps;
-            newBank.ManagerUserName = bank.ManagerUserName;
+            newBank.ManagerUserName = newDonor.UserName;
 
 
 
@@ -74,12 +79,21 @@ namespace BloodGuardian.Controller
 
         public void AdminViewBloodBanks(Donor d)
         {
+
+            var banks = BloodBankDBHandler.Instance.Read();
+
+            if(banks.Count==0)
+            {
+                Console.WriteLine(Message.NoRegisteredBloodBanks);
+                return;
+            }
+
             BloodBankDBHandler.Instance.Read().ForEach(bank =>
             {
                 Console.WriteLine(Message.SingleDashDesign);
                 Console.WriteLine("Id: " + bank.BankId);
                 Console.WriteLine("Bank Name: " + bank.BankName);
-                Console.WriteLine("Bank UserName: " + bank.ManagerUserName);
+                Console.WriteLine("Bank Manager User Name: " + bank.ManagerUserName);
                 Console.WriteLine("Manager Name: " + bank.ManagerName);
                 Console.WriteLine("Manager Email: " + bank.ManagerEmail);
                 Console.WriteLine("Manager Contact: " + bank.Contact);

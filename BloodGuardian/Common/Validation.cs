@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net;
+using System.Text.RegularExpressions;
 
 namespace BloodGuardian.Common
 {
@@ -16,6 +17,10 @@ namespace BloodGuardian.Common
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name)) throw new InvalidDataException(Message.NoEmptyName);
 
             if (name.Length < 3) throw new InvalidDataException(Message.NameLength);
+
+            int temp;
+            if (int.TryParse(name, out temp)) throw new InvalidDataException(Message.EnterValidName);
+
         }
 
         public static void ValidateUserName(string name)
@@ -57,30 +62,38 @@ namespace BloodGuardian.Common
 
             int temp;
             if (id == String.Empty || !int.TryParse(id, out temp)) throw new InvalidDataException(Message.EnterValidInput);
-            //{
-            //    Console.WriteLine(Message.EnterValidInput);
-            //    continue;
-            //}
+
         }
 
         public static void ValidateState(string state)
         {
+            
+            if (string.IsNullOrEmpty(state) || string.IsNullOrWhiteSpace(state)) throw new InvalidDataException(Message.NoEmptyState);
+
             int temp;
-            if (string.IsNullOrEmpty(state) || string.IsNullOrWhiteSpace(state) || int.TryParse(state,out temp)) throw new InvalidDataException(Message.NoEmptyState);
+            if (int.TryParse(state, out temp)) throw new InvalidDataException(Message.EnterValidState);
         }
 
 
         public static void ValidateCity(string city)
         {
+          
+            if (string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(city)) throw new InvalidDataException(Message.NoEmptyCity);
+
             int temp;
-            if (string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(city) || int.TryParse(city, out temp)) throw new InvalidDataException(Message.NoEmptyCity);
+            if (int.TryParse(city, out temp)) throw new InvalidDataException(Message.EnterValidCity);
+
         }
 
 
         public static void ValidateAddress(string address)
         {
+        
+            if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address)) throw new InvalidDataException(Message.NoEmptyAddress);
+
             int temp;
-            if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address) || int.TryParse(address, out temp)) throw new InvalidDataException(Message.NoEmptyAddress);
+            if (int.TryParse(address, out temp)) throw new InvalidDataException(Message.EnterValidAddress);
+
         }
 
         public static void ValidateRole(string role)

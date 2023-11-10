@@ -1,11 +1,15 @@
 ﻿using BloodGuardian.Common;
 using BloodGuardian.Models;
+using BloodGuardian.Controller.Interfaces;
+
 
 namespace BloodGuardian.Controller
 {
-    public class Search
+
+
+    public class Search : ISearch
     {
-        private BloodBankController _bankController;
+        private IBloodBank _bankController;
 
         public Search()
         {

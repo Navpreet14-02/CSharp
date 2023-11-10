@@ -2,14 +2,16 @@
 using BloodGuardian.Models;
 using BloodGuardian.View;
 using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.Controller
 {
-    internal class DonorController
+
+    internal class DonorController : IDonor,IAdmin
     {
 
         private DonorUI _donorUI;
-        private BloodBankController _bankController;
+        private IBloodBank _bankController;
 
         public DonorController()
         {
@@ -60,7 +62,16 @@ namespace BloodGuardian.Controller
 
         public void AdminViewDonors(Donor d)
         {
-            DonorDBHandler.Instance.Read().ForEach(donor => {
+
+            var donors = DonorDBHandler.Instance.Read();
+
+            if (donors == null || donors.Count == 0)
+            {
+                Console.WriteLine(Message.NoRegisteredDonors);
+                return;
+            }
+
+            donors.ForEach(donor => {
 
                 Console.WriteLine(Message.SingleDashDesign);
                 Console.WriteLine("id: " + donor.Donorid);
@@ -139,10 +150,11 @@ namespace BloodGuardian.Controller
         public void RemoveDonor(Donor d)
         {
             DonorDBHandler.Instance.Delete(d);
+            
 
         }
 
-        public void RemoveBloodBankManager(Donor d)
+        private void RemoveBloodBankManager(Donor d)
         {
             var bank = _bankController.FindBloodBankbyDonor(d);
             DonorDBHandler.Instance.Delete(d);

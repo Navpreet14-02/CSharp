@@ -5,7 +5,6 @@ namespace BloodGuardian.Models
 
     public class Donor
     {
-        public static List<string> BloodGroups =new List<string>{ "A+", "A-","B+","B-","O+","O-","AB+","AB-" };
 
         public int Donorid { get; set; }
 
@@ -20,8 +19,6 @@ namespace BloodGuardian.Models
         public string Password { get; set; }
         public string BloodGrp{ get; set; }
         public roles Role { get; set; }
-
-        public bool LoggedIn { get; set; } 
 
 
 

@@ -1,16 +1,20 @@
 ﻿using BloodGuardian.Models;
 using BloodGuardian.View;
 using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
+
 
 
 namespace BloodGuardian.Controller
 
 {
-    public class AuthHandler
+
+
+    public class AuthHandler : IAuth
     {
 
-        private BloodBankController _bankController;
-        private DonorController _donorController;
+        private IBloodBank _bankController;
+        private IDonor _donorController;
 
         public AuthHandler()
         {
@@ -34,9 +38,6 @@ namespace BloodGuardian.Controller
             Console.WriteLine();
             App.Start();
 
-
-            //return newDonor;
-
         }
 
         public void Login()
@@ -58,7 +59,6 @@ namespace BloodGuardian.Controller
             {
                 Console.WriteLine(Message.UserLoggedIn);
                 Console.WriteLine();
-                donor.LoggedIn = true;
                 if (donor.Role == roles.Admin)
                 {
                     AdminUI.AdminMenu(donor);

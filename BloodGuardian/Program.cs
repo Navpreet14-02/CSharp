@@ -20,8 +20,6 @@ internal class Program
         {
             ExceptionsDBHandler.Instance.LogException(ex);
             Console.WriteLine(Message.UnexpectedError);
-            Console.WriteLine(Message.RestartingApp);
-            App.Start();
         }
 
 

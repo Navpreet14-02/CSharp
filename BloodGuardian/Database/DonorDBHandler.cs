@@ -33,7 +33,6 @@ namespace BloodGuardian.Database
         public void Add(Donor d)
         {
             d.Donorid = _donors.Count;
-            d.LoggedIn = false;
             _donors.Add(d);
             Update(Message._donorDataPath);
 
