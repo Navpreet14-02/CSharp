@@ -1,5 +1,4 @@
 ﻿using BloodGuardian.Common;
-using Newtonsoft.Json;
 
 
 namespace BloodGuardian.Database
@@ -7,15 +6,6 @@ namespace BloodGuardian.Database
     internal class ExceptionsDBHandler
     {
         private static ExceptionsDBHandler _handler;
-
-        static private List<Exception> _exceptions;
-
-
-
-        private ExceptionsDBHandler()
-        {
-            _exceptions = JsonConvert.DeserializeObject<List<Exception>>(File.ReadAllText(Message._exceptionsDataPath));
-        }
 
         public static ExceptionsDBHandler Instance
         {
@@ -31,14 +21,9 @@ namespace BloodGuardian.Database
         }
         public void LogException(Exception ex)
         {
-            _exceptions.Add(ex);
-            Update(Message._exceptionsDataPath);
+
+            File.AppendAllText(Message._exceptionsDataPath, ex.ToString() + '\n');
         }
 
-        public void Update(string path)
-        {
-            string exceptionsDataJSON = JsonConvert.SerializeObject(_exceptions, Formatting.Indented);
-            File.WriteAllText(Message._exceptionsDataPath, exceptionsDataJSON);
-        }
     }
 }

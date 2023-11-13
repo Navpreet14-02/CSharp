@@ -1,7 +1,8 @@
-﻿using BloodGuardian.Models;
-using BloodGuardian.View;
-using BloodGuardian.Common;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
+using BloodGuardian.View;
 
 
 
@@ -28,7 +29,7 @@ namespace BloodGuardian.Controller
             Donor newDonor = _donorController.AddDonor();
 
 
-            if (newDonor.Role == roles.BloodBankManager)
+            if (newDonor.Role == Roles.BloodBankManager)
             {
                 _bankController.AddBloodBank(newDonor);
             }
@@ -53,17 +54,17 @@ namespace BloodGuardian.Controller
 
 
 
-            var donor = _donorController.FindDonor(username, password);
+            var donor = _donorController.FindDonorByCredentials(username, password);
 
             if (donor != null)
             {
                 Console.WriteLine(Message.UserLoggedIn);
                 Console.WriteLine();
-                if (donor.Role == roles.Admin)
+                if (donor.Role == Roles.Admin)
                 {
                     AdminUI.AdminMenu(donor);
                 }
-                else if (donor.Role == roles.BloodBankManager)
+                else if (donor.Role == Roles.BloodBankManager)
                 {
                     BloodBankManagerUI.BloodBankManagerMenu(donor);
                 }

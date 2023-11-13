@@ -1,7 +1,8 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Models;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 
 namespace BloodGuardian.View
 {
@@ -16,7 +17,6 @@ namespace BloodGuardian.View
 
             IBloodBank bankController = new BloodBankController();
             IBloodDonationCamp campController = new BloodDonationCampController();
-            IDonor donorController = new DonorController();
 
             Donor currDonor = d;
 
@@ -25,7 +25,9 @@ namespace BloodGuardian.View
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
+
             Console.WriteLine(Message.PrintBloodBankManagerOptions);
+
             Console.WriteLine(Message.DoubleDashDesign);
             Console.WriteLine();
 
@@ -49,6 +51,8 @@ namespace BloodGuardian.View
             switch (option)
             {
                 case BloodBankManagerOptions.UpdateProfile:
+                    IDonor donorController = new DonorController();
+
                     var oldDonor = d;
                     currDonor = donorController.UpdateProfile(currDonor);
                     bankController.UpdateBloodBankDetails(oldDonor, currDonor);
@@ -93,7 +97,7 @@ namespace BloodGuardian.View
         }
 
 
-        public BloodTransferReceipt CreateBloodDepositRecord() 
+        public BloodTransferReceipt CreateBloodDepositRecord()
         {
 
             BloodTransferReceipt blood = new BloodTransferReceipt();
@@ -102,7 +106,7 @@ namespace BloodGuardian.View
             Console.WriteLine(Message.EnterDetails);
 
             Console.WriteLine(Message.EnterDonorName);
-            blood.BloodDonorName= InputHandler.InputName(false);
+            blood.BloodDonorName = InputHandler.InputName(false);
 
 
             Console.WriteLine(Message.BloodDonatedType);
@@ -128,7 +132,7 @@ namespace BloodGuardian.View
 
         }
 
-        public BloodBank createBloodBank(Donor d)
+        public BloodBank InputBloodBankDetails(Donor d)
         {
 
             BloodBank bank = new BloodBank();
@@ -207,7 +211,7 @@ namespace BloodGuardian.View
             Console.Write(Message.EnterPatientPhone);
             blood.CustomerPhone = InputHandler.InputPhone(false);
 
-    
+
             Console.Write(Message.EnterTransferDate);
             blood.BloodTransferDate = InputHandler.InputDate(false);
 
@@ -232,12 +236,12 @@ namespace BloodGuardian.View
 
 
             Console.WriteLine(Message.EnterCampState);
-            camp.Camp_State=InputHandler.InputState(false);
+            camp.Camp_State = InputHandler.InputState(false);
 
 
             Console.WriteLine(Message.EnterCampCity);
             camp.Camp_City = InputHandler.InputCity(false);
-            
+
 
             Console.WriteLine(Message.EnterCampAddress);
             camp.Camp_Address = InputHandler.InputAddress(false);

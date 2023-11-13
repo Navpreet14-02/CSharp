@@ -1,19 +1,20 @@
-﻿using BloodGuardian.Models;
-using BloodGuardian.Common;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Database.Interface;
+using BloodGuardian.Models;
 using Newtonsoft.Json;
 
 namespace BloodGuardian.Database
 {
-    internal class BloodBankDBHandler : DB<BloodBank>
+    internal class BloodBankDBHandler : IBloodBankDBHandler
     {
 
 
         private static BloodBankDBHandler _handler;
 
         static private List<BloodBank> _bloodbanks;
-         
 
-        private BloodBankDBHandler()
+
+        public BloodBankDBHandler()
         {
 
             _bloodbanks = JsonConvert.DeserializeObject<List<BloodBank>>(File.ReadAllText(Message._bankDataPath));
@@ -21,7 +22,7 @@ namespace BloodGuardian.Database
 
         }
 
-        public static BloodBankDBHandler Instance
+        public IBloodBankDBHandler Instance
         {
             get
             {
@@ -40,7 +41,7 @@ namespace BloodGuardian.Database
             Update(Message._bankDataPath);
         }
 
-        public List<BloodBank> Read()
+        public List<BloodBank> Get()
         {
             return _bloodbanks;
         }
@@ -59,7 +60,7 @@ namespace BloodGuardian.Database
         public void Delete(BloodBank bb)
         {
             _bloodbanks.Remove(bb);
-            
+
             foreach (var (bank, ind) in _bloodbanks.Select((val, i) => (val, i)))
             {
                 bank.BankId = ind;

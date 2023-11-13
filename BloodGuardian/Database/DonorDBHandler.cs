@@ -1,16 +1,17 @@
 ﻿using BloodGuardian.Common;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using Newtonsoft.Json;
 
 namespace BloodGuardian.Database
 {
-    internal class DonorDBHandler : DB<Donor>
+    internal class DonorDBHandler : IDonorDBHandler
     {
 
         private static DonorDBHandler _handler = null;
 
         static private List<Donor> _donors;
-        private DonorDBHandler()
+        public DonorDBHandler()
         {
 
             _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(Message._donorDataPath));
@@ -18,7 +19,7 @@ namespace BloodGuardian.Database
 
         }
 
-        public static DonorDBHandler Instance
+        public IDonorDBHandler Instance
         {
             get
             {
@@ -38,7 +39,7 @@ namespace BloodGuardian.Database
 
 
         }
-        public List<Donor> Read()
+        public List<Donor> Get()
         {
             return _donors;
         }
@@ -70,7 +71,7 @@ namespace BloodGuardian.Database
             string donorDataJSON = JsonConvert.SerializeObject(_donors, Formatting.Indented);
             File.WriteAllText(Message._donorDataPath, donorDataJSON);
         }
-        
-            
+
+
     }
 }

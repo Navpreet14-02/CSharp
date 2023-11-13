@@ -52,7 +52,9 @@
         public static string EnterCampEndTime = "Enter the end time for the camp(HH:MM) in 24-hour format: ";
         public static string EnterDifferentUserName = "Enter a different user name.";
         public static string EnterRole = "Enter your Role - 1. Donor or 2. BloodBankManager: ";
-        public static string PrintAdminOptions = "Enter input as shown below: \n1:Update Profile.\n2:Add New Admin\n3:See All Donors\n4:Remove a Donor\n5:See all Blood Banks.\n6:Remove a Blood Bank.\n7:See all Blood Donation Camps.\n8:Remove a Blood Donation Camp.\n9:Remove a Request.\n10:SignOut.";
+        public static string PrintAdminOptions = "Enter input as shown below: \n1:Update Profile.\n2:Add New Admin\n3:Manage Donors\n4:Manage BloodBanks\n5:Remove a Request\n6:SignOut.";
+        public static string PrintAdminManageDonorOptions = "Enter input as shown below: \n1:See All Donors\n2:Remove a Donor\n3:Go Back";
+        public static string PrintAdminManageBloodBankOptions = "Enter input as shown below: \n1:See All Blood Banks\n2:Remove a BloodBank\n3:See All Blood Donation Camps\n4:Remove a Blood Donation Camp\n5:Go Back";
         public static string PrintBloodBankManagerOptions = "Enter input as shown below: \n1:Update Profile.\n2:Add Blood Deposit Record\n3:Add Blood Withdraw Record\n4:Organize Blood Donation Camps\n5:See Blood Donation Camps.\n6:Remove Blood Donation Camps.\n7:SignOut.";
         public static string PrintHomePageOptions = "Enter input as shown below: \n1:Login\n2:Register\n3:See Blood Requests\n4:Add a Blood Request\n5:Search Blood.\n6:Exit.";
         public static string PrintDonorOptions = "Enter input as shown below: \n1:Update Profile\n2:Search Blood Banks Near you\n3:See Blood Donation Camps Near you\n4:See Blood Donation History\n5:SignOut";
@@ -61,8 +63,8 @@
         public static string WrongLoginDetailsMessage = "Enter valid details. If you are a new user, then register first.";
         public static string EnterBloodBankId = "Enter the Id of the Blood Bank you want to remove: ";
         public static string EnterBankId = "Enter the bank id: ";
-        public static string WrongBankId ="The bank with this id does not exist.";
-        public static string OrganizedCamps ="Here are the blood donation camps organized by you: ";
+        public static string WrongBankId = "The bank with this id does not exist.";
+        public static string OrganizedCamps = "Here are the blood donation camps organized by you: ";
         public static string EnterCampId = "Enter the id of camp you want to remove: ";
         public static string WrongCampId = "The camp with this id does not exist.";
         public static string RemoveCampSteps = "You can remove a camp by following below Steps: \n1. Select the bank id organizing that Blood Bank.\n2. Select the camp id to remove.";
@@ -110,7 +112,7 @@
         public static string _donorDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Donors.json";
         public static string _bankDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\BloodBanks.json";
         public static string _requestDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\BloodRequests.json";
-        public static string _exceptionsDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Exceptions.json";
+        public static string _exceptionsDataPath = @"C:\Users\nasingh\source\repos\BloodGuardian\Database\Exceptions.txt";
         public static string UnexpectedError = "Unexpected Error Occurred.";
         public static string RestartingApp = "App Restarting...";
         public static string NotAuthorized = "You are not authorized.";

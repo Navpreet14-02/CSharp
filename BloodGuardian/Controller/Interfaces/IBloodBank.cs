@@ -1,9 +1,4 @@
 ﻿using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloodGuardian.Controller.Interfaces
 {
@@ -17,6 +12,7 @@ namespace BloodGuardian.Controller.Interfaces
         void RemoveBloodBank(BloodBank bank);
         void UpdateDepositBloodRecord(BloodBank bank);
         void UpdateWithdrawBloodRecord(BloodBank bank);
+        public Dictionary<BloodBank, List<BloodTransferReceipt>> GetDonorBloodDonationHistory(Donor d);
 
     }
 

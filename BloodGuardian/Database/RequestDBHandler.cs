@@ -1,10 +1,11 @@
 ﻿using BloodGuardian.Common;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using Newtonsoft.Json;
 
 namespace BloodGuardian.Database
 {
-    internal class RequestDBHandler : DB<Request>
+    internal class RequestDBHandler : IRequestDBHandler
     {
 
 
@@ -14,12 +15,12 @@ namespace BloodGuardian.Database
 
 
 
-        private RequestDBHandler()
+        public RequestDBHandler()
         {
             _bloodRequests = JsonConvert.DeserializeObject<List<Request>>(File.ReadAllText(Message._requestDataPath));
         }
 
-        public static RequestDBHandler Instance
+        public IRequestDBHandler Instance
         {
             get
             {
@@ -32,7 +33,7 @@ namespace BloodGuardian.Database
 
         }
 
-        public List<Request> Read()
+        public List<Request> Get()
         {
 
             return _bloodRequests;

@@ -1,14 +1,15 @@
-﻿using BloodGuardian.Models;
-using BloodGuardian.Common;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 
 namespace BloodGuardian.View
 {
     public class DonorUI
     {
 
-        
+
 
         public static void DonorMenu(Donor d)
         {
@@ -22,7 +23,9 @@ namespace BloodGuardian.View
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
+
             Console.WriteLine(Message.PrintDonorOptions);
+
             Console.WriteLine(Message.DoubleDashDesign);
             Console.WriteLine();
 
@@ -75,11 +78,11 @@ namespace BloodGuardian.View
 
         }
 
-        public Donor CreateUser()
+        public Donor InputUserDetails()
         {
 
 
-            DonorController _donorController = new DonorController();
+            IDonor _donorController = new DonorController();
 
 
             Donor newDonor = new Donor();
@@ -90,10 +93,10 @@ namespace BloodGuardian.View
 
             string uname;
             Console.WriteLine(Message.EnterUserName);
-            while(true)
+            while (true)
             {
                 uname = InputHandler.InputUserName(false);
-                if (_donorController.FindDonor(uname, null) != null)
+                if (_donorController.FindDonorByUserName(uname) != null)
                 {
                     Console.WriteLine(Message.EnterDifferentUserName);
                     continue;
@@ -118,7 +121,7 @@ namespace BloodGuardian.View
 
 
             Console.WriteLine(Message.EnterRole);
-            newDonor.Role =Enum.Parse<roles>(InputHandler.InputRole(false));
+            newDonor.Role = Enum.Parse<Roles>(InputHandler.InputRole(false));
 
 
             Console.WriteLine(Message.EnterState);
@@ -131,7 +134,7 @@ namespace BloodGuardian.View
 
 
             Console.WriteLine(Message.EnterAddress);
-            newDonor.Address =InputHandler.InputAddress(false);
+            newDonor.Address = InputHandler.InputAddress(false);
 
 
             Console.WriteLine(Message.EnterPassword);
@@ -139,7 +142,7 @@ namespace BloodGuardian.View
 
 
             Console.WriteLine(Message.EnterBloodGroup);
-            newDonor.BloodGrp=InputHandler.InputBloodGroup(false);
+            newDonor.BloodGrp = InputHandler.InputBloodGroup(false);
 
             return newDonor;
         }
@@ -154,7 +157,7 @@ namespace BloodGuardian.View
 
             Console.WriteLine(Message.EnterName);
             String name = InputHandler.InputName(true);
-            updatedDonor.Name = name==String.Empty?oldDonor.Name:name;
+            updatedDonor.Name = name == String.Empty ? oldDonor.Name : name;
 
 
             Console.WriteLine(Message.EnterUserName);
@@ -164,38 +167,38 @@ namespace BloodGuardian.View
 
             Console.WriteLine(Message.EnterAge);
             int age = InputHandler.InputAge(true);
-            updatedDonor.Age = age==-1?oldDonor.Age: Convert.ToInt32(age);
+            updatedDonor.Age = age == -1 ? oldDonor.Age : Convert.ToInt32(age);
 
 
             Console.WriteLine(Message.EnterPhone);
             long phone = InputHandler.InputPhone(true);
-            updatedDonor.Phone = phone==-1?oldDonor.Phone:Convert.ToInt64(phone);
+            updatedDonor.Phone = phone == -1 ? oldDonor.Phone : Convert.ToInt64(phone);
 
 
             Console.WriteLine(Message.EnterEmail);
             string email = InputHandler.InputEmail(true);
-            updatedDonor.Email = email==String.Empty?oldDonor.Email:email;
+            updatedDonor.Email = email == String.Empty ? oldDonor.Email : email;
 
 
             Console.WriteLine(Message.EnterState);
-            string state = InputHandler.InputState(true);  
-            updatedDonor.State = state==String.Empty?oldDonor.State:state;
+            string state = InputHandler.InputState(true);
+            updatedDonor.State = state == String.Empty ? oldDonor.State : state;
 
 
             Console.WriteLine(Message.EnterCity);
-            string city=InputHandler.InputCity(true);
-            updatedDonor.City = city==String.Empty?oldDonor.City:city;
+            string city = InputHandler.InputCity(true);
+            updatedDonor.City = city == String.Empty ? oldDonor.City : city;
 
 
             Console.WriteLine(Message.EnterAddress);
             string address = InputHandler.InputAddress(true);
-            updatedDonor.Address = address==String.Empty?oldDonor.Address:address;
+            updatedDonor.Address = address == String.Empty ? oldDonor.Address : address;
 
 
             Console.WriteLine(Message.EnterPassword);
             Console.WriteLine();
             string password = InputHandler.InputPassword(true);
-            updatedDonor.Password = password==String.Empty?oldDonor.Password:password;
+            updatedDonor.Password = password == String.Empty ? oldDonor.Password : password;
 
             updatedDonor.Donorid = oldDonor.Donorid;
 

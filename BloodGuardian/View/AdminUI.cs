@@ -1,7 +1,8 @@
-﻿using BloodGuardian.Models;
-using BloodGuardian.Common;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 
 namespace BloodGuardian.View
 {
@@ -12,16 +13,15 @@ namespace BloodGuardian.View
         public static void AdminMenu(Donor d)
         {
 
-
-            IAdminBloodDonationCamp donationCampController = new BloodDonationCampController();
-            IAdminBloodBank bankController = new BloodBankController();
             IAdmin donorController = new DonorController();
             IRemoveRequest requestController = new RequestController();
 
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
+
             Console.WriteLine(Message.PrintAdminOptions);
+
             Console.WriteLine(Message.DoubleDashDesign);
             Console.WriteLine();
 
@@ -54,46 +54,24 @@ namespace BloodGuardian.View
                     AdminMenu(d);
                     break;
 
-                case AdminOptions.SeeAllDonors:
-                    donorController.AdminViewDonors(d);
-                    AdminMenu(d);
+                case AdminOptions.ManageDonors:
+                    AdminManageDonorUI(d);
                     break;
 
-                case AdminOptions.RemoveDonor:
-                    donorController.AdminRemoveDonor(d);
-                    AdminMenu(d);
-                    break;
-
-                case AdminOptions.SeeAllBloodBanks:
-                    bankController.AdminViewBloodBanks(d);
-                    AdminMenu(d);
-                    break;
-
-                case AdminOptions.RemoveBloodBank:
-                    bankController.AdminRemoveBloodBank(d);
-                    AdminMenu(d);
-                    break;
-
-                case AdminOptions.SeeBloodDonationCamps:
-                    donationCampController.AdminViewBloodDonationCamps(d);
-                    AdminMenu(d);
-                    break;
-
-                case AdminOptions.RemoveBloodDonationCamps:
-                    donationCampController.AdminRemoveBloodDonationCamp(d);
-                    AdminMenu(d);
+                case AdminOptions.ManageBloodBanks:
+                    AdminManageBloodBankUI(d);
                     break;
 
                 case AdminOptions.RemoveRequest:
                     requestController.AdminRemoveRequest(d);
                     AdminMenu(d);
-
                     break;
 
                 case AdminOptions.SignOut:
                     Console.WriteLine(Message.SigningOut);
                     App.Start();
                     break;
+
                 default:
                     Console.WriteLine(Message.InvalidOption);
                     AdminMenu(d);
@@ -101,12 +79,137 @@ namespace BloodGuardian.View
 
 
 
-            }  
+            }
 
 
         }
 
-        public Donor InputAdmin(Donor d)
+        public static void AdminManageDonorUI(Donor d)
+        {
+            IAdmin donorController = new DonorController();
+
+            Console.WriteLine();
+            Console.WriteLine(Message.DoubleDashDesign);
+
+            Console.WriteLine(Message.PrintAdminManageDonorOptions);
+
+            Console.WriteLine(Message.DoubleDashDesign);
+            Console.WriteLine();
+
+
+            AdminManageDonorOptions option;
+
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
+
+            AdminManageDonorOptions result;
+            if (input == string.Empty || !Enum.TryParse<AdminManageDonorOptions>(input, out result))
+            {
+                Console.WriteLine(Message.EnterValidOption);
+                AdminMenu(d);
+            }
+
+            option = Enum.Parse<AdminManageDonorOptions>(input);
+
+            switch (option)
+            {
+
+
+                case AdminManageDonorOptions.SeeAllDonors:
+                    donorController.AdminViewDonors(d);
+                    AdminManageDonorUI(d);
+                    break;
+
+                case AdminManageDonorOptions.RemoveDonor:
+                    donorController.AdminRemoveDonor(d);
+                    AdminManageDonorUI(d);
+                    break;
+
+                case AdminManageDonorOptions.GoBack:
+                    AdminMenu(d);
+                    break;
+
+                default:
+                    Console.WriteLine(Message.InvalidOption);
+                    AdminManageDonorUI(d);
+                    break;
+
+
+
+
+            }
+        }
+
+
+        public static void AdminManageBloodBankUI(Donor d)
+        {
+            IAdminBloodBank bankController = new BloodBankController();
+            IAdminBloodDonationCamp campController = new BloodDonationCampController();
+
+            Console.WriteLine();
+            Console.WriteLine(Message.DoubleDashDesign);
+
+            Console.WriteLine(Message.PrintAdminManageBloodBankOptions);
+
+            Console.WriteLine(Message.DoubleDashDesign);
+            Console.WriteLine();
+
+
+            AdminManageBloodBankOptions option;
+
+            Console.WriteLine(Message.SingleDashDesign);
+            Console.Write(Message.EnterInput);
+            string input = Console.ReadLine();
+
+            AdminManageBloodBankOptions result;
+            if (input == string.Empty || !Enum.TryParse<AdminManageBloodBankOptions>(input, out result))
+            {
+                Console.WriteLine(Message.EnterValidOption);
+                AdminMenu(d);
+            }
+
+            option = Enum.Parse<AdminManageBloodBankOptions>(input);
+
+            switch (option)
+            {
+
+
+                case AdminManageBloodBankOptions.SeeAllBloodBanks:
+                    bankController.AdminViewBloodBanks(d);
+                    AdminManageBloodBankUI(d);
+                    break;
+
+                case AdminManageBloodBankOptions.RemoveBloodBank:
+                    bankController.AdminRemoveBloodBank(d);
+                    AdminManageBloodBankUI(d);
+                    break;
+
+                case AdminManageBloodBankOptions.SeeBloodDonationCamps:
+                    campController.AdminViewBloodDonationCamps(d);
+                    AdminManageBloodBankUI(d);
+                    break;
+
+                case AdminManageBloodBankOptions.RemoveBloodDonationCamps:
+                    campController.AdminRemoveBloodDonationCamp(d);
+                    AdminManageBloodBankUI(d);
+                    break;
+
+                case AdminManageBloodBankOptions.GoBack:
+                    AdminMenu(d);
+                    break;
+
+                default:
+                    Console.WriteLine(Message.InvalidOption);
+                    AdminManageBloodBankUI(d);
+                    break;
+
+
+
+
+            }
+        }
+        public Donor InputAdminDetails()
         {
 
             Donor newAdmin = new Donor();
@@ -133,7 +236,7 @@ namespace BloodGuardian.View
             Console.WriteLine(Message.EnterAdminCity);
             newAdmin.City = InputHandler.InputCity(false);
 
-           
+
             Console.WriteLine(Message.EnterAdminAddress);
             newAdmin.Address = InputHandler.InputAddress(false);
 

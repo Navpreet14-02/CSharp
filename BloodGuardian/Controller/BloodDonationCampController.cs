@@ -1,9 +1,9 @@
-﻿using BloodGuardian.Database;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Database;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using BloodGuardian.Common;
-using BloodGuardian.Controller.Interfaces;
-
 
 namespace BloodGuardian.Controller
 {
@@ -12,6 +12,12 @@ namespace BloodGuardian.Controller
     internal class BloodDonationCampController : IAdminBloodDonationCamp, IBloodDonationCamp
     {
 
+        private IBloodBankDBHandler bankDBHandler;
+
+        public BloodDonationCampController()
+        {
+            bankDBHandler = new BloodBankDBHandler();
+        }
 
         public void OrganizeBloodDonationCamps(BloodBank bank, Donor d)
         {
@@ -22,7 +28,7 @@ namespace BloodGuardian.Controller
             newCamp.camp_id = bank.BloodDonationCamps.Count;
 
             bank.BloodDonationCamps.Add(newCamp);
-            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
+            bankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
         }
 
@@ -30,9 +36,7 @@ namespace BloodGuardian.Controller
         {
 
 
-
-
-            if (bank==null || bank.BloodDonationCamps.Count() == 0)
+            if (bank == null || bank.BloodDonationCamps.Count == 0)
             {
                 Console.WriteLine(Message.NoDonationCamps);
             }
@@ -92,21 +96,20 @@ namespace BloodGuardian.Controller
                 }
             }
 
-            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
+            bankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
 
 
-            
+
         }
 
 
         public void AdminViewBloodDonationCamps(Donor d)
         {
 
+            var banks = bankDBHandler.Instance.Get();
 
-            var banks = BloodBankDBHandler.Instance.Read();
-
-            if(banks == null || banks.Count == 0)
+            if (banks == null || banks.Count == 0)
             {
                 Console.WriteLine(Message.NoDonationCampOrganized);
                 return;
@@ -119,7 +122,7 @@ namespace BloodGuardian.Controller
 
                 Console.WriteLine($"Camps organized by {bank.BankName}, ID - {bank.BankId}:");
 
-                if(camps.Count == 0)
+                if (camps.Count == 0)
                 {
                     Console.WriteLine(Message.NoDonationCampsBank);
                 }
@@ -152,9 +155,9 @@ namespace BloodGuardian.Controller
 
 
             Console.Write(Message.EnterBankId);
-            int bankid=InputHandler.InputId();
+            int bankid = InputHandler.InputId();
 
-            var bank = BloodBankDBHandler.Instance.Read().ElementAtOrDefault(bankid);
+            var bank = bankDBHandler.Instance.Get().ElementAtOrDefault(bankid);
 
             if (bank == null)
             {

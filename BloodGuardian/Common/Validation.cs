@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using BloodGuardian.Common.Enums;
 using System.Text.RegularExpressions;
 
 namespace BloodGuardian.Common
@@ -67,7 +67,7 @@ namespace BloodGuardian.Common
 
         public static void ValidateState(string state)
         {
-            
+
             if (string.IsNullOrEmpty(state) || string.IsNullOrWhiteSpace(state)) throw new InvalidDataException(Message.NoEmptyState);
 
             int temp;
@@ -77,7 +77,7 @@ namespace BloodGuardian.Common
 
         public static void ValidateCity(string city)
         {
-          
+
             if (string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(city)) throw new InvalidDataException(Message.NoEmptyCity);
 
             int temp;
@@ -88,7 +88,7 @@ namespace BloodGuardian.Common
 
         public static void ValidateAddress(string address)
         {
-        
+
             if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address)) throw new InvalidDataException(Message.NoEmptyAddress);
 
             int temp;
@@ -104,19 +104,19 @@ namespace BloodGuardian.Common
             if (!int.TryParse(role, out roleInput))
             {
                 throw new InvalidDataException(Message.EnterValidRole);
-                
+
             }
 
 
             int roletaken = Convert.ToInt32(role);
-            if (roletaken != (int)roles.Donor && roletaken != (int)roles.BloodBankManager)
+            if (roletaken != (int)Roles.Donor && roletaken != (int)Roles.BloodBankManager)
             {
                 throw new InvalidDataException(Message.ChooseValidRole);
-                
-               
+
+
             }
-           
-        
+
+
         }
 
         public static void ValidatePassword(string password)
@@ -154,7 +154,7 @@ namespace BloodGuardian.Common
 
             if (string.IsNullOrEmpty(bloodgrp) || string.IsNullOrWhiteSpace(bloodgrp)) throw new InvalidDataException(Message.NoEmptyBloodGroup);
 
-            
+
 
             if (!BloodGroups.Contains(bloodgrp)) throw new InvalidDataException(Message.EnterValidBloodGroup);
 
@@ -198,7 +198,7 @@ namespace BloodGuardian.Common
 
 
             int amnt;
-            if (!int.TryParse(amount, out amnt) || amnt<0) throw new InvalidDataException(Message.EnterValidInput);
+            if (!int.TryParse(amount, out amnt) || amnt < 0) throw new InvalidDataException(Message.EnterValidInput);
 
             if (amnt > 500) throw new InvalidDataException(Message.BloodAmountRange);
 

@@ -1,14 +1,12 @@
-﻿using BloodGuardian.View;
+﻿using BloodGuardian.Common;
 using BloodGuardian.Database;
-using BloodGuardian.Common;
+using BloodGuardian.View;
 
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-
-
 
         try
         {

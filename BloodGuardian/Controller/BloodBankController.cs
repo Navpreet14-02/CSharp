@@ -1,8 +1,9 @@
 ﻿using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
 using BloodGuardian.Database;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.Controller
 
@@ -14,28 +15,30 @@ namespace BloodGuardian.Controller
 
 
         private BloodBankManagerUI _bloodbankManagerUI;
+        private IBloodBankDBHandler bankDBHandler;
 
         public BloodBankController()
         {
             _bloodbankManagerUI = new BloodBankManagerUI();
+            bankDBHandler = new BloodBankDBHandler();
         }
 
         public void AddBloodBank(Donor d)
         {
 
-            BloodBank bank = _bloodbankManagerUI.createBloodBank(d);
-            BloodBankDBHandler.Instance.Add(bank);
+            BloodBank bank = _bloodbankManagerUI.InputBloodBankDetails(d);
+            bankDBHandler.Instance.Add(bank);
 
         }
 
         public List<BloodBank> GetBloodBanks()
         {
-            return BloodBankDBHandler.Instance.Read();
+            return bankDBHandler.Instance.Get();
         }
 
         public BloodBank FindBloodBankbyId(int bankid)
         {
-            var banks = BloodBankDBHandler.Instance.Read();
+            var banks = GetBloodBanks();
             if (bankid < 0 || bankid > banks.Count) return null;
             return banks[bankid];
 
@@ -43,7 +46,7 @@ namespace BloodGuardian.Controller
 
         public BloodBank FindBloodBankbyDonor(Donor d)
         {
-            var banks = BloodBankDBHandler.Instance.Read();
+            var banks = GetBloodBanks();
             return banks.Find((b) => b.ManagerUserName == d.UserName);
         }
 
@@ -52,9 +55,9 @@ namespace BloodGuardian.Controller
             var bank = FindBloodBankbyDonor(oldDonor);
 
             var newBank = new BloodBank();
-                
+
             Console.WriteLine(Message.EnterBloodBankName);
-            var newBankName = InputHandler.InputName(true); 
+            var newBankName = InputHandler.InputName(true);
 
 
             newBank.BankName = newBankName == String.Empty ? bank.BankName : newBankName;
@@ -73,22 +76,22 @@ namespace BloodGuardian.Controller
 
 
 
-            BloodBankDBHandler.Instance.UpdateBloodBank(bank, newBank);
+            bankDBHandler.Instance.UpdateBloodBank(bank, newBank);
 
         }
 
         public void AdminViewBloodBanks(Donor d)
         {
 
-            var banks = BloodBankDBHandler.Instance.Read();
+            var banks = GetBloodBanks();
 
-            if(banks.Count==0)
+            if (banks.Count == 0)
             {
                 Console.WriteLine(Message.NoRegisteredBloodBanks);
                 return;
             }
 
-            BloodBankDBHandler.Instance.Read().ForEach(bank =>
+            banks.ForEach(bank =>
             {
                 Console.WriteLine(Message.SingleDashDesign);
                 Console.WriteLine("Id: " + bank.BankId);
@@ -134,7 +137,7 @@ namespace BloodGuardian.Controller
 
         public void RemoveBloodBank(BloodBank bank)
         {
-            BloodBankDBHandler.Instance.Delete(bank);
+            bankDBHandler.Instance.Delete(bank);
         }
 
 
@@ -145,9 +148,9 @@ namespace BloodGuardian.Controller
 
             blood.Id = bank.Blood_Deposit_Record.Count;
             bank.Blood_Deposit_Record.Add(blood);
-            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
+            bankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
-            BloodBankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, true);
+            bankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, true);
 
 
 
@@ -164,13 +167,24 @@ namespace BloodGuardian.Controller
             blood.Id = bank.Blood_WithDrawal_Record.Count;
 
             bank.Blood_WithDrawal_Record.Add(blood);
-            BloodBankDBHandler.Instance.UpdateBloodBank(bank, bank);
+            bankDBHandler.Instance.UpdateBloodBank(bank, bank);
 
-            BloodBankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, false);
-
-
+            bankDBHandler.Instance.UpdateBloodTransferRecord(bank, blood.BloodGroup, blood.BloodAmount, false);
 
 
         }
+
+        public Dictionary<BloodBank, List<BloodTransferReceipt>> GetDonorBloodDonationHistory(Donor d)
+        {
+            var bankdepositLists = new Dictionary<BloodBank, List<BloodTransferReceipt>>();
+            GetBloodBanks().ForEach(bank =>
+            {
+                bankdepositLists.Add(bank, bank.Blood_Deposit_Record);
+            });
+
+            return bankdepositLists;
+        }
+
+
     }
 }

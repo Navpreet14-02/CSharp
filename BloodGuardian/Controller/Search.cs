@@ -1,6 +1,7 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Models;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 
 
 namespace BloodGuardian.Controller
@@ -19,7 +20,9 @@ namespace BloodGuardian.Controller
         public void SearchBloodBanks(Donor d)
         {
 
-            List<BloodBank> banks = _bankController.GetBloodBanks().FindAll((bloodbank) => bloodbank.State == d.State&& bloodbank.City == d.City);
+            List<BloodBank> banks = _bankController
+                                    .GetBloodBanks()
+                                    .FindAll((bloodbank) => bloodbank.State == d.State && bloodbank.City == d.City);
 
             if (banks.Count == 0)
             {
@@ -52,11 +55,11 @@ namespace BloodGuardian.Controller
             string state = InputHandler.InputState(false);
 
             Console.WriteLine(Message.EnterCity);
-            string city=InputHandler.InputCity(false);
+            string city = InputHandler.InputCity(false);
 
 
             Console.WriteLine(Message.EnterBloodGroup);
-            string bloodType=InputHandler.InputBloodGroup(false);
+            string bloodType = InputHandler.InputBloodGroup(false);
 
             Console.WriteLine();
 
@@ -92,7 +95,7 @@ namespace BloodGuardian.Controller
 
         public void SearchBloodDonationCamp(Donor d)
         {
-            if(d.Role != roles.Donor)
+            if (d.Role != Roles.Donor)
             {
                 Console.WriteLine(Message.NotAuthorized);
             }
@@ -100,7 +103,7 @@ namespace BloodGuardian.Controller
 
             var campsLists = banksList.Select((bank) => bank.BloodDonationCamps).ToList();
 
-            var camps=new List<BloodDonationCamp>();
+            var camps = new List<BloodDonationCamp>();
             campsLists.ForEach((campList) => campList.ForEach((camp) =>
             {
                 if (camp.Camp_State == d.State && camp.Camp_City == d.City) camps.Add(camp);

@@ -1,8 +1,9 @@
-﻿using BloodGuardian.Database;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Database;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using BloodGuardian.Common;
-using BloodGuardian.Controller.Interfaces;
 
 
 namespace BloodGuardian.Controller
@@ -10,17 +11,25 @@ namespace BloodGuardian.Controller
 
     internal class RequestController : IRequest, IRemoveRequest
     {
-        public void AddRequest()
+
+
+        private IRequestDBHandler requestDBHandler;
+
+        public RequestController()
         {
-            var newRequest = App.createRequest();
-            RequestDBHandler.Instance.Add(newRequest);
+            requestDBHandler = new RequestDBHandler();
+        }
+        public void AddBloodRequest()
+        {
+            var newRequest = App.InputBloodRequestDetails();
+            requestDBHandler.Instance.Add(newRequest);
         }
 
 
-        public void ViewRequests()
+        public void ViewBloodRequests()
         {
 
-            var requests = RequestDBHandler.Instance.Read();
+            var requests = requestDBHandler.Instance.Get();
             foreach (var request in requests)
             {
                 Console.WriteLine(Message.SingleDashDesign);
@@ -37,12 +46,12 @@ namespace BloodGuardian.Controller
 
         public void AdminRemoveRequest(Donor d)
         {
-            ViewRequests();
+            ViewBloodRequests();
 
             Console.Write(Message.EnterRequestId);
-            int requestId=InputHandler.InputId();
+            int requestId = InputHandler.InputId();
 
-            var request = RequestDBHandler.Instance.Read().ElementAtOrDefault(requestId);
+            var request = requestDBHandler.Instance.Get().ElementAtOrDefault(requestId);
 
             if (request == null)
             {
@@ -50,7 +59,7 @@ namespace BloodGuardian.Controller
             }
             else
             {
-                RequestDBHandler.Instance.Delete(request);
+                requestDBHandler.Instance.Delete(request);
             }
         }
     }

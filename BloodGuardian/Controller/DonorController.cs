@@ -1,33 +1,42 @@
-﻿using BloodGuardian.Database;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
+using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Database;
+using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using BloodGuardian.Common;
-using BloodGuardian.Controller.Interfaces;
 
 namespace BloodGuardian.Controller
 {
 
-    internal class DonorController : IDonor,IAdmin
+    internal class DonorController : IDonor, IAdmin
     {
 
         private DonorUI _donorUI;
         private IBloodBank _bankController;
+        private IDonorDBHandler donorDBHandler;
 
         public DonorController()
         {
-            _donorUI=new DonorUI();
-            _bankController=new BloodBankController();
+            _donorUI = new DonorUI();
+            _bankController = new BloodBankController();
+            donorDBHandler = new DonorDBHandler();
         }
 
         public Donor AddDonor()
         {
 
-           
-            Donor newDonor = _donorUI.CreateUser();
-            DonorDBHandler.Instance.Add(newDonor);
+
+            Donor newDonor = _donorUI.InputUserDetails();
+            donorDBHandler.Instance.Add(newDonor);
 
             return newDonor;
-            
+
+        }
+
+        public List<Donor> GetDonors()
+        {
+            return donorDBHandler.Instance.Get();
         }
 
         public Donor UpdateProfile(Donor d)
@@ -43,7 +52,7 @@ namespace BloodGuardian.Controller
             Console.WriteLine("City: " + d.City);
             Console.WriteLine("Address: " + d.Address);
             Console.WriteLine("Password: " + d.Password);
-            if (d.Role == roles.BloodBankManager) Console.WriteLine("Blood Bank Name: " + _bankController.FindBloodBankbyDonor(d).BankName);
+            if (d.Role == Roles.BloodBankManager) Console.WriteLine("Blood Bank Name: " + _bankController.FindBloodBankbyDonor(d).BankName);
 
 
             Console.WriteLine(Message.DoubleDashDesign);
@@ -53,7 +62,7 @@ namespace BloodGuardian.Controller
 
 
 
-            DonorDBHandler.Instance.UpdateDonor(d, updatedDonor);
+            donorDBHandler.Instance.UpdateDonor(d, updatedDonor);
 
 
             return updatedDonor;
@@ -63,7 +72,7 @@ namespace BloodGuardian.Controller
         public void AdminViewDonors(Donor d)
         {
 
-            var donors = DonorDBHandler.Instance.Read();
+            var donors = GetDonors();
 
             if (donors == null || donors.Count == 0)
             {
@@ -71,7 +80,8 @@ namespace BloodGuardian.Controller
                 return;
             }
 
-            donors.ForEach(donor => {
+            donors.ForEach(donor =>
+            {
 
                 Console.WriteLine(Message.SingleDashDesign);
                 Console.WriteLine("id: " + donor.Donorid);
@@ -91,28 +101,29 @@ namespace BloodGuardian.Controller
 
         }
 
-        public Donor FindDonor(string username, string password)
+        public Donor FindDonorByCredentials(string username, string password)
         {
 
-            var donorList = DonorDBHandler.Instance.Read();
-            Donor d = new Donor();
-            if (password == null)
-            {
-                d = donorList.FirstOrDefault((donor) => donor.UserName == username);
+            var donorList = GetDonors();
 
-            }
-            else
-            {
-                d = donorList.Find((donor) => donor.UserName == username && donor.Password == password);
+            Donor d = donorList.Find((donor) => donor.UserName == username && donor.Password == password);
 
-            }
+
+
+            return d;
+        }
+
+        public Donor FindDonorByUserName(string username)
+        {
+            var donorList = GetDonors();
+            Donor d = donorList.FirstOrDefault((donor) => donor.UserName == username);
 
             return d;
         }
 
         public Donor FindDonorByBank(BloodBank bank)
         {
-            var donor = DonorDBHandler.Instance.Read().Find((dn) => dn.UserName == bank.ManagerUserName);
+            var donor = GetDonors().Find((dn) => dn.UserName == bank.ManagerUserName);
 
             return donor;
         }
@@ -127,13 +138,13 @@ namespace BloodGuardian.Controller
             Console.Write(Message.EnterDonorId);
             int donorId = InputHandler.InputId();
 
-            var donor = DonorDBHandler.Instance.Read().ElementAtOrDefault(donorId);
+            var donor = GetDonors().ElementAtOrDefault(donorId);
 
             if (donor == null)
             {
                 Console.WriteLine(Message.WrongDonorId);
             }
-            else if (donor.Role == roles.BloodBankManager)
+            else if (donor.Role == Roles.BloodBankManager)
             {
                 RemoveBloodBankManager(donor);
             }
@@ -141,7 +152,7 @@ namespace BloodGuardian.Controller
             {
                 RemoveDonor(donor);
             }
-            
+
 
 
 
@@ -149,26 +160,22 @@ namespace BloodGuardian.Controller
 
         public void RemoveDonor(Donor d)
         {
-            DonorDBHandler.Instance.Delete(d);
-            
+            donorDBHandler.Instance.Delete(d);
+
 
         }
 
         private void RemoveBloodBankManager(Donor d)
         {
             var bank = _bankController.FindBloodBankbyDonor(d);
-            DonorDBHandler.Instance.Delete(d);
+            donorDBHandler.Instance.Delete(d);
             _bankController.RemoveBloodBank(bank);
 
         }
 
         public void ViewBloodDonationHistory(Donor d)
         {
-            var BankdepositLists = new Dictionary<BloodBank, List<BloodTransferReceipt>>();
-            _bankController.GetBloodBanks().ForEach(bank =>
-            {
-                BankdepositLists.Add(bank, bank.Blood_Deposit_Record);
-            });
+            var BankdepositLists = _bankController.GetDonorBloodDonationHistory(d);
 
 
             var isFound = false;
@@ -209,11 +216,11 @@ namespace BloodGuardian.Controller
         public void AddAdmin(Donor d)
         {
             AdminUI adminUI = new AdminUI();
-            Donor newAdmin = adminUI.InputAdmin(d);
+            Donor newAdmin = adminUI.InputAdminDetails();
 
-            newAdmin.Role = roles.Admin;
+            newAdmin.Role = Roles.Admin;
 
-            DonorDBHandler.Instance.Add(newAdmin);
+            donorDBHandler.Instance.Add(newAdmin);
 
 
         }

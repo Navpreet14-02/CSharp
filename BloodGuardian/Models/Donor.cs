@@ -1,4 +1,4 @@
-﻿using BloodGuardian.Common;
+﻿using BloodGuardian.Common.Enums;
 
 namespace BloodGuardian.Models
 {
@@ -17,8 +17,8 @@ namespace BloodGuardian.Models
         public string Address { get; set; }
         public string City { get; set; }
         public string Password { get; set; }
-        public string BloodGrp{ get; set; }
-        public roles Role { get; set; }
+        public string BloodGrp { get; set; }
+        public Roles Role { get; set; }
 
 
 

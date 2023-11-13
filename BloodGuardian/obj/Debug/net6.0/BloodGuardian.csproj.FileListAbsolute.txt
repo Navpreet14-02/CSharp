@@ -4,6 +4,9 @@ C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\BloodGuardian.runti
 C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\BloodGuardian.dll
 C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\BloodGuardian.pdb
 C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\System.Text.Json.dll
+C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\BloodGuardian.csproj.AssemblyReference.cache
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\BloodGuardian.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\BloodGuardian.AssemblyInfoInputs.cache
@@ -15,6 +18,3 @@ C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\refint\BloodGuardia
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\BloodGuardian.pdb
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\BloodGuardian.genruntimeconfig.cache
 C:\Users\nasingh\source\repos\BloodGuardian\obj\Debug\net6.0\ref\BloodGuardian.dll
-C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\System.Text.Encodings.Web.dll
-C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\System.Text.Json.dll
-C:\Users\nasingh\source\repos\BloodGuardian\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll

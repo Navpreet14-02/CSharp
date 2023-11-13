@@ -7,7 +7,9 @@ namespace BloodGuardian.Controller.Interfaces
         Donor AddDonor();
 
         Donor UpdateProfile(Donor d);
-        Donor FindDonor(string username, string password);
+        Donor FindDonorByCredentials(string username, string password);
+        Donor FindDonorByUserName(string username);
+
         Donor FindDonorByBank(BloodBank bank);
         void ViewBloodDonationHistory(Donor d);
 

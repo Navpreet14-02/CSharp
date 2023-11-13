@@ -1,7 +1,8 @@
 ﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller;
-using BloodGuardian.Models;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 
 
 namespace BloodGuardian.View
@@ -14,13 +15,12 @@ namespace BloodGuardian.View
 
             IRequest requestController = new RequestController();
             IAuth authHandler = new AuthHandler();
-            ISearch search = new Search();
-
-
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
+
             Console.WriteLine(Message.PrintHomePageOptions);
+
             Console.WriteLine(Message.DoubleDashDesign);
             Console.WriteLine();
 
@@ -33,16 +33,14 @@ namespace BloodGuardian.View
             string input = Console.ReadLine();
 
             HomePageOptions result;
-            if (input == string.Empty || !Enum.TryParse<HomePageOptions>(input, out result)){
+            if (input == string.Empty || !Enum.TryParse<HomePageOptions>(input, out result))
+            {
                 Console.WriteLine(Message.EnterValidOption);
                 Start();
             }
 
             option = Enum.Parse<HomePageOptions>(input);
-            
 
-
-            Donor d;
 
             switch (option)
             {
@@ -56,16 +54,17 @@ namespace BloodGuardian.View
                     break;
 
                 case HomePageOptions.SeeBloodRequests:
-                    requestController.ViewRequests();
+                    requestController.ViewBloodRequests();
                     Start();
                     break;
 
                 case HomePageOptions.AddBloodRequest:
-                    requestController.AddRequest();
+                    requestController.AddBloodRequest();
                     Start();
                     break;
 
                 case HomePageOptions.SearchBlood:
+                    ISearch search = new Search();
                     search.SearchBlood();
                     Start();
                     break;
@@ -81,7 +80,7 @@ namespace BloodGuardian.View
             }
         }
 
-        public static Request createRequest()
+        public static Request InputBloodRequestDetails()
         {
             Request req = new Request();
 
@@ -93,7 +92,7 @@ namespace BloodGuardian.View
 
             Console.WriteLine(Message.EnterRequiredBloodType);
             req.BloodRequirementType = InputHandler.InputBloodGroup(false);
-            
+
 
             Console.WriteLine(Message.EnterAddress);
             req.Address = InputHandler.InputAddress(false);
