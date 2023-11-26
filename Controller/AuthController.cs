@@ -5,8 +5,7 @@ using BloodGuardian.Database;
 using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-
-
+using BloodGuardian.View.Interfaces;
 
 namespace BloodGuardian.Controller
 
@@ -17,51 +16,33 @@ namespace BloodGuardian.Controller
     {
 
         private IDonorDBHandler _donorDBHandler;
-        private IBloodBankDBHandler _bankDBHandler;
+        //private IBloodBankDBHandler _bankDBHandler;
+        //private IBloodBankManagerView _bankManagerView;
 
 
-        public AuthController(IDonorDBHandler donorDBHandler,IBloodBankDBHandler bankDBHandler)
+        public AuthController(IDonorDBHandler donorDBHandler)
         {
             _donorDBHandler =donorDBHandler;
-            _bankDBHandler = bankDBHandler;
+            //_bankDBHandler = bankDBHandler;
+            //_bankManagerView = bankManagerView;
         }
 
 
-        public void Register()
+        public void Register(Donor newDonor)
         {
-            DonorView donorView = new DonorView();
-
-            Donor newDonor = donorView.InputUserDetails();
 
             _donorDBHandler.Add(newDonor);
 
-
-            if (newDonor.Role == Roles.BloodBankManager)
-            {
-
-                var bankUI = new BloodBankManagerView();
-                var bloodbank = bankUI.InputBloodBankDetails(newDonor);
-                _bankDBHandler.Add(bloodbank);
-            }
+            //BloodBank bank = _bankManagerView.InputBloodBankDetails(newDonor);
+            //_bankDBHandler.Add(bank);
 
 
-            Console.WriteLine(Message.UserRegistered);
-            Console.WriteLine();
-            UI.Start();
+
 
         }
 
-        public void Login()
+        public void Login(string username,string password)
         {
-
-
-
-            Console.WriteLine(Message.EnterUserName);
-            string username = InputHandler.InputUserName(false);
-
-            Console.WriteLine(Message.EnterPassword);
-            string password = InputHandler.InputPassword(false);
-
 
 
             var donor = _donorDBHandler.FindDonorByCredentials(username, password);
@@ -91,6 +72,11 @@ namespace BloodGuardian.Controller
 
 
 
+        }
+
+        public bool CheckUserExists(string username)
+        {
+            return _donorDBHandler.FindDonorByUserName(username)!=null;
         }
     }
 }

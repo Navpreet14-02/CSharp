@@ -14,57 +14,45 @@ namespace BloodGuardian.Controller
 
 
         private IDB<Request> _requestDBHandler;
-        private IHomeView _homeView;
-       
+      
 
-        public RequestController(IDB<Request> requestDBHandler,IHomeView homeView)
+        public RequestController(IDB<Request> requestDBHandler)
         {
             _requestDBHandler = requestDBHandler;
-            _homeView = homeView;
         }
-        public void AddBloodRequest()
+        public void AddBloodRequest(Request newRequest)
         {
-            
-            var newRequest = _homeView.InputBloodRequestDetails();
             _requestDBHandler.Add(newRequest);
         }
 
-
-        public void ViewBloodRequests()
+        public List<Request> GetBloodRequests()
         {
-
-            var requests = _requestDBHandler.Get();
-            foreach (var request in requests)
-            {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.WriteLine(request.RequestId);
-                Console.WriteLine("Requester Name: " + request.RequesterName);
-                Console.WriteLine("Requester Phone No: " + request.RequesterPhone);
-                Console.WriteLine("Requested Blood Type: " + request.BloodRequirementType);
-                Console.WriteLine("Requester Address: " + request.Address);
-                Console.WriteLine(Message.SingleDashDesign);
-
-            }
-
+            return _requestDBHandler.Get();
         }
 
-        public void AdminRemoveRequest(Donor d)
+        //public void ViewBloodRequests()
+        //{
+
+        //    var requests = _requestDBHandler.Get();
+        //    foreach (var request in requests)
+        //    {
+        //        Console.WriteLine(Message.SingleDashDesign);
+        //        Console.WriteLine(request.RequestId);
+        //        Console.WriteLine("Requester Name: " + request.RequesterName);
+        //        Console.WriteLine("Requester Phone No: " + request.RequesterPhone);
+        //        Console.WriteLine("Requested Blood Type: " + request.BloodRequirementType);
+        //        Console.WriteLine("Requester Address: " + request.Address);
+        //        Console.WriteLine(Message.SingleDashDesign);
+
+        //    }
+
+        //}
+
+        public void AdminRemoveRequest(Request request)
         {
-            ViewBloodRequests();
-
-            Console.Write(Message.EnterRequestId);
-            int requestId = InputHandler.InputId();
-
-            var request = _requestDBHandler.Get().ElementAtOrDefault(requestId);
-
-            if (request == null)
-            {
-                Console.WriteLine(Message.WrongRequestId);
-            }
-            else
-            {
-                _requestDBHandler.Delete(request);
-            }
+            
+            _requestDBHandler.Delete(request);
+            
         }
     }
 }

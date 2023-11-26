@@ -5,9 +5,9 @@ namespace BloodGuardian.Controller.Interfaces
     public interface IDonor
     {
 
-        Donor UpdateProfile(Donor d);
+        void UpdateProfile(Donor oldDonor, Donor newDonor);
         Donor FindDonorByUserName(string username);
-        void ViewBloodDonationHistory(Donor d);
+        Dictionary<BloodBank, List<BloodTransferReceipt>> GetBloodDonationHistory(Donor d);
 
 
     }

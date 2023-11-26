@@ -1,8 +1,11 @@
-﻿namespace BloodGuardian.Controller.Interfaces
+﻿using BloodGuardian.Models;
+
+namespace BloodGuardian.Controller.Interfaces
 {
     public interface IRequest
     {
-        void AddBloodRequest();
-        void ViewBloodRequests();
+
+        List<Request> GetBloodRequests();
+        void AddBloodRequest(Request newRequest);
     }
 }

@@ -23,6 +23,11 @@ namespace BloodGuardian.Controller
             _donorDBHandler = donorDBHandler;
         }
 
+        public void AddBloodBank(BloodBank bank)
+        {
+            _bankDBHandler.Add(bank);
+        }
+
 
         public List<BloodBank> GetBloodBanks()
         {
@@ -37,91 +42,55 @@ namespace BloodGuardian.Controller
 
         }
 
-        public BloodBank FindBloodBank(Donor d)
+        public BloodBank FindBloodBankByDonor(Donor d)
         {
-            return _bankDBHandler.FindBloodBankbyDonor(d);
+
+            return _bankDBHandler.FindBloodBankbyDonor(d); 
         }
 
-        public void UpdateBloodBankDetails(Donor oldDonor, Donor newDonor)
+        public void UpdateBloodBank(BloodBank oldBank, BloodBank newBank)
         {
-            var bank = FindBloodBank(oldDonor);
-
-            var newBank = new BloodBank();
-
-            Console.WriteLine(Message.EnterBloodBankName);
-            var newBankName = InputHandler.InputName(true);
 
 
-            newBank.BankName = newBankName.Equals(String.Empty) ? bank.BankName : newBankName;
-
-            newBank.ManagerEmail = newDonor.Email;
-            newBank.ManagerName = newDonor.Name;
-            newBank.Address = newDonor.Address;
-            newBank.State = newDonor.State;
-            newBank.City = newDonor.City;
-            newBank.Contact = newDonor.Phone;
-            newBank.BloodUnits = bank.BloodUnits;
-            newBank.Blood_Deposit_Record = bank.Blood_Deposit_Record;
-            newBank.Blood_WithDrawal_Record = bank.Blood_WithDrawal_Record;
-            newBank.BloodDonationCamps = bank.BloodDonationCamps;
-            newBank.ManagerUserName = newDonor.UserName;
-
-
-
-            _bankDBHandler.UpdateBloodBank(bank, newBank);
+            _bankDBHandler.UpdateBloodBank(oldBank, newBank);
 
         }
 
-        public void AdminViewBloodBanks(Donor d)
+        //public void AdminViewBloodBanks(Donor d)
+        //{
+
+        //    var banks = GetBloodBanks();
+
+        //    if (banks.Count == 0)
+        //    {
+        //        Console.WriteLine(Message.NoRegisteredBloodBanks);
+        //        return;
+        //    }
+
+        //    banks.ForEach(bank =>
+        //    {
+        //        Console.WriteLine(Message.SingleDashDesign);
+        //        Console.WriteLine("Id: " + bank.BankId);
+        //        Console.WriteLine("Bank Name: " + bank.BankName);
+        //        Console.WriteLine("Bank Manager User Name: " + bank.ManagerUserName);
+        //        Console.WriteLine("Manager Name: " + bank.ManagerName);
+        //        Console.WriteLine("Manager Email: " + bank.ManagerEmail);
+        //        Console.WriteLine("Manager Contact: " + bank.Contact);
+        //        Console.WriteLine("Address: " + bank.Address);
+        //        Console.WriteLine(Message.SingleDashDesign);
+
+        //    });
+
+        //}
+
+
+        public void AdminRemoveBloodBank(BloodBank bank)
         {
+ 
+            var donor = _donorDBHandler.FindDonorByBank(bank);
+            _donorDBHandler.Delete(donor);
+            _bankDBHandler.Delete(bank);
 
-            var banks = GetBloodBanks();
-
-            if (banks.Count == 0)
-            {
-                Console.WriteLine(Message.NoRegisteredBloodBanks);
-                return;
-            }
-
-            banks.ForEach(bank =>
-            {
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.WriteLine("Id: " + bank.BankId);
-                Console.WriteLine("Bank Name: " + bank.BankName);
-                Console.WriteLine("Bank Manager User Name: " + bank.ManagerUserName);
-                Console.WriteLine("Manager Name: " + bank.ManagerName);
-                Console.WriteLine("Manager Email: " + bank.ManagerEmail);
-                Console.WriteLine("Manager Contact: " + bank.Contact);
-                Console.WriteLine("Address: " + bank.Address);
-                Console.WriteLine(Message.SingleDashDesign);
-
-            });
-
-        }
-
-
-        public void AdminRemoveBloodBank(Donor d)
-        {
-            AdminViewBloodBanks(d);
-
-            Console.WriteLine(Message.DoubleDashDesign);
-            Console.WriteLine(Message.EnterBloodBankId);
-
-
-            int bankid = InputHandler.InputId();
-
-            var bank = FindBloodBankbyId(bankid);
-
-            if (bank == null)
-            {
-                Console.WriteLine(Message.WrongBankId);
-            }
-            else
-            {
-                var donor = _donorDBHandler.FindDonorByBank(bank);
-                _donorDBHandler.Delete(donor);
-                RemoveBloodBank(bank);
-            }
 
 
         }
@@ -132,10 +101,8 @@ namespace BloodGuardian.Controller
         }
 
 
-        public void UpdateDepositBloodRecord(BloodBank bank)
+        public void UpdateDepositBloodRecord(BloodBank bank,BloodTransferReceipt blood)
         {
-            BloodBankManagerView bloodBankManagerUI = new BloodBankManagerView();
-            BloodTransferReceipt blood = bloodBankManagerUI.CreateBloodDepositRecord();
 
             blood.Id = bank.Blood_Deposit_Record.Count;
             bank.Blood_Deposit_Record.Add(blood);
@@ -148,13 +115,8 @@ namespace BloodGuardian.Controller
         }
 
 
-        public void UpdateWithdrawBloodRecord(BloodBank bank)
+        public void UpdateWithdrawBloodRecord(BloodBank bank,BloodTransferReceipt blood)
         {
-
-            BloodBankManagerView bloodBankManagerUI = new BloodBankManagerView();
-            BloodTransferReceipt blood = bloodBankManagerUI.CreateBloodWithdrawRecord();
-
-
             blood.Id = bank.Blood_WithDrawal_Record.Count;
 
             bank.Blood_WithDrawal_Record.Add(blood);

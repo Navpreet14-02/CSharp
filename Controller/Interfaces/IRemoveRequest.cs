@@ -4,6 +4,8 @@ namespace BloodGuardian.Controller.Interfaces
 {
     public interface IRemoveRequest
     {
-        void AdminRemoveRequest(Donor d);
+        List<Request> GetBloodRequests();
+        void AddBloodRequest(Request newRequest);
+        void AdminRemoveRequest(Request request);
     }
 }

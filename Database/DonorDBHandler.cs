@@ -10,13 +10,13 @@ namespace BloodGuardian.Database
 
         private static DonorDBHandler _handler = null;
 
-        static private List<Donor> _donors;
+        private List<Donor> _donors;
         private DonorDBHandler()
         {
 
             try
             {
-                if(_donors!=null) _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(Message._donorDataPath));
+                _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(Message._donorDataPath));
 
             }
             catch(Exception ex)
@@ -28,6 +28,8 @@ namespace BloodGuardian.Database
 
 
         }
+
+
 
         public static DonorDBHandler Instance
         {
@@ -47,6 +49,12 @@ namespace BloodGuardian.Database
             _donors.Add(d);
             Update(Message._donorDataPath);
 
+
+        }
+
+        public Donor FindDonorByUserName(string username)
+        {
+            return _donors.Find((donor) => donor.UserName.Equals(username,StringComparison.InvariantCultureIgnoreCase));
 
         }
         public List<Donor> Get()
@@ -78,13 +86,12 @@ namespace BloodGuardian.Database
 
         public Donor FindDonorByCredentials(string username, string password)
         {
-            return _donors.Find((donor) => donor.UserName.Equals(username,StringComparison.InvariantCultureIgnoreCase) && donor.Password.Equals(password));
+            return _donors.Find((donor) => donor.UserName==username && donor.Password==password);
         }
 
         public Donor FindDonorByBank(BloodBank bank)
         {
             var donor = _donors.Find((dn) => dn.UserName.Equals(bank.ManagerUserName,StringComparison.InvariantCultureIgnoreCase));
-
             return donor;
         }
 

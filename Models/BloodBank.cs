@@ -33,5 +33,29 @@ namespace BloodGuardian.Models
         }
 
 
+
+        public override bool Equals(object obj)
+        {
+            BloodBank bank2 = obj as BloodBank;
+
+            if(bank2==null) return false;
+
+            return
+                this.BankId.Equals(bank2.BankId) &&
+                this.BankName.Equals(bank2.BankName) &&
+                this.ManagerName.Equals(bank2.ManagerName) &&
+                this.ManagerUserName.Equals(bank2.ManagerUserName) &&
+                this.ManagerEmail.Equals(bank2.ManagerEmail) &&
+                this.Contact.Equals(bank2.Contact) &&
+                this.State.Equals(bank2.State) &&
+                this.City.Equals(bank2.City) &&
+                this.Address.Equals(bank2.Address) &&
+                this.Blood_WithDrawal_Record.Equals(bank2.Blood_WithDrawal_Record) &&
+                this.Blood_Deposit_Record.Equals(bank2.Blood_Deposit_Record) &&
+                this.BloodDonationCamps.Equals(bank2.BloodDonationCamps) &&
+                this.BloodUnits.Equals(bank2.BloodUnits);
+
+        }
+
     }
 }

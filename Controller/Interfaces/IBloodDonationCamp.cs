@@ -4,8 +4,7 @@ namespace BloodGuardian.Controller.Interfaces
 {
     public interface IBloodDonationCamp
     {
-        void OrganizeBloodDonationCamps(BloodBank bank, Donor d);
-        void GetBloodDonationCamps(BloodBank bank, Donor d);
-        void RemoveBloodDonationCamps(BloodBank bank, Donor d);
+        void RemoveBloodDonationCamps(BloodBank bank, int campid);
+        void OrganizeBloodDonationCamps(BloodBank bank, BloodDonationCamp newCamp);
     }
 }

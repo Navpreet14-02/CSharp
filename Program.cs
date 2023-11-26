@@ -17,6 +17,7 @@ internal class Program
         catch (Exception ex)
         {
             LogExceptions.Instance.Log(ex);
+            Console.WriteLine(ex.StackTrace);
             Console.WriteLine(Message.UnexpectedError);
         }
 

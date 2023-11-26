@@ -1,6 +1,5 @@
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BloodGuardian.Tests
+namespace BloodGuardian.Tests.Common.Tests
 {
     [TestClass]
     public class ValidationTests

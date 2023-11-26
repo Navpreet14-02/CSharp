@@ -4,9 +4,9 @@ namespace BloodGuardian.Controller.Interfaces
 {
     public interface IAdmin
     {
-        Donor UpdateProfile(Donor d);
-
-        void AdminViewDonors(Donor d);
+        void UpdateProfile(Donor oldDonor,Donor newDonor);
+        List<Donor> GetDonors();
+        Donor FindDonorByBank(BloodBank bank);
         void AddAdmin(Donor d);
         void AdminRemoveDonor(Donor d);
     }

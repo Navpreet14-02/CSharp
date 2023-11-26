@@ -1,26 +1,98 @@
 [
   {
     "BankId": 0,
-    "ManagerName": "Shahrukh",
-    "ManagerUserName": "Shahrukh14",
-    "ManagerEmail": "shah@wg.com",
-    "Contact": 3953598345,
-    "BankName": "shahrukh-bloodbank",
+    "ManagerName": "Varun Dhawan",
+    "ManagerUserName": "Varun14",
+    "ManagerEmail": "varun@gmail.com",
+    "Contact": 5689305685,
+    "BankName": "dhawan-bloodbank",
     "State": "Punjab",
     "Address": "Patiala,Punjab",
     "City": "Patiala",
-    "Blood_WithDrawal_Record": [],
-    "Blood_Deposit_Record": [],
+    "Blood_WithDrawal_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": null,
+        "BloodReceiverName": "Kishan1",
+        "BloodGroup": "B-",
+        "CustomerEmail": "kishan1@gmail.com",
+        "CustomerPhone": 9045893457,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 50
+      },
+      {
+        "Id": 1,
+        "BloodDonorName": null,
+        "BloodReceiverName": "Kishan2",
+        "BloodGroup": "B-",
+        "CustomerEmail": "kishan2@gmail.com",
+        "CustomerPhone": 2943529839,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 50
+      },
+      {
+        "Id": 2,
+        "BloodDonorName": null,
+        "BloodReceiverName": "Kishan3",
+        "BloodGroup": "B+",
+        "CustomerEmail": "kishan3@gmail.com",
+        "CustomerPhone": 4596496948,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 100
+      }
+    ],
+    "Blood_Deposit_Record": [
+      {
+        "Id": 0,
+        "BloodDonorName": "Ravi1",
+        "BloodReceiverName": null,
+        "BloodGroup": "O-",
+        "CustomerEmail": "ravi114@gmail.com",
+        "CustomerPhone": 4395864968,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 100
+      },
+      {
+        "Id": 1,
+        "BloodDonorName": "Ravi2",
+        "BloodReceiverName": null,
+        "BloodGroup": "O+",
+        "CustomerEmail": "ravi214@gmail.com",
+        "CustomerPhone": 4569804456,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 100
+      },
+      {
+        "Id": 2,
+        "BloodDonorName": "Ravi3",
+        "BloodReceiverName": null,
+        "BloodGroup": "B+",
+        "CustomerEmail": "ravi314@gmail.com",
+        "CustomerPhone": 3294053902,
+        "BloodTransferDate": "2023-11-26T00:00:00",
+        "BloodAmount": 100
+      }
+    ],
     "BloodUnits": {
-      "A+": 0,
-      "A-": 0,
-      "B+": 0,
-      "B-": 50,
-      "O+": 40,
-      "O-": 0,
-      "AB+": 0,
-      "AB-": 0
+      "A+": 200,
+      "A-": 200,
+      "B+": 200,
+      "B-": 300,
+      "O+": 100,
+      "O-": 100,
+      "AB+": 100,
+      "AB-": 50
     },
-    "BloodDonationCamps": []
+    "BloodDonationCamps": [
+      {
+        "camp_id": 0,
+        "Date": "2023-12-10T00:00:00",
+        "Camp_State": "Punjab",
+        "Camp_City": "Patiala",
+        "Camp_Address": "Patiala,Punjab",
+        "Start_Time": "10:00:00",
+        "End_Time": "20:00:00"
+      }
+    ]
   }
 ]

@@ -10,18 +10,16 @@ using BloodGuardian.View.Interfaces;
 namespace BloodGuardian.Controller
 {
 
-    internal class DonorController : IDonor, IAdmin
+    public class DonorController : IDonor, IAdmin
     {
 
-        private IDonorView _donorView;
         private IBloodBankDBHandler _bankDBHandler;
         private IDonorDBHandler _donorDBHandler;
 
 
-        public DonorController(IDonorView donorView,IBloodBankDBHandler bankDBHandler,IDonorDBHandler donorDBHandler)
+        public DonorController(IBloodBankDBHandler bankDBHandler,IDonorDBHandler donorDBHandler)
 
         {
-            _donorView = donorView;
             _bankDBHandler = bankDBHandler;
             _donorDBHandler = donorDBHandler;
         }
@@ -31,69 +29,64 @@ namespace BloodGuardian.Controller
             return _donorDBHandler.Get();
         }
 
-        public Donor UpdateProfile(Donor d)
+        public void UpdateProfile(Donor oldDonor,Donor newDonor)
         {
             
-            Console.WriteLine(Message.SingleDashDesign);
-            Console.WriteLine(Message.ShowOldDetails);
-            Console.WriteLine("Name: " + d.Name);
-            Console.WriteLine("User Name: " + d.UserName);
-            Console.WriteLine("Age: " + d.Age);
-            Console.WriteLine("Phone: " + d.Phone);
-            Console.WriteLine("Email: " + d.Email);
-            Console.WriteLine("State: " + d.State);
-            Console.WriteLine("City: " + d.City);
-            Console.WriteLine("Address: " + d.Address);
-            Console.WriteLine("Password: " + d.Password);
-            if (d.Role == Roles.BloodBankManager) Console.WriteLine("Blood Bank Name: " + _bankDBHandler.FindBloodBankbyDonor(d).BankName);
+
+            //if (d.Role == Roles.BloodBankManager) Console.WriteLine("Blood Bank Name: " + _bankDBHandler.FindBloodBankbyDonor(d).BankName);
 
 
-            Console.WriteLine(Message.DoubleDashDesign);
-            Console.WriteLine(Message.EnterNewDetails);
+            //Console.WriteLine(Message.DoubleDashDesign);
+            //Console.WriteLine(Message.EnterNewDetails);
 
-            Donor updatedDonor = _donorView.InputUpdatedUserInfo(d);
-
-
-
-            _donorDBHandler.UpdateDonor(d, updatedDonor);
+            //Donor updatedDonor = _donorView.InputUpdatedUserInfo(d);
 
 
-            return updatedDonor;
+            _donorDBHandler.UpdateDonor(oldDonor, newDonor);
+
+
+            //return updatedDonor;
 
         }
 
-        public void AdminViewDonors(Donor d)
+        //public void AdminViewDonors(Donor d)
+        //{
+
+        //    var donors = GetDonors();
+
+        //    if (donors == null || donors.Count == 0)
+        //    {
+        //        Console.WriteLine(Message.NoRegisteredDonors);
+        //        return;
+        //    }
+
+        //    donors.ForEach(donor =>
+        //    {
+
+        //        Console.WriteLine(Message.SingleDashDesign);
+        //        Console.WriteLine("id: " + donor.Donorid);
+        //        Console.WriteLine("Name: " + donor.Name);
+        //        Console.WriteLine("UserName: " + donor.UserName);
+        //        Console.WriteLine("Age: " + donor.Age);
+        //        Console.WriteLine("Phone: " + donor.Phone);
+        //        Console.WriteLine("Email: " + donor.Email);
+        //        Console.WriteLine("Address: " + donor.Address);
+        //        Console.WriteLine("Blood Group: " + donor.BloodGrp);
+        //        Console.WriteLine("Role: " + donor.Role.ToString());
+        //        Console.WriteLine(Message.SingleDashDesign);
+
+        //    }
+        //    );
+
+
+        //}
+
+
+        public Donor FindDonorByBank(BloodBank bank)
         {
-
-            var donors = GetDonors();
-
-            if (donors == null || donors.Count == 0)
-            {
-                Console.WriteLine(Message.NoRegisteredDonors);
-                return;
-            }
-
-            donors.ForEach(donor =>
-            {
-
-                Console.WriteLine(Message.SingleDashDesign);
-                Console.WriteLine("id: " + donor.Donorid);
-                Console.WriteLine("Name: " + donor.Name);
-                Console.WriteLine("UserName: " + donor.UserName);
-                Console.WriteLine("Age: " + donor.Age);
-                Console.WriteLine("Phone: " + donor.Phone);
-                Console.WriteLine("Email: " + donor.Email);
-                Console.WriteLine("Address: " + donor.Address);
-                Console.WriteLine("Blood Group: " + donor.BloodGrp);
-                Console.WriteLine("Role: " + donor.Role.ToString());
-                Console.WriteLine(Message.SingleDashDesign);
-
-            }
-            );
-
-
+            var donor = GetDonors().Find((dn) => dn.UserName.Equals(bank.ManagerUserName, StringComparison.InvariantCultureIgnoreCase));
+            return donor;
         }
-
 
         public Donor FindDonorByUserName(string username)
         {
@@ -103,23 +96,11 @@ namespace BloodGuardian.Controller
             return d;
         }
 
-        public void AdminRemoveDonor(Donor d)
+        public void AdminRemoveDonor(Donor donor)
         {
 
-            AdminViewDonors(d);
 
-            Console.WriteLine();
-
-            Console.Write(Message.EnterDonorId);
-            int donorId = InputHandler.InputId();
-
-            var donor = GetDonors().ElementAtOrDefault(donorId);
-
-            if (donor == null)
-            {
-                Console.WriteLine(Message.WrongDonorId);
-            }
-            else if (donor.Role == Roles.BloodBankManager)
+            if (donor.Role == Roles.BloodBankManager)
             {
                 RemoveBloodBankManager(donor);
             }
@@ -149,50 +130,53 @@ namespace BloodGuardian.Controller
 
         }
 
-        public void ViewBloodDonationHistory(Donor d)
+        public Dictionary<BloodBank, List<BloodTransferReceipt>> GetBloodDonationHistory(Donor d)
         {
-            var BankdepositLists = _bankDBHandler.GetDonorBloodDonationHistory(d);
-
-
-            var isFound = false;
-
-            foreach (KeyValuePair<BloodBank, List<BloodTransferReceipt>> entry in BankdepositLists)
-            {
-
-
-                entry.Value.ForEach((receipt) =>
-                {
-                    if (receipt.CustomerEmail.Equals(d.Email) && receipt.CustomerPhone.Equals(d.Phone))
-                    {
-                        isFound = true;
-
-                        Console.WriteLine();
-                        Console.WriteLine(Message.SingleDashDesign);
-                        Console.WriteLine($"Bank Name: {entry.Key.BankName}");
-                        Console.WriteLine($"Address: {entry.Key.Address}");
-                        Console.WriteLine($"Date: {receipt.BloodTransferDate}");
-                        Console.WriteLine(Message.SingleDashDesign);
-
-
-                    }
-                });
-
-
-
-            }
-
-            if (!isFound)
-            {
-                Console.WriteLine(Message.NoBloodDonated);
-            }
-
-
+            return _bankDBHandler.GetDonorBloodDonationHistory(d);
         }
 
-        public void AddAdmin(Donor d)
+        //public void ViewBloodDonationHistory(Donor d)
+        //{
+        //    var BankdepositLists = _bankDBHandler.GetDonorBloodDonationHistory(d);
+
+
+        //    var isFound = false;
+
+        //    foreach (KeyValuePair<BloodBank, List<BloodTransferReceipt>> entry in BankdepositLists)
+        //    {
+
+
+        //        entry.Value.ForEach((receipt) =>
+        //        {
+        //            if (receipt.CustomerEmail.Equals(d.Email) && receipt.CustomerPhone.Equals(d.Phone))
+        //            {
+        //                isFound = true;
+
+        //                Console.WriteLine();
+        //                Console.WriteLine(Message.SingleDashDesign);
+        //                Console.WriteLine($"Bank Name: {entry.Key.BankName}");
+        //                Console.WriteLine($"Address: {entry.Key.Address}");
+        //                Console.WriteLine($"Date: {receipt.BloodTransferDate}");
+        //                Console.WriteLine(Message.SingleDashDesign);
+
+
+        //            }
+        //        });
+
+
+
+        //    }
+
+        //    if (!isFound)
+        //    {
+        //        Console.WriteLine(Message.NoBloodDonated);
+        //    }
+
+
+        //}
+
+        public void AddAdmin(Donor newAdmin)
         {
-            AdminView adminView = new AdminView();
-            Donor newAdmin = adminView.InputAdminDetails();
 
             newAdmin.Role = Roles.Admin;
 

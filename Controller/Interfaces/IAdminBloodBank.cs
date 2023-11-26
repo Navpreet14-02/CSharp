@@ -4,7 +4,9 @@ namespace BloodGuardian.Controller.Interfaces
 {
     public interface IAdminBloodBank
     {
-        void AdminViewBloodBanks(Donor d);
-        void AdminRemoveBloodBank(Donor d);
+        List<BloodBank> GetBloodBanks();
+        //void AdminViewBloodBanks(Donor d);
+        void AdminRemoveBloodBank(BloodBank bank);
+        BloodBank FindBloodBankbyId(int bankid);
     }
 }

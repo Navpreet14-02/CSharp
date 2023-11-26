@@ -4,15 +4,13 @@ using BloodGuardian.Controller.Interfaces;
 using BloodGuardian.Controller;
 using BloodGuardian.Database;
 using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BloodGuardian.View.Interfaces;
+using BloodGuardian.View;
+
 
 namespace BloodGuardian.View
 {
-    internal static class UI
+    public static class UI
     {
 
         private static IRequest _requestController;
@@ -20,17 +18,30 @@ namespace BloodGuardian.View
         private static IDonor _donorController;
         private static IBloodBank _bankController;
         private static IBloodDonationCamp _campController;
+
         private static ISearch _search;
+        private static IDonorDashboard _donorDashboard;
+        private static IAdminDashboard _adminDashboard;
+        private static IBloodBankManagerDashboard _bankManagerDashboard;
+        private static IAuthDashboard _authDashboard;
+        private static IHomeDashboard _homeDashboard;
+     
 
 
         static UI()
         {
-            _requestController = new RequestController(RequestDBHandler.Instance,new HomeView());
-            _authController = new AuthController(DonorDBHandler.Instance,BloodBankDBHandler.Instance);
-            _donorController = new DonorController(new DonorView(), BloodBankDBHandler.Instance, DonorDBHandler.Instance);
+            _requestController = new RequestController(RequestDBHandler.Instance);
+            _authController = new AuthController(DonorDBHandler.Instance);
+            _donorController = new DonorController(BloodBankDBHandler.Instance, DonorDBHandler.Instance);
             _bankController = new BloodBankController(BloodBankDBHandler.Instance, DonorDBHandler.Instance);
             _campController = new BloodDonationCampController(BloodBankDBHandler.Instance);
+
+            _bankManagerDashboard = new BloodBankManagerDashboard(_bankController,_campController);
             _search = new Search(_bankController);
+            _donorDashboard = new DonorDashboard(_donorController);
+            _adminDashboard = new AdminDashboard((IAdmin)_donorController, (IRemoveRequest)_requestController, (IAdminBloodBank)_bankController,(IAdminBloodDonationCamp) _campController);
+            _homeDashboard = new BloodRequestDashboard(_requestController);
+            _authDashboard = new AuthDashboard(_authController, _bankManagerDashboard);
         }
 
         public static void Start()
@@ -66,20 +77,20 @@ namespace BloodGuardian.View
             {
 
                 case HomePageOptions.Login:
-                    _authController.Login();
+                    _authDashboard.Login();
                     break;
 
                 case HomePageOptions.Register:
-                    _authController.Register();
+                    _authDashboard.Register();
                     break;
 
                 case HomePageOptions.SeeBloodRequests:
-                    _requestController.ViewBloodRequests();
+                    _homeDashboard.ViewBloodRequests();
                     Start();
                     break;
 
                 case HomePageOptions.AddBloodRequest:
-                    _requestController.AddBloodRequest();
+                    _homeDashboard.CreateBloodRequest();
                     Start();
                     break;
 
@@ -133,7 +144,7 @@ namespace BloodGuardian.View
             switch (option)
             {
                 case DonorOptions.UpdateProfile:
-                    currDonor = _donorController.UpdateProfile(currDonor);
+                    currDonor = _donorDashboard.UpdateProfile(currDonor);
                     DonorUI(currDonor);
                     break;
                 case DonorOptions.SearchBloodBanks:
@@ -141,11 +152,11 @@ namespace BloodGuardian.View
                     DonorUI(currDonor);
                     break;
                 case DonorOptions.SearchBloodDonationCamps:
-                    _search.SearchBloodDonationCamp(d);
+                    _search.SearchBloodDonationCamp(currDonor);
                     DonorUI(currDonor);
                     break;
                 case DonorOptions.SeeBloodDonationHistory:
-                    _donorController.ViewBloodDonationHistory(d);
+                    _donorDashboard.ViewBloodDonationHistory(currDonor);
                     DonorUI(currDonor);
                     break;
                 case DonorOptions.SignOut:
@@ -169,8 +180,9 @@ namespace BloodGuardian.View
 
             Donor currDonor = d;
 
-            BloodBank bank = _bankController.FindBloodBank(currDonor);
+            BloodBank bank = _bankController.FindBloodBankByDonor(currDonor);
 
+            Console.WriteLine(bank.ManagerUserName);
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
@@ -200,36 +212,34 @@ namespace BloodGuardian.View
             switch (option)
             {
                 case BloodBankManagerOptions.UpdateProfile:
-                    IDonor donorController = new DonorController(new DonorView(), BloodBankDBHandler.Instance, DonorDBHandler.Instance);
-
                     var oldDonor = d;
-                    currDonor = donorController.UpdateProfile(currDonor);
-                    _bankController.UpdateBloodBankDetails(oldDonor, currDonor);
-                    BloodBankManagerUI(d);
+                    currDonor = _donorDashboard.UpdateProfile(currDonor);
+                    _bankManagerDashboard.UpdateBloodBankDetails(oldDonor, currDonor);
+                    BloodBankManagerUI(currDonor);
                     break;
 
                 case BloodBankManagerOptions.AddBloodDepositRecord:
-                    _bankController.UpdateDepositBloodRecord(bank);
-                    BloodBankManagerUI(d);
+                    _bankManagerDashboard.CreateBloodDepositRecord(bank);
+                    BloodBankManagerUI(currDonor);
                     break;
 
                 case BloodBankManagerOptions.AddBloodWithdrawRecord:
-                    _bankController.UpdateWithdrawBloodRecord(bank);
-                    BloodBankManagerUI(d);
+                    _bankManagerDashboard.CreateBloodWithdrawRecord(bank);
+                    BloodBankManagerUI(currDonor);
                     break;
                 case BloodBankManagerOptions.OrganizeBloodDonationCamp:
-                    _campController.OrganizeBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI(d);
+                    _bankManagerDashboard.CreateBloodDonationCamp(bank, currDonor);
+                    BloodBankManagerUI(currDonor);
                     break;
 
                 case BloodBankManagerOptions.SeeBloodDonationCamp:
-                    _campController.GetBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI(d);
+                    _bankManagerDashboard.ViewBloodDonationCamps(bank, currDonor);
+                    BloodBankManagerUI(currDonor);
                     break;
 
                 case BloodBankManagerOptions.RemoveBloodDonationCamp:
-                    _campController.RemoveBloodDonationCamps(bank, currDonor);
-                    BloodBankManagerUI(d);
+                    _bankManagerDashboard.RemoveBloodDonationCamps(bank, currDonor);
+                    BloodBankManagerUI(currDonor);
                     break;
 
                 case BloodBankManagerOptions.SignOut:
@@ -249,8 +259,7 @@ namespace BloodGuardian.View
         public static void AdminUI(Donor d)
         {
 
-            IAdmin donorController = new DonorController(new DonorView(), BloodBankDBHandler.Instance, DonorDBHandler.Instance);
-            IRemoveRequest requestController = new RequestController(RequestDBHandler.Instance, new HomeView());
+            Donor currDonor = d; 
 
 
             Console.WriteLine();
@@ -281,26 +290,27 @@ namespace BloodGuardian.View
             switch (option)
             {
                 case AdminOptions.UpdateProfile:
-                    donorController.UpdateProfile(d);
-                    AdminUI(d);
+                    currDonor = _donorDashboard.UpdateProfile(currDonor);
+                    AdminUI(currDonor);
                     break;
 
                 case AdminOptions.AddNewAdmin:
-                    donorController.AddAdmin(d);
-                    AdminUI(d);
+                    _adminDashboard.CreateAdmin(currDonor);
+                    AdminUI(currDonor);
                     break;
 
                 case AdminOptions.ManageDonors:
-                    AdminManageDonorUI(d,donorController);
+                    AdminManageDonorUI(currDonor);
                     break;
 
                 case AdminOptions.ManageBloodBanks:
-                    AdminManageBloodBankUI(d);
+                    AdminManageBloodBankUI(currDonor);
                     break;
 
                 case AdminOptions.RemoveRequest:
-                    requestController.AdminRemoveRequest(d);
-                    AdminUI(d);
+                    _homeDashboard.ViewBloodRequests();
+                    _adminDashboard.RemoveRequest(currDonor);
+                    AdminUI(currDonor);
                     break;
 
                 case AdminOptions.SignOut:
@@ -320,9 +330,8 @@ namespace BloodGuardian.View
 
         }
 
-        public static void AdminManageDonorUI(Donor d, IAdmin donorController)
+        public static void AdminManageDonorUI(Donor d)
         {
-            //IAdmin donorController = new DonorController(new DonorView(), new BloodBankDBHandler(), new DonorDBHandler());
 
             Console.WriteLine();
             Console.WriteLine(Message.DoubleDashDesign);
@@ -343,7 +352,7 @@ namespace BloodGuardian.View
             if (input == string.Empty || !Enum.TryParse<AdminManageDonorOptions>(input, out result))
             {
                 Console.WriteLine(Message.EnterValidOption);
-                AdminManageDonorUI(d,donorController);
+                AdminManageDonorUI(d);
             }
 
             option = Enum.Parse<AdminManageDonorOptions>(input);
@@ -353,14 +362,14 @@ namespace BloodGuardian.View
 
 
                 case AdminManageDonorOptions.SeeAllDonors:
-                    donorController.AdminViewDonors(d);
-                    AdminManageDonorUI(d, donorController);
+                    _adminDashboard.AdminViewDonors(d);
+                    AdminManageDonorUI(d);
 
                     break;
 
                 case AdminManageDonorOptions.RemoveDonor:
-                    donorController.AdminRemoveDonor(d);
-                    AdminManageDonorUI(d, donorController);
+                    _adminDashboard.RemoveDonor(d);
+                    AdminManageDonorUI(d);
 
                     break;
 
@@ -370,7 +379,7 @@ namespace BloodGuardian.View
 
                 default:
                     Console.WriteLine(Message.InvalidOption);
-                    AdminManageDonorUI(d, donorController);
+                    AdminManageDonorUI(d);
                     break;
 
 
@@ -413,22 +422,22 @@ namespace BloodGuardian.View
 
 
                 case AdminManageBloodBankOptions.SeeAllBloodBanks:
-                    bankController.AdminViewBloodBanks(d);
+                    _adminDashboard.AdminViewBloodBanks(d);
                     AdminManageBloodBankUI(d);
                     break;
 
                 case AdminManageBloodBankOptions.RemoveBloodBank:
-                    bankController.AdminRemoveBloodBank(d);
+                    _adminDashboard.RemoveBloodBank(d);
                     AdminManageBloodBankUI(d);
                     break;
 
                 case AdminManageBloodBankOptions.SeeBloodDonationCamps:
-                    campController.AdminViewBloodDonationCamps(d);
+                    _adminDashboard.ViewBloodDonationCamps(d);
                     AdminManageBloodBankUI(d);
                     break;
 
                 case AdminManageBloodBankOptions.RemoveBloodDonationCamps:
-                    campController.AdminRemoveBloodDonationCamp(d);
+                    _adminDashboard.RemoveBloodDonationCamp(d);
                     AdminManageBloodBankUI(d);
                     break;
 
