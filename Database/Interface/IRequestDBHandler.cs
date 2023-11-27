@@ -2,7 +2,7 @@
 
 namespace BloodGuardian.Database.Interface
 {
-    internal interface IRequestDBHandler : IDB<Request>
+    public interface IRequestDBHandler : IDB<Request>
     {
         IRequestDBHandler Instance { get; }
     }

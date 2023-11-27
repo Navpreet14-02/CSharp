@@ -81,7 +81,7 @@ namespace BloodGuardian.Database
         public void UpdateBloodTransferRecord(BloodBank bank, string bloodType, int newquantity, bool deposit)
         {
 
-            if (deposit) _bloodbanks.Find(b => b.ManagerUserName.Equals(bank.ManagerUserName,StringComparison.InvariantCultureIgnoreCase)).BloodUnits[bloodType] += newquantity;
+            if (deposit) _bloodbanks.Find(b => b.ManagerUserName.Equals(bank.ManagerUserName, StringComparison.InvariantCultureIgnoreCase)).BloodUnits[bloodType] += newquantity;
             else _bloodbanks.Find(b => b.ManagerUserName.Equals(bank.ManagerUserName, StringComparison.InvariantCultureIgnoreCase)).BloodUnits[bloodType] -= newquantity;
 
             Update(Message._bankDataPath);
@@ -90,8 +90,8 @@ namespace BloodGuardian.Database
 
         public BloodBank FindBloodBankbyDonor(Donor d)
         {
-            
-            return _bloodbanks.Find((b) => b.ManagerUserName.Equals(d.UserName,StringComparison.InvariantCultureIgnoreCase));
+
+            return _bloodbanks.Find((b) => b.ManagerUserName.Equals(d.UserName, StringComparison.InvariantCultureIgnoreCase));
         }
 
 

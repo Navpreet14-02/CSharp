@@ -1,8 +1,5 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Common.Enums;
-using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
 using BloodGuardian.View.Interfaces;
 
@@ -99,7 +96,7 @@ namespace BloodGuardian.View
 
             Donor updatedDonor = InputUpdatedUserInfo(d);
 
-            _donorController.UpdateProfile(d,updatedDonor);
+            _donorController.UpdateProfile(d, updatedDonor);
 
             return updatedDonor;
 

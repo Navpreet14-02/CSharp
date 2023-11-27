@@ -1,11 +1,7 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Common.Enums;
-using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
-using BloodGuardian.View.Interfaces;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
-using BloodGuardian.Database.Interface;
+using BloodGuardian.View.Interfaces;
 
 
 namespace BloodGuardian.View
@@ -18,7 +14,7 @@ namespace BloodGuardian.View
         public BloodRequestDashboard(IRequest requestController)
         {
             _requestController = requestController;
-        }   
+        }
 
         public void CreateBloodRequest()
         {
@@ -51,7 +47,7 @@ namespace BloodGuardian.View
             foreach (var request in requests)
             {
                 Console.WriteLine(Message.SingleDashDesign);
-                Console.WriteLine("Request Id: "+request.RequestId);
+                Console.WriteLine("Request Id: " + request.RequestId);
                 Console.WriteLine("Requester Name: " + request.RequesterName);
                 Console.WriteLine("Requester Phone No: " + request.RequesterPhone);
                 Console.WriteLine("Requested Blood Type: " + request.BloodRequirementType);

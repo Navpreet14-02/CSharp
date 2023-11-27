@@ -19,7 +19,7 @@ namespace BloodGuardian.Database
                 _donors = JsonConvert.DeserializeObject<List<Donor>>(File.ReadAllText(Message._donorDataPath));
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogExceptions.Instance.Log(ex);
                 Console.WriteLine(Message.UnexpectedError);
@@ -54,7 +54,7 @@ namespace BloodGuardian.Database
 
         public Donor FindDonorByUserName(string username)
         {
-            return _donors.Find((donor) => donor.UserName.Equals(username,StringComparison.InvariantCultureIgnoreCase));
+            return _donors.Find((donor) => donor.UserName.Equals(username, StringComparison.InvariantCultureIgnoreCase));
 
         }
         public List<Donor> Get()
@@ -86,12 +86,12 @@ namespace BloodGuardian.Database
 
         public Donor FindDonorByCredentials(string username, string password)
         {
-            return _donors.Find((donor) => donor.UserName==username && donor.Password==password);
+            return _donors.Find((donor) => donor.UserName == username && donor.Password == password);
         }
 
         public Donor FindDonorByBank(BloodBank bank)
         {
-            var donor = _donors.Find((dn) => dn.UserName.Equals(bank.ManagerUserName,StringComparison.InvariantCultureIgnoreCase));
+            var donor = _donors.Find((dn) => dn.UserName.Equals(bank.ManagerUserName, StringComparison.InvariantCultureIgnoreCase));
             return donor;
         }
 
@@ -104,7 +104,7 @@ namespace BloodGuardian.Database
                 File.WriteAllText(Message._donorDataPath, donorDataJSON);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogExceptions.Instance.Log(ex);
                 Console.WriteLine(Message.UnexpectedError);

@@ -1,14 +1,9 @@
-﻿using BloodGuardian.Common.Enums;
-using BloodGuardian.Common;
-using BloodGuardian.Controller;
-using BloodGuardian.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller.Interfaces;
+using BloodGuardian.Models;
 using BloodGuardian.View.Interfaces;
+using System.Drawing;
 
 namespace BloodGuardian.View
 {
@@ -18,7 +13,7 @@ namespace BloodGuardian.View
         public IAuth _authController;
         public IBloodBankManagerDashboard _bankManagerView;
 
-        public AuthDashboard(IAuth authController,IBloodBankManagerDashboard bankManagerView)
+        public AuthDashboard(IAuth authController, IBloodBankManagerDashboard bankManagerView)
         {
             _authController = authController;
             _bankManagerView = bankManagerView;
@@ -32,7 +27,30 @@ namespace BloodGuardian.View
             Console.WriteLine(Message.EnterPassword);
             string password = InputHandler.InputPassword(false);
 
-            _authController.Login(username, password);
+            Donor donor = _authController.Login(username, password);
+
+            if (donor != null)
+            {
+                Console.WriteLine(Message.UserLoggedIn);
+                Console.WriteLine();
+                if (donor.Role == Roles.Admin)
+                {
+                    UI.AdminUI(donor);
+                }
+                else if (donor.Role == Roles.BloodBankManager)
+                {
+                    UI.BloodBankManagerUI(donor);
+                }
+                else
+                {
+                    UI.DonorUI(donor);
+                }
+            }
+            else
+            {
+                Console.WriteLine(Message.WrongLoginDetailsMessage);
+                UI.Start();
+            }
         }
 
 
@@ -52,7 +70,7 @@ namespace BloodGuardian.View
             {
                 uname = InputHandler.InputUserName(false);
 
-                if (_authController.CheckUserExists(uname))
+                if (_authController.CheckUserNameExists(uname))
                 {
                     Console.WriteLine(Message.EnterDifferentUserName);
                     continue;

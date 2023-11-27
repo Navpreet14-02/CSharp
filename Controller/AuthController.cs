@@ -1,11 +1,9 @@
 ﻿using BloodGuardian.Common;
 using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller.Interfaces;
-using BloodGuardian.Database;
 using BloodGuardian.Database.Interface;
 using BloodGuardian.Models;
 using BloodGuardian.View;
-using BloodGuardian.View.Interfaces;
 
 namespace BloodGuardian.Controller
 
@@ -16,15 +14,10 @@ namespace BloodGuardian.Controller
     {
 
         private IDonorDBHandler _donorDBHandler;
-        //private IBloodBankDBHandler _bankDBHandler;
-        //private IBloodBankManagerView _bankManagerView;
-
 
         public AuthController(IDonorDBHandler donorDBHandler)
         {
-            _donorDBHandler =donorDBHandler;
-            //_bankDBHandler = bankDBHandler;
-            //_bankManagerView = bankManagerView;
+            _donorDBHandler = donorDBHandler;
         }
 
 
@@ -33,50 +26,19 @@ namespace BloodGuardian.Controller
 
             _donorDBHandler.Add(newDonor);
 
-            //BloodBank bank = _bankManagerView.InputBloodBankDetails(newDonor);
-            //_bankDBHandler.Add(bank);
+        }
 
+        public Donor Login(string username, string password)
+        {
 
+            return _donorDBHandler.FindDonorByCredentials(username, password);
 
 
         }
 
-        public void Login(string username,string password)
+        public bool CheckUserNameExists(string username)
         {
-
-
-            var donor = _donorDBHandler.FindDonorByCredentials(username, password);
-
-            if (donor != null)
-            {
-                Console.WriteLine(Message.UserLoggedIn);
-                Console.WriteLine();
-                if (donor.Role == Roles.Admin)
-                {
-                    UI.AdminUI(donor);
-                }
-                else if (donor.Role == Roles.BloodBankManager)
-                {
-                    UI.BloodBankManagerUI(donor);
-                }
-                else
-                {
-                    UI.DonorUI(donor);
-                }
-            }
-            else
-            {
-                Console.WriteLine(Message.WrongLoginDetailsMessage);
-                UI.Start();
-            }
-
-
-
-        }
-
-        public bool CheckUserExists(string username)
-        {
-            return _donorDBHandler.FindDonorByUserName(username)!=null;
+            return _donorDBHandler.FindDonorByUserName(username) != null;
         }
     }
 }

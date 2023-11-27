@@ -20,6 +20,8 @@ namespace BloodGuardian.Models
         public override bool Equals(object obj)
         {
             var camp = obj as BloodDonationCamp;
+
+            if (this == null && camp == null) return true;
             if (camp == null) return false;
 
             return
@@ -28,8 +30,13 @@ namespace BloodGuardian.Models
                 this.Camp_State.Equals(camp.Camp_State) &&
                 this.Camp_City.Equals(camp.Camp_City) &&
                 this.Camp_Address.Equals(camp.Camp_Address) &&
-                this.Start_Time.Equals(camp.Start_Time) && 
+                this.Start_Time.Equals(camp.Start_Time) &&
                 this.End_Time.Equals(camp.End_Time);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
 

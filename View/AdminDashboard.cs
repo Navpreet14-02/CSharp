@@ -1,11 +1,7 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Common.Enums;
-using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
-using BloodGuardian.View.Interfaces;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
-using BloodGuardian.Database.Interface;
+using BloodGuardian.View.Interfaces;
 
 namespace BloodGuardian.View
 {
@@ -16,7 +12,7 @@ namespace BloodGuardian.View
         private static IAdminBloodBank _bankController;
         private static IAdminBloodDonationCamp _campController;
 
-        public AdminDashboard(IAdmin donorController,IRemoveRequest requestController,IAdminBloodBank bankController, IAdminBloodDonationCamp campController)
+        public AdminDashboard(IAdmin donorController, IRemoveRequest requestController, IAdminBloodBank bankController, IAdminBloodDonationCamp campController)
         {
             _donorController = donorController;
             _requestController = requestController;
@@ -228,9 +224,6 @@ namespace BloodGuardian.View
             Console.Write(Message.EnterBankId);
             int bankid = InputHandler.InputId();
 
-            //_campController.AdminRemoveBloodDonationCamp(d,bankid);
-
-
             var bank = _bankController.GetBloodBanks().ElementAtOrDefault(bankid);
 
             if (bank == null)
@@ -247,15 +240,6 @@ namespace BloodGuardian.View
                 int campid = InputHandler.InputId();
 
                 _campController.RemoveBloodDonationCamps(bank, campid);
-
-                //var choosenCamp = bank.BloodDonationCamps.ElementAtOrDefault(campid);
-
-                //if (choosenCamp == null)
-                //{
-                //    Console.WriteLine(Message.WrongCampId);
-                //}
-
-                //RemoveBloodDonationCamps(bank, d);
             }
 
 

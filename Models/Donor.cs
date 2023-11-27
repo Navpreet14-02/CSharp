@@ -26,7 +26,11 @@ namespace BloodGuardian.Models
         {
             Donor d1 = obj as Donor;
 
-            if(d1 == null) return false;
+
+            if(this==null &&  d1==null) return true;
+            if (d1 == null) return false;
+
+            
 
             return
                 this.Donorid.Equals(d1.Donorid) &&

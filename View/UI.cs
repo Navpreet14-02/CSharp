@@ -1,11 +1,10 @@
-﻿using BloodGuardian.Common.Enums;
-using BloodGuardian.Common;
-using BloodGuardian.Controller.Interfaces;
+﻿using BloodGuardian.Common;
+using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller;
+using BloodGuardian.Controller.Interfaces;
 using BloodGuardian.Database;
 using BloodGuardian.Models;
 using BloodGuardian.View.Interfaces;
-using BloodGuardian.View;
 
 
 namespace BloodGuardian.View
@@ -25,7 +24,7 @@ namespace BloodGuardian.View
         private static IBloodBankManagerDashboard _bankManagerDashboard;
         private static IAuthDashboard _authDashboard;
         private static IHomeDashboard _homeDashboard;
-     
+
 
 
         static UI()
@@ -36,10 +35,10 @@ namespace BloodGuardian.View
             _bankController = new BloodBankController(BloodBankDBHandler.Instance, DonorDBHandler.Instance);
             _campController = new BloodDonationCampController(BloodBankDBHandler.Instance);
 
-            _bankManagerDashboard = new BloodBankManagerDashboard(_bankController,_campController);
+            _bankManagerDashboard = new BloodBankManagerDashboard(_bankController, _campController);
             _search = new Search(_bankController);
             _donorDashboard = new DonorDashboard(_donorController);
-            _adminDashboard = new AdminDashboard((IAdmin)_donorController, (IRemoveRequest)_requestController, (IAdminBloodBank)_bankController,(IAdminBloodDonationCamp) _campController);
+            _adminDashboard = new AdminDashboard((IAdmin)_donorController, (IRemoveRequest)_requestController, (IAdminBloodBank)_bankController, (IAdminBloodDonationCamp)_campController);
             _homeDashboard = new BloodRequestDashboard(_requestController);
             _authDashboard = new AuthDashboard(_authController, _bankManagerDashboard);
         }
@@ -259,7 +258,7 @@ namespace BloodGuardian.View
         public static void AdminUI(Donor d)
         {
 
-            Donor currDonor = d; 
+            Donor currDonor = d;
 
 
             Console.WriteLine();

@@ -2,7 +2,6 @@
 using BloodGuardian.Common.Enums;
 using BloodGuardian.Controller.Interfaces;
 using BloodGuardian.Models;
-using BloodGuardian.View.Interfaces;
 
 namespace BloodGuardian.View
 {
@@ -101,16 +100,16 @@ namespace BloodGuardian.View
             }
             var banksList = _bankController.GetBloodBanks();
 
-            if(banksList==null || banksList.Count == 0)
+            if (banksList == null || banksList.Count == 0)
             {
                 Console.WriteLine(Message.NoDonationCampFound);
                 return;
             }
 
-            var bankCampDict = 
+            var bankCampDict =
                 banksList
-                .Select((bank) => new {Bank =bank.BankName ,camps =bank.BloodDonationCamps})
-                .ToDictionary(t=>t.Bank,t=>t.camps);
+                .Select((bank) => new { Bank = bank.BankName, camps = bank.BloodDonationCamps })
+                .ToDictionary(t => t.Bank, t => t.camps);
 
 
             if (bankCampDict.Count == 0)
@@ -119,12 +118,12 @@ namespace BloodGuardian.View
                 return;
             }
 
-            foreach(var item in bankCampDict)
+            foreach (var item in bankCampDict)
             {
 
                 var bank = item.Key;
-                var camps = item.Value.Where(camp => 
-                    camp.Camp_State.Equals(d.State, StringComparison.InvariantCultureIgnoreCase) && 
+                var camps = item.Value.Where(camp =>
+                    camp.Camp_State.Equals(d.State, StringComparison.InvariantCultureIgnoreCase) &&
                     camp.Camp_City.Equals(d.City, StringComparison.InvariantCultureIgnoreCase)
                 );
 
@@ -133,7 +132,7 @@ namespace BloodGuardian.View
                 {
                     Console.WriteLine();
                     Console.WriteLine(Message.SingleDashDesign);
-                    Console.WriteLine("BankName: "+bank);
+                    Console.WriteLine("BankName: " + bank);
                     Console.WriteLine("Address: " + camp.Camp_Address);
                     Console.WriteLine("Camp Date: " + camp.Date);
                     Console.WriteLine($"Camp Duration: {camp.Start_Time.ToString()} - {camp.End_Time.ToString()}");
@@ -144,8 +143,8 @@ namespace BloodGuardian.View
                 }
             }
 
-            
-            
+
+
         }
     }
 }

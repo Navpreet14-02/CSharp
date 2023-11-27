@@ -1,8 +1,5 @@
 ﻿using BloodGuardian.Common;
-using BloodGuardian.Common.Enums;
-using BloodGuardian.Controller;
 using BloodGuardian.Controller.Interfaces;
-using BloodGuardian.Database;
 using BloodGuardian.Models;
 using BloodGuardian.View.Interfaces;
 
@@ -14,7 +11,7 @@ namespace BloodGuardian.View
         private IBloodBank _bankController;
         private IBloodDonationCamp _campController;
 
-        public BloodBankManagerDashboard(IBloodBank bankController,IBloodDonationCamp campController)
+        public BloodBankManagerDashboard(IBloodBank bankController, IBloodDonationCamp campController)
         {
             _bankController = bankController;
             _campController = campController;
@@ -51,17 +48,7 @@ namespace BloodGuardian.View
             blood.BloodAmount = InputHandler.InputBloodAmount(false);
 
 
-            //Console.WriteLine(blood.BloodDonorName);
-            //Console.WriteLine(blood.BloodGroup);
-            //Console.WriteLine(blood.CustomerEmail);
-
-            //Console.WriteLine(blood.CustomerPhone);
-
-            //Console.WriteLine(blood.BloodTransferDate);
-            //Console.WriteLine(blood.BloodAmount);
-
-
-            _bankController.UpdateDepositBloodRecord(bank,blood);
+            _bankController.UpdateDepositBloodRecord(bank, blood);
 
 
         }
@@ -118,7 +105,7 @@ namespace BloodGuardian.View
 
             _bankController.AddBloodBank(bank);
 
-            
+
 
         }
 
@@ -156,11 +143,10 @@ namespace BloodGuardian.View
 
 
             _bankController.UpdateWithdrawBloodRecord(bank, blood);
-            //return blood;
         }
 
 
-        public void CreateBloodDonationCamp(BloodBank bank,Donor d)
+        public void CreateBloodDonationCamp(BloodBank bank, Donor d)
         {
             var camp = new BloodDonationCamp();
 
@@ -193,7 +179,6 @@ namespace BloodGuardian.View
             camp.End_Time = InputHandler.InputTime(false);
 
             _campController.OrganizeBloodDonationCamps(bank, camp);
-            //return camp;
         }
 
         public void UpdateBloodBankDetails(Donor oldDonor, Donor newDonor)

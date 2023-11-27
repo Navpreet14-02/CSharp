@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.ObjectModel;
+
 namespace BloodGuardian.Models
 {
     public class BloodBank
@@ -38,23 +40,31 @@ namespace BloodGuardian.Models
         {
             BloodBank bank2 = obj as BloodBank;
 
-            if(bank2==null) return false;
+            if (this == null && bank2 == null) return true;
+            if (bank2 == null) return false;
 
             return
                 this.BankId.Equals(bank2.BankId) &&
-                this.BankName.Equals(bank2.BankName) &&
-                this.ManagerName.Equals(bank2.ManagerName) &&
-                this.ManagerUserName.Equals(bank2.ManagerUserName) &&
-                this.ManagerEmail.Equals(bank2.ManagerEmail) &&
+                this.BankName.Equals(bank2.BankName, StringComparison.InvariantCultureIgnoreCase) &&
+                this.ManagerName.Equals(bank2.ManagerName, StringComparison.InvariantCultureIgnoreCase) &&
+                this.ManagerUserName.Equals(bank2.ManagerUserName, StringComparison.InvariantCultureIgnoreCase) &&
+                this.ManagerEmail.Equals(bank2.ManagerEmail, StringComparison.InvariantCultureIgnoreCase) &&
                 this.Contact.Equals(bank2.Contact) &&
-                this.State.Equals(bank2.State) &&
-                this.City.Equals(bank2.City) &&
-                this.Address.Equals(bank2.Address) &&
-                this.Blood_WithDrawal_Record.Equals(bank2.Blood_WithDrawal_Record) &&
-                this.Blood_Deposit_Record.Equals(bank2.Blood_Deposit_Record) &&
-                this.BloodDonationCamps.Equals(bank2.BloodDonationCamps) &&
-                this.BloodUnits.Equals(bank2.BloodUnits);
+                this.State.Equals(bank2.State, StringComparison.InvariantCultureIgnoreCase) &&
+                this.City.Equals(bank2.City, StringComparison.InvariantCultureIgnoreCase) &&
+                this.Address.Equals(bank2.Address, StringComparison.InvariantCultureIgnoreCase);
+                //Collection<BloodTransferReceipt>.Equals(this.Blood_WithDrawal_Record,bank2.Blood_WithDrawal_Record,) &&
+                //Collection<BloodTransferReceipt>.Equals(this.Blood_Deposit_Record,bank2.Blood_Deposit_Record) &&
+                //Collection<BloodDonationCamp>.Equals(this.BloodDonationCamps,bank2.BloodDonationCamps) &&
+                //Dictionary<string,int>.Equals(this.BloodUnits,bank2.BloodUnits);
 
+
+
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
     }

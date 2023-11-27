@@ -9,7 +9,6 @@ namespace BloodGuardian.Controller.Interfaces
         BloodBank FindBloodBankbyId(int bankid);
         BloodBank FindBloodBankByDonor(Donor d);
         void UpdateBloodBank(BloodBank oldBank, BloodBank newBank);
-        void RemoveBloodBank(BloodBank bank);
         void UpdateDepositBloodRecord(BloodBank bank, BloodTransferReceipt blood);
         void UpdateWithdrawBloodRecord(BloodBank bank, BloodTransferReceipt blood);
 
