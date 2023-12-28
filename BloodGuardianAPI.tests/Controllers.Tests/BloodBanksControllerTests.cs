@@ -163,6 +163,26 @@ namespace BloodGuardianAPI.tests.Controllers.Tests
         }
 
         [TestMethod]
+        public void GetBloodBanks_StateAndCity_Returns500InternalServerError()
+        {
+
+            var state = "Punjab";
+            var city = "Patiala";
+            var bloodgrp = "A+";
+            _mockBankBusiness.Setup(bankBus => bankBus.SearchBloodBanks(state, city)).Throws(new Exception());
+            var bankController = new BloodBanksController(_mockBankBusiness.Object);
+
+
+            var response = bankController.Get(state, city, null) as ObjectResult;
+
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, response.StatusCode);
+
+
+        }
+
+        [TestMethod]
         public void Post_InputBloodBank_Returns400BadRequest()
         {
 
@@ -184,6 +204,31 @@ namespace BloodGuardianAPI.tests.Controllers.Tests
 
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status400BadRequest, response.StatusCode);
+
+
+        }
+
+        [TestMethod]
+        public void Post_InputBloodBank_Returns500InternalServerError()
+        {
+
+            var bank = new RegisterBloodBankModel()
+            {
+                BankName = "dhawan-bloodbank",
+                State = "Punjab",
+                Address = "Patiala,Punjab",
+                City = "Patiala",
+            };
+
+            _mockBankBusiness.Setup(bankBus => bankBus.AddBloodBank(It.IsAny<RegisterBloodBankModel>(), It.IsAny<string>())).Throws(new Exception());
+            var bankController = new BloodBanksController(_mockBankBusiness.Object);
+
+
+            var response = bankController.Post(bank) as ObjectResult;
+
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, response.StatusCode);
 
 
         }
@@ -249,6 +294,25 @@ namespace BloodGuardianAPI.tests.Controllers.Tests
 
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status200OK, response.StatusCode);
+
+
+        }
+
+        [TestMethod]
+        public void Delete_InputBloodId_Returns500InternalServerError()
+        {
+
+            int bankid = 1;
+
+            _mockBankBusiness.Setup(bankBus => bankBus.RemoveBloodBank(It.IsAny<int>())).Throws(new Exception());
+            var bankController = new BloodBanksController(_mockBankBusiness.Object);
+
+
+            var response = bankController.Delete(bankid) as ObjectResult;
+
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, response.StatusCode);
 
 
         }

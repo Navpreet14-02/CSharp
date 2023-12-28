@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -102,6 +103,29 @@ namespace BloodGuardianAPI.tests.Controllers.Tests
         }
 
         [TestMethod]
+        public void Post_InputBloodRequest_Returns500InternalServerError()
+        {
+
+            _mockRequestBusiness.Setup(reqBus => reqBus.AddBloodRequest(It.IsAny<BloodRequest>())).Throws(new Exception());
+            var bloodRequest = new BloodRequest()
+            {
+                RequesterName = "Kishan",
+                BloodRequirementType = 2,
+                RequesterPhone = "2843752384",
+                Address = "Noida,Uttar Pradesh"
+            };
+            var bloodRequestController = new BloodRequestsController(_mockRequestBusiness.Object);
+
+
+            var response = bloodRequestController.Post(bloodRequest) as ObjectResult;
+
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, response.StatusCode);
+
+        }
+
+        [TestMethod]
         public void Post_InputBloodRequest_Returns201Created()
         {
 
@@ -138,6 +162,23 @@ namespace BloodGuardianAPI.tests.Controllers.Tests
 
             Assert.IsNotNull(response);
             Assert.AreEqual(StatusCodes.Status404NotFound, response.StatusCode);
+
+        }
+
+        [TestMethod]
+        public void Delete_InputBloodRequestId_Returns500InternalServerError()
+        {
+
+            _mockRequestBusiness.Setup(reqBus => reqBus.RemoveBloodRequest(It.IsAny<int>())).Throws(new Exception());
+            int requestId = 1;
+            var bloodRequestController = new BloodRequestsController(_mockRequestBusiness.Object);
+
+
+            var response = bloodRequestController.Delete(requestId) as ObjectResult;
+
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, response.StatusCode);
 
         }
 
